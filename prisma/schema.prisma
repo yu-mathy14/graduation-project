@@ -12,10 +12,87 @@ datasource db {
   provider = "postgresql"
 }
 
-// prisma studio確認用に追加
-model Todo {
-  id        Int      @id @default(autoincrement())
-  title     String
-  done      Boolean  @default(false)
-  createdAt DateTime @default(now())
+// teams(チーム)
+model Teams {
+  teamId    Int    @id
+  teamName  String @unique @db.VarChar(30)
+  teamColor String @db.VarChar(7)
+
+// *1 Teamsは複数のPlayersを持つ
+  player Players[]
+// *2 Teamsは複数のGamesを持つ
+  // このhomeGamesは"HomeGames"を介してhomeTeamと対応している、と明示的に
+  homeGames Games[] @relation("HomeGames")
+  // このawayGamesは"AwayGames"を介してawayTeamと対応している、と明示的に
+  awayGames Games[] @relation("AwayGames")
+}
+
+// players(選手)
+model Players {
+  playerId        Int    @id
+  teamId          Int    // 外部キー
+  playerNameKanji String @db.VarChar(30)
+  playerNameKana  String @db.VarChar(30)
+  jerseyNumber    Int 
+  almaMater       String @db.VarChar(30) @default("未設定")
+  height          Int 
+  weight          Int 
+
+// 同じチーム内では背番号を重複させない
+  @@unique([teamId, jerseyNumber])
+
+// *1 Teamsは複数のPlayersを持つ
+  team Teams @relation(fields: [teamId], references: [teamId])
+
+// *3 Playersは複数のStatsを持つ
+  stats Stats[]
+}
+
+// games(試合)
+model Games {
+  gameId Int          @id
+  tipoffTime DateTime @default(now())
+  homeTeamId Int      // 外部キー
+  awayTeamId Int      // 外部キー
+
+// *2 Teamsは複数のGamesを持つ
+/* HOMEとAWAYで同じTeamsを2回参照するから、リレーションも2本必要 */
+  // このhomeTeamは"HomeGames"を介してhomeGamesと対応している、と明示的に
+  homeTeam Teams @relation("HomeGames", fields: [homeTeamId], references: [teamId])
+  // このawayTeamは"AwayGames"を介してawayGamesと対応している、と明示的に
+  awayTeam Teams @relation("AwayGames", fields: [awayTeamId], references: [teamId])
+
+// *4 Gamesは複数のStatsを持つ
+  stats Stats[]
+}
+
+// stats(スタッツ)
+model Stats {
+  playerId Int // 複合主キー
+  gameId   Int // 複合主キー
+  p3A      Int @default(0) 
+  p3M      Int @default(0)
+  p2A      Int @default(0)
+  p2M      Int @default(0)
+  ftA      Int @default(0)
+  ftM      Int @default(0)
+  oRbd     Int @default(0)
+  dRbd     Int @default(0)
+  stl      Int @default(0)
+  blk      Int @default(0)
+  tov      Int @default(0)
+  pf       Int @default(0)
+  tf       Int @default(0)
+  fo       Int @default(0)
+  dq       Int @default(0)
+  playSec  Int @default(0)
+
+// 複合主キー
+  @@id([playerId, gameId])
+
+// *3 Playersは複数のStatsを持つ
+  player Players @relation(fields: [playerId], references: [playerId])
+
+// *4 Gamesは複数のStatsを持つ
+  game Games @relation(fields: [gameId], references: [gameId])
 }
