@@ -14,9 +14,9 @@ datasource db {
 
 // teams(チーム)
 model Teams {
-  teamId    Int    @id
-  teamName  String @unique @db.VarChar(30)
-  teamColor String @db.VarChar(7)
+  teamId    Int    @id @default(autoincrement()) @map("team_id")
+  teamName  String @unique @db.VarChar(30) @map("team_name")
+  teamColor String @db.VarChar(7) @default("#FFFFFF") @map("team_color")
 
 // *1 Teamsは複数のPlayersを持つ
   player Players[]
@@ -25,18 +25,20 @@ model Teams {
   homeGames Games[] @relation("HomeGames")
   // このawayGamesは"AwayGames"を介してawayTeamと対応している、と明示的に
   awayGames Games[] @relation("AwayGames")
+
+  @@map("teams")
 }
 
 // players(選手)
 model Players {
-  playerId        Int    @id
-  teamId          Int    // 外部キー
-  playerNameKanji String @db.VarChar(30)
-  playerNameKana  String @db.VarChar(30)
-  jerseyNumber    Int 
-  almaMater       String @db.VarChar(30) @default("未設定")
-  height          Int 
-  weight          Int 
+  playerId        Int    @id @default(autoincrement()) @map("player_id")
+  teamId          Int    @map("team_id") // 外部キー 
+  playerNameKanji String @db.VarChar(30) @map("player_name_kanji")
+  playerNameKana  String @db.VarChar(30) @map("player_name_kana")
+  jerseyNumber    Int    @map("jersey_number")
+  almaMater       String @db.VarChar(30) @default("未設定") @map("alma_mater")
+  height          Int? 
+  weight          Int? 
 
 // 同じチーム内では背番号を重複させない
   @@unique([teamId, jerseyNumber])
@@ -46,14 +48,16 @@ model Players {
 
 // *3 Playersは複数のStatsを持つ
   stats Stats[]
+
+  @@map("players")
 }
 
 // games(試合)
 model Games {
-  gameId Int          @id
-  tipoffTime DateTime @default(now())
-  homeTeamId Int      // 外部キー
-  awayTeamId Int      // 外部キー
+  gameId   Int @id @default(autoincrement()) @map("game_id")
+  tipoffTime DateTime @default(now()) @map("tipoff_time")
+  homeTeamId Int      @map("home_team_id") // 外部キー 
+  awayTeamId Int      @map("away_team_id") // 外部キー 
 
 // *2 Teamsは複数のGamesを持つ
 /* HOMEとAWAYで同じTeamsを2回参照するから、リレーションも2本必要 */
@@ -64,20 +68,22 @@ model Games {
 
 // *4 Gamesは複数のStatsを持つ
   stats Stats[]
+
+  @@map("games")
 }
 
 // stats(スタッツ)
 model Stats {
-  playerId Int // 複合主キー
-  gameId   Int // 複合主キー
-  p3A      Int @default(0) 
-  p3M      Int @default(0)
-  p2A      Int @default(0)
-  p2M      Int @default(0)
-  ftA      Int @default(0)
-  ftM      Int @default(0)
-  oRbd     Int @default(0)
-  dRbd     Int @default(0)
+  playerId Int @map("player_id") // 複合主キー 
+  gameId   Int @map("game_id") // 複合主キー 
+  p3A      Int @default(0) @map("p3_a") 
+  p3M      Int @default(0) @map("p3_m") 
+  p2A      Int @default(0) @map("p2_a") 
+  p2M      Int @default(0) @map("p2_m")
+  ftA      Int @default(0) @map("ft_a") 
+  ftM      Int @default(0) @map("ft_m")
+  oRbd     Int @default(0) @map("o_rbd")
+  dRbd     Int @default(0) @map("d_rbd")
   stl      Int @default(0)
   blk      Int @default(0)
   tov      Int @default(0)
@@ -85,7 +91,7 @@ model Stats {
   tf       Int @default(0)
   fo       Int @default(0)
   dq       Int @default(0)
-  playSec  Int @default(0)
+  playSec  Int @default(0) @map("play_sec")
 
 // 複合主キー
   @@id([playerId, gameId])
@@ -95,4 +101,6 @@ model Stats {
 
 // *4 Gamesは複数のStatsを持つ
   game Games @relation(fields: [gameId], references: [gameId])
+
+  @@map("stats")
 }
