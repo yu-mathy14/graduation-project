@@ -50,7 +50,7 @@ export default function TeamNewPage() {
       <form action={createTeam}>
         {/* 必須項目 */}
         <div>
-          <label htmlFor="teamName">チーム名</label>
+          <label htmlFor="teamName">チーム名 *</label>
           <input
             id="teamName" // labelと対応
             name="teamName"
@@ -59,13 +59,24 @@ export default function TeamNewPage() {
         </div>
 
         <div>
-          <label htmlFor="teamColor">チームカラー</label>
+          <label htmlFor="teamColor">チームカラー *</label>
           <input
             id="teamColor" // labelと対応
             name="teamColor"
             required // 必須入力
             placeholder=" 例：#FFFFFF"
           />
+
+          <p>
+            <a 
+              href="https://www.colordic.org"
+              target="_blank" // サイトを別タブで開く
+              /* target="_blank"で外部サイトを開くときによくセットで使用するもの */
+              rel="noopener noreferrer"
+            >
+              カラーコードを選ぶ(参考サイト)
+            </a>
+          </p>
         </div>
 
         <div>

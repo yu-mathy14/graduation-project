@@ -65,7 +65,7 @@ export default async function TeamEditPage({ params }: Props) {
       {/* action={updateTeam} -> フォーム送信時に実行される関数 */}
       <form action={updateTeam}>
         <div>
-          <label htmlFor="teamName">チーム名</label>
+          <label htmlFor="teamName">チーム名 *</label>
           <input 
             id="teamName" // labelと対応
             name="teamName"
@@ -75,13 +75,24 @@ export default async function TeamEditPage({ params }: Props) {
         </div>
 
         <div>
-          <label htmlFor="teamColor">チームカラー</label>
+          <label htmlFor="teamColor">チームカラー *</label>
           <input 
             id="teamColor" // labelと対応
             name="teamColor"
             defaultValue={team.teamColor}
             required // 必須入力
           />
+
+          <p>
+            <a 
+              href="https://www.colordic.org"
+              target="_blank" // サイトを別タブで開く
+              /* target="_blank"で外部サイトを開くときによくセットで使用するもの */
+              rel="noopener noreferrer"
+            >
+              カラーコードを選ぶ(参考サイト)
+            </a>
+          </p>
         </div>
 
         <div>
