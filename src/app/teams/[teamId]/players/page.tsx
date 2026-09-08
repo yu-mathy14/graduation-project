@@ -3,12 +3,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 type Props = {
-  params: Promise<{teamId: string}>;
+  params: Promise<{ teamId: string }>;
 };
 
 export default async function TeamPlayersPage({ params }: Props) {
   const { teamId } = await params;
-  const id = Number(teamId); // teamId(文字列)を数値に変換し、idに格納
+  const id = Number( teamId ); // teamId(文字列)を数値に変換し、idに格納
 
   // Prismaを使ってTeamsテーブルから該当のチーム情報(1件)を取得
   const team = await prisma.teams.findUnique({

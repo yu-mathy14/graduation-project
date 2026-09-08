@@ -6,14 +6,14 @@ export default async function TeamsPage() {
   const teams = await prisma.teams.findMany({
     orderBy: {
       teamId: "asc", // チームIDの昇順
-    }
+    },
   });
 
   return (
     <div>
       <h1>チーム一覧</h1>
 
-      {/* 【三項演算子】条件式：teams配列の中身が0件 */}
+      {/* 【三項演算子】teamsが0件かどうかで表示を切り替える */}
       {teams.length === 0 ? (
         <p>チームが登録されていません</p>
       ) : (

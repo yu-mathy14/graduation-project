@@ -3,12 +3,12 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 
 type Props = {
-  params: Promise<{teamId: string}>;
+  params: Promise<{ teamId: string }>;
 };
 
 export default async function TeamDetailPage({ params }: Props) {
   const { teamId } = await params;
-  const id = Number(teamId); // teamId(文字列)を数値に変換し、idに格納
+  const id = Number( teamId ); // teamId(文字列)を数値に変換し、idに格納
 
   const team = await prisma.teams.findUnique({
     where: { teamId: id },
@@ -61,7 +61,7 @@ export default async function TeamDetailPage({ params }: Props) {
         </table>
       </section>
 
-      <Link href={`/players/${id}`}>
+      <Link href={`/teams/${id}/players`}>
         所属選手一覧へ
       </Link>
 
