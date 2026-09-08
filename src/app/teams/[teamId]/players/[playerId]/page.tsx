@@ -43,6 +43,11 @@ export default async function PlayerDetailPage({ params }: Props) {
         ←所属選手一覧へ戻る
       </Link>
 
+      {/* 選手情報編集ページへの遷移リンク */}
+      <Link href={`/teams/${tId}/players/${pId}/edit`}>
+        編集
+      </Link>
+
       <section>
         <h2>【{team.teamName}】選手情報</h2>
         <table>
