@@ -17,516 +17,611 @@ async function main() {
 
 // 各テーブルの初期値の作成=========================================
   /* 1. チーム */
-  const teams = await prisma.teams.createMany({
-    data: [
-      {
-        teamId: 1,
+  const shohoku = await prisma.teams.create({
+    data: {
         teamName: '湘北高校',
         teamColor: '#E60012',
-      },
-      {
-        teamId: 2,
+    },
+  });
+
+  const ryonan = await prisma.teams.create({
+    data: {
         teamName: '陵南高校',
         teamColor: '#1E3A8A',
-      },
-      {
-        teamId: 3,
+    },
+  });
+
+  const shoyo = await prisma.teams.create({
+    data: {
         teamName: '翔陽高校',
         teamColor: '#15803D',
-      },
-      {
-        teamId: 4,
+    },
+  });
+
+  const kainan = await prisma.teams.create({
+    data: {
         teamName: '海南大付属高校',
         teamColor: '#552583',
-      },
-      {
-        teamId: 5,
+    },
+  });
+
+  const toyotama = await prisma.teams.create({
+    data: {
         teamName: '豊玉高校',
         teamColor: '#0077C0',
-      },
-      {
-        teamId: 6,
+    },
+  });
+
+  const sannoh = await prisma.teams.create({
+    data: {
         teamName: '山王高校',
         teamColor: '#FFFFFF',
-      },
-    ],
+    },
   });
 
   /* 2. 選手 */
-  await prisma.players.createMany({
-    data: [
-      // 1 湘北高校
-      {
-        playerId: 1,
-        teamId: 1,
-        playerNameKanji: '赤木剛憲',
-        playerNameKana: 'あかぎ　たけのり',
-        jerseyNumber: 4,
-        height: 197,
-        weight: 93,
-      },
-      {
-        playerId: 2,
-        teamId: 1,
-        playerNameKanji: '木暮公延',
-        playerNameKana: 'こぐれ　きみのぶ',
-        jerseyNumber: 5,
-        height: 178,
-        weight: 62,
-      },
-      {
-        playerId: 3,
-        teamId: 1,
-        playerNameKanji: '宮城リョータ',
-        playerNameKana: 'みやぎ　りょうた',
-        jerseyNumber: 7,
-        height: 168,
-        weight: 59,
-      },
-      {
-        playerId: 4,
-        teamId: 1,
-        playerNameKanji: '桜木花道',
-        playerNameKana: 'さくらぎ　はなみち',
-        jerseyNumber: 10,
-        height: 188,
-        weight: 83,
-      },
-      {
-        playerId: 5,
-        teamId: 1,
-        playerNameKanji: '流川楓',
-        playerNameKana: 'るかわ　かえで',
-        jerseyNumber: 11,
-        height: 187,
-        weight: 75,
-      },
-      {
-        playerId: 6,
-        teamId: 1,
-        playerNameKanji: '三井寿',
-        playerNameKana: 'みつい　ひさし',
-        jerseyNumber: 14,
-        height: 184,
-        weight: 70,
-      },
-      {
-        playerId: 7,
-        teamId: 1,
-        playerNameKanji: '安田靖春',
-        playerNameKana: 'やすだ　やすはる',
-        jerseyNumber: 6,
-        height: 165,
-        weight: 57,
-      },
-
-      // 2 陵南高校
-      {
-        playerId: 8,
-        teamId: 2,
-        playerNameKanji: '魚住純',
-        playerNameKana: 'うおずみ じゅん',
-        jerseyNumber: 4,
-        height: 202,
-        weight: 90,
-      },
-      {
-        playerId: 9,
-        teamId: 2,
-        playerNameKanji: '池上亮二',
-        playerNameKana: 'いけがみ りょうじ',
-        jerseyNumber: 5,
-        height: 183,
-        weight: 83,
-      },
-      {
-        playerId: 10,
-        teamId: 2,
-        playerNameKanji: '越野宏明',
-        playerNameKana: 'こしの ひろあき',
-        jerseyNumber: 6,
-        height: 174,
-        weight: 62,
-      },
-      {
-        playerId: 11,
-        teamId: 2,
-        playerNameKanji: '仙道彰',
-        playerNameKana: 'せんどう あきら',
-        jerseyNumber: 7,
-        height: 190,
-        weight: 79,
-      },
-      {
-        playerId: 12,
-        teamId: 2,
-        playerNameKanji: '植草智之',
-        playerNameKana: 'うえくさ ともゆき',
-        jerseyNumber: 8,
-        height: 170,
-        weight: 62,
-      },
-      {
-        playerId: 13,
-        teamId: 2,
-        playerNameKanji: '福田吉兆',
-        playerNameKana: 'ふくだ きっちょう',
-        jerseyNumber: 13,
-        height: 188,
-        weight: 80,
-      },
-      {
-        playerId: 14,
-        teamId: 2,
-        playerNameKanji: '菅平',
-        playerNameKana: 'すがだいら',
-        jerseyNumber: 11,
-        height: 188,
-        weight: 78,
-      },
-
-      // 3 翔陽高校
-      {
-        playerId: 15,
-        teamId: 3,
-        playerNameKanji: '藤真健司',
-        playerNameKana: 'ふじま けんじ',
-        jerseyNumber: 4,
-        height: 178,
-        weight: 66,
-      },
-      {
-        playerId: 16,
-        teamId: 3,
-        playerNameKanji: '花形透',
-        playerNameKana: 'はながた とおる',
-        jerseyNumber: 5,
-        height: 197,
-        weight: 83,
-      },
-      {
-        playerId: 17,
-        teamId: 3,
-        playerNameKanji: '長谷川一志',
-        playerNameKana: 'はせがわ かずし',
-        jerseyNumber: 6,
-        height: 190,
-        weight: 81,
-      },
-      {
-        playerId: 18,
-        teamId: 3,
-        playerNameKanji: '永野満',
-        playerNameKana: 'ながの みつる',
-        jerseyNumber: 7,
-        height: 191,
-        weight: 84,
-      },
-      {
-        playerId: 19,
-        teamId: 3,
-        playerNameKanji: '高野昭一',
-        playerNameKana: 'たかの しょういち',
-        jerseyNumber: 8,
-        height: 193,
-        weight: 85,
-      },
-      {
-        playerId: 20,
-        teamId: 3,
-        playerNameKanji: '伊藤卓',
-        playerNameKana: 'いとう たく',
-        jerseyNumber: 9,
-        height: 180,
-        weight: 70,
-      },
-
-      // 4 海南高校
-      {
-        playerId: 21,
-        teamId: 4,
-        playerNameKanji: '牧紳一',
-        playerNameKana: 'まき しんいち',
-        jerseyNumber: 4,
-        height: 184,
-        weight: 79,
-      },
-      {
-        playerId: 22,
-        teamId: 4,
-        playerNameKanji: '高砂一馬',
-        playerNameKana: 'たかさご かずま',
-        jerseyNumber: 5,
-        height: 191,
-        weight: 80,
-      },
-      {
-        playerId: 23,
-        teamId: 4,
-        playerNameKanji: '神宗一郎',
-        playerNameKana: 'じん そういちろう',
-        jerseyNumber: 6,
-        height: 189,
-        weight: 71,
-      },
-      {
-        playerId: 24,
-        teamId: 4,
-        playerNameKanji: '武藤正',
-        playerNameKana: 'むとう ただし',
-        jerseyNumber: 9,
-        height: 184,
-        weight: 75,
-      },
-      {
-        playerId: 25,
-        teamId: 4,
-        playerNameKanji: '清田信長',
-        playerNameKana: 'きよた のぶなが',
-        jerseyNumber: 10,
-        height: 178,
-        weight: 65,
-      },
-      {
-        playerId: 26,
-        teamId: 4,
-        playerNameKanji: '宮益義範',
-        playerNameKana: 'みやます よしのり',
-        jerseyNumber: 15,
-        height: 160,
-        weight: 42,
-      },
-
-      // 5 豊玉高校
-      {
-        playerId: 27,
-        teamId: 5,
-        playerNameKanji: '南烈',
-        playerNameKana: 'みなみ　つよし',
-        jerseyNumber: 4,
-        height: 184,
-        weight: 73,
-      },
-      {
-        playerId: 28,
-        teamId: 5,
-        playerNameKanji: '岸本実理',
-        playerNameKana: 'きしもと みのり',
-        jerseyNumber: 5,
-        height: 188,
-        weight: 80,
-      },
-      {
-        playerId: 29,
-        teamId: 5,
-        playerNameKanji: '板倉大二朗',
-        playerNameKana: 'いたくら だいじろう',
-        jerseyNumber: 6,
-        height: 183,
-        weight: 70,
-      },
-      {
-        playerId: 30,
-        teamId: 5,
-        playerNameKanji: '矢嶋京平',
-        playerNameKana: 'やじま きょうへい',
-        jerseyNumber: 7,
-        height: 180,
-        weight: 70,
-      },
-      {
-        playerId: 31,
-        teamId: 5,
-        playerNameKanji: '岩田三秋',
-        playerNameKana: 'いわた みつあき',
-        jerseyNumber: 8,
-        height: 190,
-        weight: 80,
-      },
-      {
-        playerId: 32,
-        teamId: 5,
-        playerNameKanji: '大川輝男',
-        playerNameKana: 'おおかわ てるお',
-        jerseyNumber: 14,
-        height: 180,
-        weight: 70,
-      },
-
-      // 6 山王工業高校
-      {
-        playerId: 33,
-        teamId: 6,
-        playerNameKanji: '深津一成',
-        playerNameKana: 'ふかつ かずなり',
-        jerseyNumber: 4,
-        height: 180,
-        weight: 70,
-      },
-      {
-        playerId: 34,
-        teamId: 6,
-        playerNameKanji: '野辺将広',
-        playerNameKana: 'のべ まさひろ',
-        jerseyNumber: 5,
-        height: 198,
-        weight: 90,
-      },
-      {
-        playerId: 35,
-        teamId: 6,
-        playerNameKanji: '松本稔',
-        playerNameKana: 'まつもと みのる',
-        jerseyNumber: 6,
-        height: 180,
-        weight: 70,
-      },
-      {
-        playerId: 36,
-        teamId: 6,
-        playerNameKanji: '河田雅史',
-        playerNameKana: 'かわた まさし',
-        jerseyNumber: 7,
-        height: 194,
-        weight: 93,
-      },
-      {
-        playerId: 37,
-        teamId: 6,
-        playerNameKanji: '一之倉聡',
-        playerNameKana: 'いちのくら さとし',
-        jerseyNumber: 8,
-        height: 171,
-        weight: 62,
-      },
-      {
-        playerId: 38,
-        teamId: 6,
-        playerNameKanji: '沢北栄治',
-        playerNameKana: 'さわきた えいじ',
-        jerseyNumber: 9,
-        height: 188,
-        weight: 80,
-      },
-      {
-        playerId: 39,
-        teamId: 6,
-        playerNameKanji: '河田美紀男',
-        playerNameKana: 'かわた みきお',
-        jerseyNumber: 15,
-        height: 210,
-        weight: 130,
-      },
-    ],
+  // 1 湘北高校 ------------------------------
+  const akagi = await prisma.players.create({
+    data: {
+      teamId: shohoku.teamId,
+      playerNameKanji: '赤木剛憲',
+      playerNameKana: 'あかぎ　たけのり',
+      jerseyNumber: 4,
+      height: 197,
+      weight: 93,
+    },
   });
 
-  // 控え選手の追加
-  await prisma.players.createMany({
-    data: [
-      {
-        playerId: 40,
-        teamId: 1,
-        playerNameKanji: '潮崎哲士',
-        playerNameKana: 'しおざき てつし',
-        jerseyNumber: 8,
-        height: 170,
-        weight: 60,
-      },
-      {
-        playerId: 41,
-        teamId: 1,
-        playerNameKanji: '角田悟',
-        playerNameKana: 'つのだ さとる',
-        jerseyNumber: 9,
-        height: 180,
-        weight: 70,
-      },
-      {
-        playerId: 42,
-        teamId: 1,
-        playerNameKanji: '石井健太郎',
-        playerNameKana: 'いしい けんたろう',
-        jerseyNumber: 12,
-        height: 170,
-        weight: 65,
-      },
-      {
-        playerId: 43,
-        teamId: 1,
-        playerNameKanji: '佐々岡智',
-        playerNameKana: 'ささおか さとし',
-        jerseyNumber: 13,
-        height: 175,
-        weight: 65,
-      },
-      {
-        playerId: 44,
-        teamId: 1,
-        playerNameKanji: '桑田登紀',
-        playerNameKana: 'くわた とき',
-        jerseyNumber: 15,
-        height: 165,
-        weight: 55,
-      },
-    ],
+  const kogure = await prisma.players.create({
+    data: {
+      teamId: shohoku.teamId,
+      playerNameKanji: '木暮公延',
+      playerNameKana: 'こぐれ　きみのぶ',
+      jerseyNumber: 5,
+      height: 178,
+      weight: 62,
+    },
+  });
+
+  const miyagi = await prisma.players.create({
+    data: {
+      teamId: shohoku.teamId,
+      playerNameKanji: '宮城リョータ',
+      playerNameKana: 'みやぎ　りょうた',
+      jerseyNumber: 7,
+      height: 168,
+      weight: 59,
+    },
+  });
+
+  const sakuragi = await prisma.players.create({
+    data: {
+      teamId: shohoku.teamId,
+      playerNameKanji: '桜木花道',
+      playerNameKana: 'さくらぎ　はなみち',
+      jerseyNumber: 10,
+      height: 188,
+      weight: 83,
+    },
+  });
+
+  const rukawa = await prisma.players.create({
+    data: {
+      teamId: shohoku.teamId,
+      playerNameKanji: '流川楓',
+      playerNameKana: 'るかわ　かえで',
+      jerseyNumber: 11,
+      height: 187,
+      weight: 75,
+    },
+  });
+
+  const mitsui = await prisma.players.create({
+    data: {
+      teamId: shohoku.teamId,
+      playerNameKanji: '三井寿',
+      playerNameKana: 'みつい　ひさし',
+      jerseyNumber: 14,
+      height: 184,
+      weight: 70,
+    },
+  });
+
+  const yasuda = await prisma.players.create({
+    data: {
+      teamId: shohoku.teamId,
+      playerNameKanji: '安田靖春',
+      playerNameKana: 'やすだ　やすはる',
+      jerseyNumber: 6,
+      height: 165,
+      weight: 57,
+    },
+  });
+
+  const shiozaki = await prisma.players.create({
+    data: {
+      teamId: shohoku.teamId,
+      playerNameKanji: '潮崎哲士',
+      playerNameKana: 'しおざき　てつし',
+      jerseyNumber: 8,
+      height: 170,
+      weight: 60,
+    },
+  });
+
+  const kakuta = await prisma.players.create({
+    data: {
+      teamId: shohoku.teamId,
+      playerNameKanji: '角田悟',
+      playerNameKana: 'かくた　さとる',
+      jerseyNumber: 9,
+      height: 180,
+      weight: 70,
+    },
+  });
+
+  const ishii = await prisma.players.create({
+    data: {
+      teamId: shohoku.teamId,
+      playerNameKanji: '石井健太郎',
+      playerNameKana: 'いしい　けんたろう',
+      jerseyNumber: 12,
+      height: 170,
+      weight: 65,
+    },
+  });
+
+  const sasaoka = await prisma.players.create({
+    data: {
+      teamId: shohoku.teamId,
+      playerNameKanji: '佐々岡智',
+      playerNameKana: 'ささおか　さとる',
+      jerseyNumber: 13,
+      height: 175,
+      weight: 65,
+    },
+  });
+
+  const kuwata = await prisma.players.create({
+    data: {
+      teamId: shohoku.teamId,    
+      playerNameKanji: '桑田登紀',
+      playerNameKana: 'くわた　とき',
+      jerseyNumber: 15,
+      height: 165,
+      weight: 55,
+    },
+  });
+
+  // 2 陵南高校 -------------------------------
+  const uozumi = await prisma.players.create({
+    data: {
+      teamId: ryonan.teamId,
+      playerNameKanji: '魚住純',
+      playerNameKana: 'うおずみ　じゅん',
+      jerseyNumber: 4,
+      height: 202,
+      weight: 90,
+    },
+  });
+
+  const ikegami = await prisma.players.create({
+    data: {
+      teamId: ryonan.teamId,
+      playerNameKanji: '池上亮二',
+      playerNameKana: 'いけがみ　りょうじ',
+      jerseyNumber: 5,
+      height: 183,
+      weight: 83,
+    },
+  });
+
+  const koshino = await prisma.players.create({
+    data: {
+      teamId: ryonan.teamId,
+      playerNameKanji: '越野宏明',
+      playerNameKana: 'こしの　ひろあき',
+      jerseyNumber: 6,
+      height: 174,
+      weight: 62,
+    },
+  });
+
+  const sendo = await prisma.players.create({
+    data: {
+      teamId: ryonan.teamId,
+      playerNameKanji: '仙道彰',
+      playerNameKana: 'せんどう　あきら',
+      jerseyNumber: 7,
+      height: 190,
+      weight: 79,
+    },
+  });
+
+  const uekusa = await prisma.players.create({
+    data: {
+      teamId: ryonan.teamId,
+      playerNameKanji: '植草智之',
+      playerNameKana: 'うえくさ　ともゆき',
+      jerseyNumber: 8,
+      height: 170,
+      weight: 62,
+    },
+  });
+
+  const fukuda = await prisma.players.create({
+    data: {
+      teamId: ryonan.teamId,
+      playerNameKanji: '福田吉兆',
+      playerNameKana: 'ふくだ　きっちょう',
+      jerseyNumber: 13,
+      height: 188,
+      weight: 80,
+    },
+  });
+
+  const sugadaira = await prisma.players.create({
+    data: {
+      teamId: ryonan.teamId,
+      playerNameKanji: '菅平',
+      playerNameKana: 'すがだいら',
+      jerseyNumber: 11,
+      height: 188,
+      weight: 78,
+    },
+  });
+
+  // 3 翔陽高校 -------------------------------
+  const fujima = await prisma.players.create({
+    data: {
+      teamId: shoyo.teamId,
+      playerNameKanji: '藤真健司',
+      playerNameKana: 'ふじま　けんじ',
+      jerseyNumber: 4,
+      height: 178,
+      weight: 66,
+    },
+  });
+
+  const hanagata = await prisma.players.create({
+    data: {
+      teamId: shoyo.teamId,
+      playerNameKanji: '花形透',
+      playerNameKana: 'はながた　とおる',
+      jerseyNumber: 5,
+      height: 197,
+      weight: 83,
+    },
+  });
+
+  const hasegawa = await prisma.players.create({
+    data: {
+      teamId: shoyo.teamId,
+      playerNameKanji: '長谷川一志',
+      playerNameKana: 'はせがわ　かずし',
+      jerseyNumber: 6,
+      height: 190,
+      weight: 81,
+    },
+  });
+
+  const nagano = await prisma.players.create({
+    data: {
+      teamId: shoyo.teamId,
+      playerNameKanji: '永野満',
+      playerNameKana: 'ながの　みつる',
+      jerseyNumber: 7,
+      height: 191,
+      weight: 84,
+    },
+  });
+
+  const takano = await prisma.players.create({
+    data: {
+      teamId: shoyo.teamId,
+      playerNameKanji: '高野昭一',
+      playerNameKana: 'たかの　しょういち',
+      jerseyNumber: 8,
+      height: 193,
+      weight: 85,
+    },
+  });
+
+  const ito = await prisma.players.create({
+    data: {
+      teamId: shoyo.teamId,
+      playerNameKanji: '伊藤卓',
+      playerNameKana: 'いとう　たく',
+      jerseyNumber: 9,
+      height: 180,
+      weight: 70,
+    },
+  });
+
+  // 4 海南高校 -----------------------------
+  const maki = await prisma.players.create({
+    data: {
+      teamId: kainan.teamId,
+      playerNameKanji: '牧紳一',
+      playerNameKana: 'まき　しんいち',
+      jerseyNumber: 4,
+      height: 184,
+      weight: 79,
+    },
+  });
+
+  const takasago = await prisma.players.create({
+    data: {
+      teamId: kainan.teamId,
+      playerNameKanji: '高砂一馬',
+      playerNameKana: 'たかさご　かずま',
+      jerseyNumber: 5,
+      height: 191,
+      weight: 80,
+    },
+  });
+
+  const jin = await prisma.players.create({
+    data: {
+      teamId: kainan.teamId,
+      playerNameKanji: '神宗一郎',
+      playerNameKana: 'じん　そういちろう',
+      jerseyNumber: 6,
+      height: 189,
+      weight: 71,
+    },
+  });
+
+  const muto = await prisma.players.create({
+    data: {
+      teamId: kainan.teamId,
+      playerNameKanji: '武藤正',
+      playerNameKana: 'むとう　ただし',
+      jerseyNumber: 9,
+      height: 184,
+      weight: 75,
+    },
+  });
+
+  const kiyota = await prisma.players.create({
+    data: {
+      teamId: kainan.teamId,
+      playerNameKanji: '清田信長',
+      playerNameKana: 'きよた　のぶなが',
+      jerseyNumber: 10,
+      height: 178,
+      weight: 65,
+    },
+  });
+
+  const miyamasu = await prisma.players.create({
+    data: {
+      teamId: kainan.teamId,
+      playerNameKanji: '宮益義範',
+      playerNameKana: 'みやます　よしのり',
+      jerseyNumber: 15,
+      height: 160,
+      weight: 42,
+    },
+  });
+
+  // 5 豊玉高校 -------------------------------
+  const minami = await prisma.players.create({
+    data: {
+      teamId: toyotama.teamId,
+      playerNameKanji: '南烈',
+      playerNameKana: 'みなみ　つよし',
+      jerseyNumber: 4,
+      height: 184,
+      weight: 73,
+    },
+  });
+
+  const kishimoto = await prisma.players.create({
+    data: {
+      teamId: toyotama.teamId,
+      playerNameKanji: '岸本実理',
+      playerNameKana: 'きしもと　みのり',
+      jerseyNumber: 5,
+      height: 188,
+      weight: 80,
+    },
+  });
+
+  const itakura = await prisma.players.create({
+    data: {
+      teamId: toyotama.teamId,
+      playerNameKanji: '板倉大二朗',
+      playerNameKana: 'いたくら　だいじろう',
+      jerseyNumber: 6,
+      height: 183,
+      weight: 70,
+    },
+  });
+
+  const yajima = await prisma.players.create({
+    data: {
+      teamId: toyotama.teamId,
+      playerNameKanji: '矢嶋京平',
+      playerNameKana: 'やじま　きょうへい',
+      jerseyNumber: 7,
+      height: 180,
+      weight: 70,
+    },
+  });
+
+  const iwata = await prisma.players.create({
+    data: {
+      teamId: toyotama.teamId,
+      playerNameKanji: '岩田三秋',
+      playerNameKana: 'いわた　みつあき',
+      jerseyNumber: 8,
+      height: 190,
+      weight: 80,
+    },
+  });
+
+  const okawa = await prisma.players.create({
+    data: {
+      teamId: toyotama.teamId,
+      playerNameKanji: '大川輝男',
+      playerNameKana: 'おおかわ　てるお',
+      jerseyNumber: 14,
+      height: 180,
+      weight: 70,
+    },
+  });
+
+  // 6 山王工業高校 -----------------------------
+  const fukatsu = await prisma.players.create({
+    data: {
+      teamId: sannoh.teamId,
+      playerNameKanji: '深津一成',
+      playerNameKana: 'ふかつ　かずなり',
+      jerseyNumber: 4,
+      height: 180,
+      weight: 70,
+    },
+  });
+
+  const nobe = await prisma.players.create({
+    data: {
+      teamId: sannoh.teamId,
+      playerNameKanji: '野辺将広',
+      playerNameKana: 'のべ　まさひろ',
+      jerseyNumber: 5,
+      height: 198,
+      weight: 90,
+    },
+  });
+
+  const matsumoto = await prisma.players.create({
+    data: {
+      teamId: sannoh.teamId,
+      playerNameKanji: '松本稔',
+      playerNameKana: 'まつもと　みのる',
+      jerseyNumber: 6,
+      height: 180,
+      weight: 70,
+    },
+  });
+
+  const kawataMasashi = await prisma.players.create({
+    data: {
+      teamId: sannoh.teamId,
+      playerNameKanji: '河田雅史',
+      playerNameKana: 'かわた　まさし',
+      jerseyNumber: 7,
+      height: 194,
+      weight: 93,
+    },
+  });
+
+  const ichinokura = await prisma.players.create({
+    data: {
+      teamId: sannoh.teamId,
+      playerNameKanji: '一之倉聡',
+      playerNameKana: 'いちのくら　さとし',
+      jerseyNumber: 8,
+      height: 171,
+      weight: 62,
+    },
+  });
+
+  const sawakita = await prisma.players.create({
+    data: {
+      teamId: sannoh.teamId,
+      playerNameKanji: '沢北栄治',
+      playerNameKana: 'さわきた　えいじ',
+      jerseyNumber: 9,
+      height: 188,
+      weight: 80,
+    },
+  });
+
+  const kawataMikio = await prisma.players.create({
+    data: {
+      teamId: sannoh.teamId,
+      playerNameKanji: '河田美紀男',
+      playerNameKana: 'かわた　みきお',
+      jerseyNumber: 15,
+      height: 210,
+      weight: 130,
+    },
   });
 
   /* 3. 試合 */
-  await prisma.games.createMany({
-    data: [
-      {
-        gameId: 1,
-        tipoffTime: new Date('2026-04-14T11:00:00+09:00'),
-        homeTeamId: 1,
-        awayTeamId: 2,
-      },
-      {
-        gameId: 2,
-        tipoffTime: new Date('2026-05-25T10:00:00+09:00'),
-        homeTeamId: 1,
-        awayTeamId: 3,
-      },
-      {
-        gameId: 3,
-        tipoffTime: new Date('2026-06-20T10:30:00+09:00'),
-        homeTeamId: 1,
-        awayTeamId: 4,
-      },
-      {
-        gameId: 4,
-        tipoffTime: new Date('2026-06-23T10:00:00+09:00'),
-        homeTeamId: 2,
-        awayTeamId: 4,
-      },
-      {
-        gameId: 5,
-        tipoffTime: new Date('2026-06-27T10:00:00+09:00'),
-        homeTeamId: 1,
-        awayTeamId: 2,
-      },
-      {
-        gameId: 6,
-        tipoffTime: new Date('2026-08-02T14:00:00+09:00'),
-        homeTeamId: 1,
-        awayTeamId: 5,
-      },
-      {
-        gameId: 7,
-        tipoffTime: new Date('2026-08-03T11:30:00+09:00'),
-        homeTeamId: 1,
-        awayTeamId: 6,
-      },
-    ],
+  // 1 湘北 - 陵南
+  const game1 = await prisma.games.create({
+    data: {
+      tipoffTime: new Date('2026-04-14T11:00:00+09:00'),
+      homeTeamId: shohoku.teamId,
+      awayTeamId: ryonan.teamId,
+    },
+  });
+  
+  // 2 湘北 - 翔陽
+  const game2 = await prisma.games.create({
+    data: {
+      tipoffTime: new Date('2026-05-25T10:00:00+09:00'),
+      homeTeamId: shohoku.teamId,
+      awayTeamId: shoyo.teamId,
+    },
+  });
+
+  // 3 湘北 - 海南
+  const game3 = await prisma.games.create({
+    data: {
+      tipoffTime: new Date('2026-06-20T10:30:00+09:00'),
+      homeTeamId: shohoku.teamId,
+      awayTeamId: kainan.teamId,
+    },
+  });
+
+  // 4 陵南 - 海南
+  const game4 = await prisma.games.create({
+    data: {
+      tipoffTime: new Date('2026-06-23T10:00:00+09:00'),
+      homeTeamId: ryonan.teamId,
+      awayTeamId: kainan.teamId,
+    },
+  });
+
+  // 5 湘北 - 陵南
+  const game5 = await prisma.games.create({
+    data: {
+      tipoffTime: new Date('2026-06-27T10:00:00+09:00'),
+      homeTeamId: shohoku.teamId,
+      awayTeamId: ryonan.teamId,
+    },
+  });
+
+  // 6 湘北 - 豊玉
+  const game6 = await prisma.games.create({
+    data: {
+      tipoffTime: new Date('2026-08-02T14:00:00+09:00'),
+      homeTeamId: shohoku.teamId,
+      awayTeamId: toyotama.teamId,
+    },
+  });
+
+  // 7 湘北 - 山王
+  const game7 = await prisma.games.create({
+    data: {
+      tipoffTime: new Date('2026-08-03T11:30:00+09:00'),
+      homeTeamId: shohoku.teamId,
+      awayTeamId: sannoh.teamId,
+    },
   });
 
   /* 4. スタッツ */
-  // 湘北-陵南
+  // game1 湘北-陵南
   await prisma.stats.createMany({
     data: [
       // ========================================
       // 湘北高校
       // 湘北 86 - 87 陵南
-      // gameId: 1
+      // game1
       // ========================================
 
       // ----------------------------------------
@@ -536,8 +631,8 @@ async function main() {
       // FT: 8/10 = 8点
       // ----------------------------------------
       {
-        playerId: 1,
-        gameId: 1,
+        playerId: akagi.playerId,
+        gameId: game1.gameId,
         p3A: 0,
         p3M: 0,
         p2A: 17,
@@ -564,8 +659,8 @@ async function main() {
       // FT: 1/2 = 1点
       // ----------------------------------------
       {
-        playerId: 2,
-        gameId: 1,
+        playerId: kogure.playerId,
+        gameId: game1.gameId,
         p3A: 6,
         p3M: 3,
         p2A: 5,
@@ -591,8 +686,8 @@ async function main() {
       // 2P: 2/4 = 4点
       // ----------------------------------------
       {
-        playerId: 7,
-        gameId: 1,
+        playerId: yasuda.playerId,
+        gameId: game1.gameId,
         p3A: 2,
         p3M: 1,
         p2A: 4,
@@ -617,8 +712,8 @@ async function main() {
       // 2P: 1/2 = 2点
       // ----------------------------------------
       {
-        playerId: 40,
-        gameId: 1,
+        playerId: shiozaki.playerId,
+        gameId: game1.gameId,
         p3A: 0,
         p3M: 0,
         p2A: 2,
@@ -644,8 +739,8 @@ async function main() {
       // FT: 1/3 = 1点
       // ----------------------------------------
       {
-        playerId: 4,
-        gameId: 1,
+        playerId: sakuragi.playerId,
+        gameId: game1.gameId,
         p3A: 0,
         p3M: 0,
         p2A: 8,
@@ -672,8 +767,8 @@ async function main() {
       // FT: 4/5 = 4点
       // ----------------------------------------
       {
-        playerId: 5,
-        gameId: 1,
+        playerId: rukawa.playerId,
+        gameId: game1.gameId,
         p3A: 5,
         p3M: 2,
         p2A: 12,
@@ -704,8 +799,8 @@ async function main() {
       // FT: 2/4 = 2点
       // ----------------------------------------
       {
-        playerId: 8,
-        gameId: 1,
+        playerId: uozumi.playerId,
+        gameId: game1.gameId,
         p3A: 0,
         p3M: 0,
         p2A: 13,
@@ -731,8 +826,8 @@ async function main() {
       // 2P: 2/5 = 4点
       // ----------------------------------------
       {
-        playerId: 9,
-        gameId: 1,
+        playerId: ikegami.playerId,
+        gameId: game1.gameId,
         p3A: 5,
         p3M: 2,
         p2A: 5,
@@ -759,8 +854,8 @@ async function main() {
       // FT: 2/2 = 2点
       // ----------------------------------------
       {
-        playerId: 10,
-        gameId: 1,
+        playerId: koshino.playerId,
+        gameId: game1.gameId,
         p3A: 5,
         p3M: 2,
         p2A: 6,
@@ -787,8 +882,8 @@ async function main() {
       // FT: 4/5 = 4点
       // ----------------------------------------
       {
-        playerId: 11,
-        gameId: 1,
+        playerId: sendo.playerId,
+        gameId: game1.gameId,
         p3A: 7,
         p3M: 3,
         p2A: 13,
@@ -815,8 +910,8 @@ async function main() {
       // FT: 4/5 = 4点
       // ----------------------------------------
       {
-        playerId: 12,
-        gameId: 1,
+        playerId: uekusa.playerId,
+        gameId: game1.gameId,
         p3A: 4,
         p3M: 2,
         p2A: 9,
@@ -837,20 +932,19 @@ async function main() {
     ],
   });
 
-  // 湘北-翔陽
+  // game2 湘北-翔陽
   await prisma.stats.createMany({
     data: [
       // ========================================
       // 湘北高校
       // 湘北 62 - 60 翔陽
-      // gameId: 2
       // ========================================
 
       // 赤木剛憲 #4
       // 6得点
       {
-        playerId: 1,
-        gameId: 2,
+        playerId: akagi.playerId,
+        gameId: game2.gameId,
         p3A: 0,
         p3M: 0,
         p2A: 7,
@@ -872,8 +966,8 @@ async function main() {
       // 木暮公延 #5
       // 6得点・途中出場
       {
-        playerId: 2,
-        gameId: 2,
+        playerId: kogure.playerId,
+        gameId: game2.gameId,
         p3A: 3,
         p3M: 1,
         p2A: 3,
@@ -892,11 +986,11 @@ async function main() {
         playSec: 900,
       },
 
-      // 安田靖司 #6
+      // 安田靖春 #6
       // 8得点
       {
-        playerId: 7,
-        gameId: 2,
+        playerId: yasuda.playerId,
+        gameId: game2.gameId,
         p3A: 3,
         p3M: 2,
         p2A: 3,
@@ -918,8 +1012,8 @@ async function main() {
       // 宮城リョータ #7
       // 2得点
       {
-        playerId: 3,
-        gameId: 2,
+        playerId: miyagi.playerId,
+        gameId: game2.gameId,
         p3A: 1,
         p3M: 0,
         p2A: 4,
@@ -941,8 +1035,8 @@ async function main() {
       // 桜木花道 #10
       // 2得点
       {
-        playerId: 4,
-        gameId: 2,
+        playerId: sakuragi.playerId,
+        gameId: game2.gameId,
         p3A: 0,
         p3M: 0,
         p2A: 4,
@@ -964,8 +1058,8 @@ async function main() {
       // 流川楓 #11
       // 18得点
       {
-        playerId: 5,
-        gameId: 2,
+        playerId: rukawa.playerId,
+        gameId: game2.gameId,
         p3A: 5,
         p3M: 2,
         p2A: 10,
@@ -987,8 +1081,8 @@ async function main() {
       // 三井寿 #14
       // 20得点
       {
-        playerId: 6,
-        gameId: 2,
+        playerId: mitsui.playerId,
+        gameId: game2.gameId,
         p3A: 11,
         p3M: 5,
         p2A: 5,
@@ -1007,7 +1101,6 @@ async function main() {
         playSec: 2400,
       },
 
-
       // ========================================
       // 翔陽高校
       // 湘北 62 - 60 翔陽
@@ -1016,8 +1109,8 @@ async function main() {
       // 藤真健司 #4
       // 5得点・途中出場
       {
-        playerId: 15,
-        gameId: 2,
+        playerId: fujima.playerId,
+        gameId: game2.gameId,
         p3A: 2,
         p3M: 1,
         p2A: 2,
@@ -1039,8 +1132,8 @@ async function main() {
       // 花形透 #5
       // 18得点
       {
-        playerId: 16,
-        gameId: 2,
+        playerId: hanagata.playerId,
+        gameId: game2.gameId,
         p3A: 0,
         p3M: 0,
         p2A: 11,
@@ -1062,8 +1155,8 @@ async function main() {
       // 長谷川一志 #6
       // 12得点
       {
-        playerId: 17,
-        gameId: 2,
+        playerId: hasegawa.playerId,
+        gameId: game2.gameId,
         p3A: 5,
         p3M: 2,
         p2A: 6,
@@ -1085,8 +1178,8 @@ async function main() {
       // 永野満 #7
       // 10得点
       {
-        playerId: 18,
-        gameId: 2,
+        playerId: nagano.playerId,
+        gameId: game2.gameId,
         p3A: 4,
         p3M: 2,
         p2A: 5,
@@ -1108,8 +1201,8 @@ async function main() {
       // 高野昭一 #8
       // 8得点
       {
-        playerId: 19,
-        gameId: 2,
+        playerId: takano.playerId,
+        gameId: game2.gameId,
         p3A: 0,
         p3M: 0,
         p2A: 7,
@@ -1131,8 +1224,8 @@ async function main() {
       // 伊藤卓 #9
       // 7得点
       {
-        playerId: 20,
-        gameId: 2,
+        playerId: ito.playerId,
+        gameId: game2.gameId,
         p3A: 4,
         p3M: 1,
         p2A: 5,
@@ -1153,16 +1246,17 @@ async function main() {
     ],
   });
 
-  // 湘北-海南
+  // game3 湘北-海南
   await prisma.stats.createMany({
     data: [
       // =========================
       // 湘北高校
       // =========================
 
+      // 赤木剛憲 #4
       {
-        playerId: 1, // 赤木
-        gameId: 3,
+        playerId: akagi.playerId,
+        gameId: game3.gameId,
         p3A: 0,
         p3M: 0,
         p2A: 10,
@@ -1181,9 +1275,10 @@ async function main() {
         playSec: 2400,
       },
 
+      // 木暮公延 #5
       {
-        playerId: 2, // 木暮
-        gameId: 3,
+        playerId: kogure.playerId,
+        gameId: game3.gameId,
         p3A: 0,
         p3M: 0,
         p2A: 1,
@@ -1199,12 +1294,13 @@ async function main() {
         tf: 0,
         fo: 0,
         dq: 0,
-        playSec: 180, // 3分
+        playSec: 180,
       },
 
+      // 宮城リョータ #7
       {
-        playerId: 3, // 宮城
-        gameId: 3,
+        playerId: miyagi.playerId,
+        gameId: game3.gameId,
         p3A: 3,
         p3M: 1,
         p2A: 6,
@@ -1220,12 +1316,13 @@ async function main() {
         tf: 0,
         fo: 0,
         dq: 0,
-        playSec: 2220, // 37分
+        playSec: 2220,
       },
 
+      // 桜木花道 #10
       {
-        playerId: 4, // 桜木
-        gameId: 3,
+        playerId: sakuragi.playerId,
+        gameId: game3.gameId,
         p3A: 0,
         p3M: 0,
         p2A: 10,
@@ -1244,9 +1341,10 @@ async function main() {
         playSec: 2400,
       },
 
+      // 流川楓 #11
       {
-        playerId: 5, // 流川
-        gameId: 3,
+        playerId: rukawa.playerId,
+        gameId: game3.gameId,
         p3A: 7,
         p3M: 3,
         p2A: 13,
@@ -1265,9 +1363,10 @@ async function main() {
         playSec: 2400,
       },
 
+      // 三井寿 #14
       {
-        playerId: 6, // 三井
-        gameId: 3,
+        playerId: mitsui.playerId,
+        gameId: game3.gameId,
         p3A: 9,
         p3M: 4,
         p2A: 7,
@@ -1290,9 +1389,10 @@ async function main() {
       // 海南高校
       // =========================
 
+      // 牧紳一 #4
       {
-        playerId: 21, // 牧
-        gameId: 3,
+        playerId: maki.playerId,
+        gameId: game3.gameId,
         p3A: 3,
         p3M: 1,
         p2A: 14,
@@ -1311,9 +1411,10 @@ async function main() {
         playSec: 2280,
       },
 
+      // 高砂一馬 #5
       {
-        playerId: 22, // 高砂
-        gameId: 3,
+        playerId: takasago.playerId,
+        gameId: game3.gameId,
         p3A: 0,
         p3M: 0,
         p2A: 8,
@@ -1332,9 +1433,10 @@ async function main() {
         playSec: 2400,
       },
 
+      // 神宗一郎 #6
       {
-        playerId: 23, // 神
-        gameId: 3,
+        playerId: jin.playerId,
+        gameId: game3.gameId,
         p3A: 10,
         p3M: 5,
         p2A: 8,
@@ -1353,9 +1455,10 @@ async function main() {
         playSec: 2400,
       },
 
+      // 武藤正 #9
       {
-        playerId: 24, // 武藤
-        gameId: 3,
+        playerId: muto.playerId,
+        gameId: game3.gameId,
         p3A: 0,
         p3M: 0,
         p2A: 7,
@@ -1374,9 +1477,10 @@ async function main() {
         playSec: 2400,
       },
 
+      // 清田信長 #10
       {
-        playerId: 25, // 清田
-        gameId: 3,
+        playerId: kiyota.playerId,
+        gameId: game3.gameId,
         p3A: 5,
         p3M: 2,
         p2A: 7,
@@ -1395,9 +1499,10 @@ async function main() {
         playSec: 2400,
       },
 
+      // 宮益義範 #15
       {
-        playerId: 26, // 宮益
-        gameId: 3,
+        playerId: miyamasu.playerId,
+        gameId: game3.gameId,
         p3A: 0,
         p3M: 0,
         p2A: 0,
