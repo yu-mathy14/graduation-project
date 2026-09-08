@@ -50,6 +50,7 @@ export default async function TeamPlayersPage({ params }: Props) {
               <tr>
                 <th>背番号</th>
                 <th>氏名</th>
+                <th></th>
               </tr>
             </thead>
 
@@ -62,6 +63,11 @@ export default async function TeamPlayersPage({ params }: Props) {
 
                   {/* 氏名 */}
                   <td>{p.playerNameKanji}</td>
+
+                  {/* 選手詳細画面へ遷移するリンク */}
+                  <td>
+                    <Link href={`/teams/${id}/players/${p.playerId}`}>選手情報を見る</Link>
+                  </td>
                 </tr>
               ))}
             </tbody>
