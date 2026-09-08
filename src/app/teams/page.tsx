@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import Link from "next/link";
 
 export default async function TeamsPage() {
   // Prismaを使ってTeamsテーブルから全件取得
@@ -34,8 +35,15 @@ export default async function TeamsPage() {
               <tr key={t.teamId}>
                 {/* チームID */}
                 <td>{t.teamId}</td>
-                {/* チーム名 */}
-                <td>{t.teamName}</td>
+                
+                {/* チーム名
+                -> クリックでチーム詳細ページへ遷移 */}
+                <td>
+                  <Link href={`/teams/${t.teamId}`}>
+                    {t.teamName}
+                  </Link>
+                </td>
+
                 {/* DBのカラーコードを実際の色として表示 */}
                 <td>
                   <div
