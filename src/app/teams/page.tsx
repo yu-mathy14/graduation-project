@@ -10,49 +10,58 @@ export default async function TeamsPage() {
   });
 
   return (
-    <div>
-      <h1>チーム一覧</h1>
+    <>
+      <div>
+        <h1>チーム一覧</h1>
 
-      {/* 【三項演算子】teamsが0件かどうかで表示を切り替える */}
-      {teams.length === 0 ? (
-        <p>チームが登録されていません</p>
-      ) : (
-        /* teams配列の中身が1件以上の場合、表として表示 */
-        <table>
-          {/* 見出しを作る */}
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>チーム名</th>
-              <th></th>
-            </tr>
-          </thead>
+        {/* チーム登録ページへのリンク */}
+        <Link href="/teams/new">
+          新規登録
+        </Link>
+      </div>
 
-          {/* 1つ1つのデータを作る */}
-          <tbody>
-            {teams.map((t) => (
-              <tr key={t.teamId}>
-                {/* チームID */}
-                <td>{t.teamId}</td>
-
-                {/* チーム名
-                -> クリックでチーム詳細ページへ遷移 */}
-                <td>{t.teamName}</td>
-
-                {/* チーム詳細へ遷移するリンク
-                → チーム情報すべてを確認することができる */}
-                <td>
-                  <Link href={`/teams/${t.teamId}`}>
-                    詳しく見る
-                  </Link>
-                </td>
+      <div>
+        {/* 【三項演算子】teamsが0件かどうかで表示を切り替える */}
+        {teams.length === 0 ? (
+          <p>チームが登録されていません</p>
+        ) : (
+          /* teams配列の中身が1件以上の場合、表として表示 */
+          <table>
+            {/* 見出しを作る */}
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>チーム名</th>
+                <th></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+            </thead>
 
-      <p>合計：{teams.length}件</p>
-    </div>
+            {/* 1つ1つのデータを作る */}
+            <tbody>
+              {teams.map((t) => (
+                <tr key={t.teamId}>
+                  {/* チームID */}
+                  <td>{t.teamId}</td>
+
+                  {/* チーム名
+                  -> クリックでチーム詳細ページへ遷移 */}
+                  <td>{t.teamName}</td>
+
+                  {/* チーム詳細へ遷移するリンク
+                  → チーム情報すべてを確認することができる */}
+                  <td>
+                    <Link href={`/teams/${t.teamId}`}>
+                      詳しく見る
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+
+        <p>合計：{teams.length}件</p>
+      </div>
+    </>  
   );
 }
