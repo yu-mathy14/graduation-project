@@ -24,8 +24,7 @@ export default async function TeamsPage() {
             <tr>
               <th>ID</th>
               <th>チーム名</th>
-              <th>チームカラー</th>
-              <th>カラーコード</th>
+              <th></th>
             </tr>
           </thead>
 
@@ -35,27 +34,18 @@ export default async function TeamsPage() {
               <tr key={t.teamId}>
                 {/* チームID */}
                 <td>{t.teamId}</td>
-                
+
                 {/* チーム名
                 -> クリックでチーム詳細ページへ遷移 */}
+                <td>{t.teamName}</td>
+
+                {/* チーム詳細へ遷移するリンク
+                → チーム情報すべてを確認することができる */}
                 <td>
                   <Link href={`/teams/${t.teamId}`}>
-                    {t.teamName}
+                    詳しく見る
                   </Link>
                 </td>
-
-                {/* DBのカラーコードを実際の色として表示 */}
-                <td>
-                  <div
-                    style={{
-                      backgroundColor: t.teamColor,
-                      width: "15px",
-                      height: "15px",
-                    }}
-                  />
-                </td>
-                {/* カラーコードの表示 */}
-                <td>{t.teamColor}</td>
               </tr>
             ))}
           </tbody>

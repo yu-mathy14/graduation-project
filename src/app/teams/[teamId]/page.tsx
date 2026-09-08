@@ -25,10 +25,6 @@ export default async function TeamDetailPage({ params }: Props) {
       ←チーム一覧に戻る
       </Link>
 
-      <Link href={`/players/${team.teamId}`}></Link>
-
-      <h1>チーム詳細</h1>
-
       {/* チーム情報 */}
       <section>
         <h2>チーム情報</h2>
