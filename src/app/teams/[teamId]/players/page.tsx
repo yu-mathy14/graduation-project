@@ -8,7 +8,7 @@ type Props = {
 
 export default async function TeamPlayersPage({ params }: Props) {
   const { teamId } = await params;
-  const id = Number( teamId ); // teamId(文字列)を数値に変換し、idに格納
+  const id = Number(teamId); // teamId(文字列)を数値に変換し、idに格納
 
   // Prismaを使ってTeamsテーブルから該当のチーム情報(1件)を取得
   const team = await prisma.teams.findUnique({
@@ -36,10 +36,15 @@ export default async function TeamPlayersPage({ params }: Props) {
         ←チーム情報へ戻る
       </Link>
 
+      {/* 選手登録画面へ遷移するリンク */}
+      <Link href={`/teams/${id}/players/new`}>
+        選手の登録
+      </Link>
+
       <section>
         <h1>【{team.teamName}】所属選手一覧</h1>
 
-        {/* 【三項演算子】条件式：players配列の中身が0件 */}
+        {/* 【三項演算子】条件式：players配列の中身が0件かどうか */}
         {players.length === 0 ? (
           <p>選手が登録されていません</p>
         ) : (
