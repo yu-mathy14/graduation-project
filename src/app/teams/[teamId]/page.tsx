@@ -25,6 +25,8 @@ export default async function TeamDetailPage({ params }: Props) {
       ←チーム一覧に戻る
       </Link>
 
+      <Link href={`/players/${team.teamId}`}></Link>
+
       <h1>チーム詳細</h1>
 
       {/* チーム情報 */}
@@ -62,6 +64,10 @@ export default async function TeamDetailPage({ params }: Props) {
           </tbody>
         </table>
       </section>
+
+      <Link href={`/players/${id}`}>
+        所属選手一覧へ
+      </Link>
 
     </div>
   );
