@@ -37,17 +37,17 @@ async function main() {
       {
         teamId: 4,
         teamName: '海南大付属高校',
-        teamColor: '#F50E0B',
+        teamColor: '#552583',
       },
       {
         teamId: 5,
         teamName: '豊玉高校',
-        teamColor: '#7C3AED',
+        teamColor: '#0077C0',
       },
       {
         teamId: 6,
         teamName: '山王高校',
-        teamColor: '#111827',
+        teamColor: '#FFFFFF',
       },
     ],
   });
