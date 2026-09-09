@@ -58,7 +58,16 @@ export default async function GameDetailPage({ params }: Props) {
             {/* 対戦日時 */}
             <tr>
               <th>対戦日時</th>
-              <td>{game.tipoffTime.toLocaleDateString("ja-JP")}</td>
+              <td>
+                {game.tipoffTime.toLocaleString("ja-JP", {
+                  timeZone: "Asia/Tokyo",
+                  year: "numeric",
+                  month: "numeric",
+                  day: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </td>
             </tr>
 
             {/* スコア
