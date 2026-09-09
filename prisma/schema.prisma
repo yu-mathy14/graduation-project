@@ -54,10 +54,12 @@ model Players {
 
 // games(試合)
 model Games {
-  gameId   Int @id @default(autoincrement()) @map("game_id")
+  gameId     Int      @id @default(autoincrement()) @map("game_id")
   tipoffTime DateTime @default(now()) @map("tipoff_time")
   homeTeamId Int      @map("home_team_id") // 外部キー 
   awayTeamId Int      @map("away_team_id") // 外部キー 
+  homeScore  Int      @default(0) @map("home_score") 
+  awayScore  Int      @default(0) @map("away_score") 
 
 // *2 Teamsは複数のGamesを持つ
 /* HOMEとAWAYで同じTeamsを2回参照するから、リレーションも2本必要 */

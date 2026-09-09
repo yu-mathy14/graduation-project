@@ -13,3 +13,7 @@
 | /teams/[teamId]/players/[playerId]/edit | 選手詳細編集 |
 
 ---
+## 試合・スタッツ関連
+| URL | 画面 | 
+| :---- | :---- |
+| /games | 試合一覧 |

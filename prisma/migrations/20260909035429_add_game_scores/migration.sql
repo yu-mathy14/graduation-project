@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "games" ADD COLUMN     "away_score" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "home_score" INTEGER NOT NULL DEFAULT 0;

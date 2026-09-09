@@ -557,6 +557,8 @@ async function main() {
       tipoffTime: new Date('2026-04-14T11:00:00+09:00'),
       homeTeamId: shohoku.teamId,
       awayTeamId: ryonan.teamId,
+      homeScore: 86,
+      awayScore: 87,
     },
   });
   
@@ -566,6 +568,8 @@ async function main() {
       tipoffTime: new Date('2026-05-25T10:00:00+09:00'),
       homeTeamId: shohoku.teamId,
       awayTeamId: shoyo.teamId,
+      homeScore: 62,
+      awayScore: 60,
     },
   });
 
@@ -575,6 +579,8 @@ async function main() {
       tipoffTime: new Date('2026-06-20T10:30:00+09:00'),
       homeTeamId: shohoku.teamId,
       awayTeamId: kainan.teamId,
+      homeScore: 88,
+      awayScore: 90,
     },
   });
 
@@ -584,6 +590,8 @@ async function main() {
       tipoffTime: new Date('2026-06-23T10:00:00+09:00'),
       homeTeamId: ryonan.teamId,
       awayTeamId: kainan.teamId,
+      homeScore: 83,
+      awayScore: 89,
     },
   });
 
@@ -593,6 +601,8 @@ async function main() {
       tipoffTime: new Date('2026-06-27T10:00:00+09:00'),
       homeTeamId: shohoku.teamId,
       awayTeamId: ryonan.teamId,
+      homeScore: 70,
+      awayScore: 66,
     },
   });
 
@@ -602,6 +612,8 @@ async function main() {
       tipoffTime: new Date('2026-08-02T14:00:00+09:00'),
       homeTeamId: shohoku.teamId,
       awayTeamId: toyotama.teamId,
+      homeScore: 91,
+      awayScore: 87,
     },
   });
 
@@ -611,6 +623,8 @@ async function main() {
       tipoffTime: new Date('2026-08-03T11:30:00+09:00'),
       homeTeamId: shohoku.teamId,
       awayTeamId: sannoh.teamId,
+      homeScore: 79,
+      awayScore: 78,
     },
   });
 
