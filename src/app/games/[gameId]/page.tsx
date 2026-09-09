@@ -50,6 +50,11 @@ export default async function GameDetailPage({ params }: Props) {
       ←試合一覧に戻る
       </Link>
 
+      {/* 試合編集ページへの遷移リンク */}
+      <Link href={`/games/${id}/edit`}>
+        試合情報を編集
+      </Link>
+
       {/* 試合情報 */}
       <section>
         <h2>試合情報</h2>

@@ -19,3 +19,4 @@
 | /games | 試合一覧 |
 | /games/new | 試合登録(新規) |
 | /games/[gameId] | 試合詳細 + スタッツ一覧 |
+| /games/[gameId]/edit | 試合詳細編集 |
