@@ -71,6 +71,8 @@ export default async function StatsNewPage({ params }: Props) {
       <StatsNewForm
         homeTeamName={game.homeTeam.teamName}
         homePlayers={homePlayers}
+        awayTeamName={game.awayTeam.teamName}
+        awayPlayers={awayPlayers}
       />
 
 

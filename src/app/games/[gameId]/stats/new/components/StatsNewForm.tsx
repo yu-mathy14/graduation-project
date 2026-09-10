@@ -7,6 +7,7 @@
 import { useState } from "react";
 import { PlayerStats } from "../types";
 import PlayerStatsInput from "./PlayerStatsInput";
+import PlayerSelect from "./PlayerSelect";
 
 type Player = {
   playerId: number;
@@ -17,17 +18,28 @@ type Player = {
 type Props = {
   homeTeamName: string;
   homePlayers: Player[];
+  awayTeamName: string;
+  awayPlayers: Player[];
 };
 
 export default function StatsNewForm({
   homeTeamName,
   homePlayers,
+  awayTeamName,
+  awayPlayers,
 }: Props) {
   // 現在どのステップを表示しているか
   const [step, setStep] = useState(1);
 
   // 出場選手のID
-  const [selectedPlayerIds, setSelectedPlayerIds] = useState<number[]>([]);
+  // ホームチーム
+  const [selectedHomePlayerIds, setSelectedHomePlayerIds] = useState<
+    number[]
+  >([]);
+  // アウェイチーム
+  const [selectedAwayPlayerIds, setSelectedAwayPlayerIds] = useState<
+    number[]
+  >([]);
 
   // 選手ごとのスタッツ
   const [playerStats, setPlayerStats] = useState<
@@ -35,8 +47,19 @@ export default function StatsNewForm({
   >({});
 
   // 出場選手のチェックを変更する
-  const handlePlayerChange = (playerId: number) => {
-    setSelectedPlayerIds((currentIds) => {
+  // ホームチーム
+  const handleHomePlayerChange = (playerId: number) => {
+    setSelectedHomePlayerIds((currentIds) => {
+      if (currentIds.includes(playerId)) {
+        return currentIds.filter((id) => id !== playerId);
+      }
+
+      return [...currentIds, playerId];
+    });
+  };
+  // アウェイチーム
+  const handleAwayPlayerChange = (playerId: number) => {
+    setSelectedAwayPlayerIds((currentIds) => {
       if (currentIds.includes(playerId)) {
         return currentIds.filter((id) => id !== playerId);
       }
@@ -59,6 +82,7 @@ export default function StatsNewForm({
       },
     }));
   };
+  
 
   return (
     <section>
@@ -69,24 +93,16 @@ export default function StatsNewForm({
 
           <p>出場選手を選択してください</p>
 
-          {homePlayers.map((player) => (
-            <label key={player.playerId}>
-              <input
-                type="checkbox"
-                value={player.playerId}
-                checked={selectedPlayerIds.includes(player.playerId)}
-                onChange={() => handlePlayerChange(player.playerId)}
-              />
-              #{player.jerseyNumber} {player.playerNameKanji}
-            </label>
-          ))}
-
-          <p>選択人数：{selectedPlayerIds.length}人</p>
+          <PlayerSelect
+            players={homePlayers}
+            selectedPlayerIds={selectedHomePlayerIds}
+            onChange={handleHomePlayerChange}
+          />
 
           <button
             type="button"
             onClick={() => setStep(2)}
-            disabled={selectedPlayerIds.length === 0}
+            disabled={selectedHomePlayerIds.length === 0}
           >
             次へ
           </button>
@@ -100,7 +116,7 @@ export default function StatsNewForm({
 
           {homePlayers
             .filter((player) =>
-              selectedPlayerIds.includes(player.playerId)
+              selectedHomePlayerIds.includes(player.playerId)
             )
             .map((player) => (
               <PlayerStatsInput
@@ -115,8 +131,59 @@ export default function StatsNewForm({
             戻る
           </button>
 
-          <button type="button" onClick={() => console.log(playerStats)}>
-            確認
+          <button type="button" onClick={() => setStep(3)}>
+            次へ
+          </button>
+        </>
+      )}
+
+      {/* ステップ3：アウェイチームの出場選手選択 */}
+      {step === 3 && (
+        <>
+          <h3>アウェイチーム【{awayTeamName}】</h3>
+
+          <p>出場選手を選択してください</p>
+
+          <PlayerSelect
+            players={awayPlayers}
+            selectedPlayerIds={selectedAwayPlayerIds}
+            onChange={handleAwayPlayerChange}
+          />
+
+          <button type="button" onClick={() => setStep(2)}>
+            ホームに戻る
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setStep(4)}
+            disabled={selectedAwayPlayerIds.length === 0}
+          >
+            次へ
+          </button>
+        </>
+      )}
+
+      {/* ステップ4：アウェイチームのスタッツ入力 */}
+      {step === 4 && (
+        <>
+          <h3>アウェイチーム【{awayTeamName}】のスタッツ</h3>
+
+          {awayPlayers
+            .filter((player) =>
+              selectedAwayPlayerIds.includes(player.playerId)
+            )
+            .map((player) => (
+              <PlayerStatsInput
+                key={player.playerId}
+                player={player}
+                stats={playerStats[player.playerId]}
+                onChange={handleStatsChange}
+              />
+            ))}
+
+          <button type="button" onClick={() => setStep(3)}>
+            戻る
           </button>
         </>
       )}
