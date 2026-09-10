@@ -1,5 +1,13 @@
 // 複数のコンポーネントが使う型は共通ファイルに切り出す
 
+/* 1選手分のオブジェクトの型定義 */
+export type Player = {
+  playerId: number;
+  playerNameKanji: string;
+  jerseyNumber: number;
+};
+
+/* 1選手分のスタッツの型定義 */
 export type PlayerStats = {
   p3A: number;
   p3M: number;

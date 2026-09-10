@@ -1,26 +1,26 @@
-// 1人分の全スタッツ入力を管理するコンポーネント
+// 1人分のスタッツ入力を表示・管理するコンポーネント
 // ===========================================
 
+/* このコンポーネントはブラウザ上(クライアントサイド)で実行されることを明示 */
 "use client";
 
-import { PlayerStats } from "../types";
+/* 型の読み込み */
+import type { Player, PlayerStats } from "../types";
 
-type Player = {
-  playerId: number;
-  playerNameKanji: string;
-  jerseyNumber: number;
-};
-
+/* PlayerStatsInputが受け取るPropsの型定義 */
 type Props = {
   player: Player;
+  /* まだその選手のスタッツを変更していない場合はundefinedの可能性がある */
   stats: PlayerStats | undefined;
+  /* 選手ID・変更するスタッツ・変更後の値を受け取る関数 */
   onChange: (
     playerId: number,
-    field: keyof PlayerStats,
+    field: keyof PlayerStats, // PlayerStatsのキー
     value: number
-  ) => void;
+  ) => void; // 戻り値なし
 };
 
+/* 1人分のスタッツ入力を表示し、変更を親に伝える関数 */
 export default function PlayerStatsInput({
   player,
   stats,
@@ -39,13 +39,16 @@ export default function PlayerStatsInput({
         <label>
           3P試投
           <input
-            type="number"
-            min="0"
+            type="number" // 入力欄の種類は数値
+            min="0" // 最小値0
+            /* stats が存在すれば p3A を表示し、存在しなければ 0 を表示する */
             value={stats?.p3A ?? 0}
+            /* 値が変わった時の処理 */
             onChange={(e) =>
               onChange(
                 player.playerId,
                 "p3A",
+                /* 入力された値を数値型に変換してonChangeに渡す */
                 Number(e.target.value)
               )
             }

@@ -1,9 +1,18 @@
+// そのURLにアクセスしたときに表示するページの土台を作る
+/* 1. DBから試合情報を取得
+   2. ホーム・アウェイの選手を取得
+   3. 取得したデータをStatsNewFormに渡す
+*/
+// =========================================
+
 import { prisma } from "@/lib/prisma";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import Link from "next/link";
 
+/* コンポーネントの読み込み */
 import StatsNewForm from "./components/StatsNewForm";
 
+/* StatsNewPageが受け取るPropsの型定義 */
 type Props = {
   params: Promise<{ gameId: string }>;
 };
@@ -19,6 +28,7 @@ export default async function StatsNewPage({ params }: Props) {
   const { gameId } = await params;
   const id = Number(gameId); // gameId(文字列)を数値に変換し、idに格納
 
+  /* URLから受け取った[gameId]と一致する試合を取得 */
   const game = await prisma.games.findUnique({
     where: { gameId: id },
     // include：関連するテーブルを一緒に取得する
@@ -30,10 +40,7 @@ export default async function StatsNewPage({ params }: Props) {
   });
 
   /* 試合が見つからなかった場合、404ページを表示する */
-  // if (!game) notFound();
-  if (!game) {
-  return <p>試合が見つかりません。gameId: {id}</p>;
-}
+  if (!game) notFound();
 
   /* ホーム・アウェイのチームを選択肢として使用する */
   const teams = [game.homeTeam, game.awayTeam];
@@ -69,13 +76,13 @@ export default async function StatsNewPage({ params }: Props) {
       <h1>スタッツを登録</h1>
 
       <StatsNewForm
+      /* これは属性ではなくProps */
+        gameId={game.gameId}
         homeTeamName={game.homeTeam.teamName}
         homePlayers={homePlayers}
         awayTeamName={game.awayTeam.teamName}
         awayPlayers={awayPlayers}
       />
-
-
 
     </div>
   )
