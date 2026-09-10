@@ -30,6 +30,13 @@ export default function StatsNewForm({
 }: Props) {
   // 現在どのステップを表示しているか
   const [step, setStep] = useState(1);
+  // 現在スタッツを入力している選手の位置
+  // ホーム
+  const [currentHomePlayerIndex, setCurrentHomePlayerIndex] =
+    useState(0);
+  // アウェイ
+  const [currentAwayPlayerIndex, setCurrentAwayPlayerIndex] =
+    useState(0);
 
   // 出場選手のID
   // ホームチーム
@@ -109,7 +116,7 @@ export default function StatsNewForm({
         </>
       )}
 
-      {/* ステップ2：スタッツ入力 */}
+      {/* ステップ2：ホームチームのスタッツ入力 */}
       {step === 2 && (
         <>
           <h3>ホームチーム【{homeTeamName}】のスタッツ</h3>
@@ -118,21 +125,41 @@ export default function StatsNewForm({
             .filter((player) =>
               selectedHomePlayerIds.includes(player.playerId)
             )
-            .map((player) => (
-              <PlayerStatsInput
-                key={player.playerId}
-                player={player}
-                stats={playerStats[player.playerId]}
-                onChange={handleStatsChange}
-              />
-            ))}
+            .map((player, index) =>
+              index === currentHomePlayerIndex ? (
+                <PlayerStatsInput
+                  key={player.playerId}
+                  player={player}
+                  stats={playerStats[player.playerId]}
+                  onChange={handleStatsChange}
+                />
+              ) : null
+            )}
+
+          {currentHomePlayerIndex <
+          selectedHomePlayerIds.length - 1 ? (
+            <button
+              type="button"
+              onClick={() =>
+                setCurrentHomePlayerIndex((currentIndex) => currentIndex + 1)
+              }
+            >
+              次の選手
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => {
+                setCurrentHomePlayerIndex(0);
+                setStep(3);
+              }}
+            >
+              アウェイ選手選択へ
+            </button>
+          )}
 
           <button type="button" onClick={() => setStep(1)}>
-            戻る
-          </button>
-
-          <button type="button" onClick={() => setStep(3)}>
-            次へ
+            選手選択に戻る
           </button>
         </>
       )}
@@ -173,20 +200,45 @@ export default function StatsNewForm({
             .filter((player) =>
               selectedAwayPlayerIds.includes(player.playerId)
             )
-            .map((player) => (
-              <PlayerStatsInput
-                key={player.playerId}
-                player={player}
-                stats={playerStats[player.playerId]}
-                onChange={handleStatsChange}
-              />
-            ))}
+            .map((player, index) =>
+              index === currentAwayPlayerIndex ? (
+                <PlayerStatsInput
+                  key={player.playerId}
+                  player={player}
+                  stats={playerStats[player.playerId]}
+                  onChange={handleStatsChange}
+                />
+              ) : null
+            )}
+
+          {currentAwayPlayerIndex <
+          selectedAwayPlayerIds.length - 1 ? (
+            <button
+              type="button"
+              onClick={() =>
+                setCurrentAwayPlayerIndex((currentIndex) => currentIndex + 1)
+              }
+            >
+              次の選手
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => {
+                setCurrentAwayPlayerIndex(0);
+                setStep(3);
+              }}
+            >
+              アウェイ選手選択に戻る
+            </button>
+          )}
 
           <button type="button" onClick={() => setStep(3)}>
             戻る
           </button>
         </>
       )}
+      
     </section>
   );
 }
