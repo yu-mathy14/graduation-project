@@ -228,7 +228,10 @@ export default async function GameDetailPage({ params }: Props) {
 
           </table>
         )}
-
+        
+        <Link href={`/games/${id}/stats/edit?team=home`}>
+          スタッツを編集
+        </Link>
         
       </section>
 
@@ -371,6 +374,9 @@ export default async function GameDetailPage({ params }: Props) {
           </table>
         )}
 
+        <Link href={`/games/${id}/stats/edit?team=away`}>
+          スタッツを編集
+        </Link>
         
       </section>
 
