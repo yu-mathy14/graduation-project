@@ -46,7 +46,14 @@ export default async function TeamPlayersPage({ params }: Props) {
 
         {/* 【三項演算子】条件式：players配列の中身が0件かどうか */}
         {players.length === 0 ? (
-          <p>選手が登録されていません</p>
+          <>
+            <p>選手が登録されていません</p>
+
+            <Link href={`/teams/${id}/players/new`}>
+              選手の登録
+            </Link>
+          </>
+          
         ) : (
           /* players配列の中身が1件以上の場合、表として表示 */
           <table>

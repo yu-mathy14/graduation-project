@@ -23,7 +23,14 @@ export default async function TeamsPage() {
       <div>
         {/* 【三項演算子】teamsが0件かどうかで表示を切り替える */}
         {teams.length === 0 ? (
-          <p>チームが登録されていません</p>
+          <>
+            <p>チームが登録されていません</p>
+
+            <Link href="/teams/new">
+              新規登録
+            </Link>
+          </>
+          
         ) : (
           /* teams配列の中身が1件以上の場合、表として表示 */
           <table>

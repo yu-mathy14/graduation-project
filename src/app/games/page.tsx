@@ -29,7 +29,13 @@ export default async function GamesPage() {
       <div>
         {/* 【三項演算子】gamesの件数が0件かどうかで表示を切り替える */}
         {games.length === 0 ? (
-          <p>試合が登録されていません</p>
+          <>
+            <p>試合が登録されていません</p>
+
+            <Link href="/games/new">
+              新規登録
+            </Link>
+          </> 
         ) : (
           /* games配列の中身が1件以上の場合、表として表示 */
             <table>

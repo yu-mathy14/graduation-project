@@ -94,144 +94,153 @@ export default async function GameDetailPage({ params }: Props) {
         <h2>【{game.homeTeam.teamName}】スタッツ</h2>
         {/* 【三項演算子】ホームチームの選手のスタッツの件数が0件かどうかで表示を切り替える */}
         {homeStats.length === 0 ? (
-          <p>スタッツが登録されていません</p>
+          <>
+            <p>スタッツが登録されていません</p>
+            <Link href={`/games/${id}/stats/new?team=home`}>
+              スタッツを登録
+            </Link>
+          </>
         ) : (
           /* 1件以上の場合、表として表示 */
-          <table>
-          {/* 見出しを作る */}
-            <thead>
-              <tr>
-                <th>背番号</th>
-                <th>選手名</th>
-                <th>pts</th>
-                <th>3P(M)</th>
-                <th>3P(A)</th>
-                <th>3P(%)</th>
-                <th>2P(M)</th>
-                <th>2P(A)</th>
-                <th>2P(%)</th>
-                <th>FT(M)</th>
-                <th>FT(A)</th>
-                <th>FT(%)</th>
-                <th>RBD(OR)</th>
-                <th>RBD(DR)</th>
-                <th>RBD(TOT)</th>
-                <th>AST</th>
-                <th>STL</th>
-                <th>BLK</th>
-                <th>TO</th>
-                <th>PF</th>
-                <th>TF</th>
-                <th>FO</th>
-                <th>DQ</th>
-                <th>試合出場時間</th>
-              </tr>
-            </thead>
+          <>
+            <table>
+            {/* 見出しを作る */}
+              <thead>
+                <tr>
+                  <th>背番号</th>
+                  <th>選手名</th>
+                  <th>pts</th>
+                  <th>3P(M)</th>
+                  <th>3P(A)</th>
+                  <th>3P(%)</th>
+                  <th>2P(M)</th>
+                  <th>2P(A)</th>
+                  <th>2P(%)</th>
+                  <th>FT(M)</th>
+                  <th>FT(A)</th>
+                  <th>FT(%)</th>
+                  <th>RBD(OR)</th>
+                  <th>RBD(DR)</th>
+                  <th>RBD(TOT)</th>
+                  <th>AST</th>
+                  <th>STL</th>
+                  <th>BLK</th>
+                  <th>TO</th>
+                  <th>PF</th>
+                  <th>TF</th>
+                  <th>FO</th>
+                  <th>DQ</th>
+                  <th>試合出場時間</th>
+                </tr>
+              </thead>
 
-            {/* 1つ1つのデータを作る */}
-            <tbody>
-              {homeStats.map((gs) => {
-              // 計算が必要なものを定数に格納
-                // 総得点
-                const pts: number = gs.p3M * 3 + gs.p2M * 2 + gs.ftM;
+              {/* 1つ1つのデータを作る */}
+              <tbody>
+                {homeStats.map((gs) => {
+                // 計算が必要なものを定数に格納
+                  // 総得点
+                  const pts: number = gs.p3M * 3 + gs.p2M * 2 + gs.ftM;
 
-                // 各シュート成功率
-                /* 【三項演算子】試行回数が0の時は成功率を0、
-                  そうでない場合は M/A で成功率を計算する */
-                /* 【Math.round()】小数第二位を四捨五入して整数に
-                -> 成功率を小数第一位まで表示 */
-                const p3P: number = gs.p3A === 0 ? 0 : Math.round((gs.p3M / gs.p3A) * 1000) / 10;
-                const p2P: number = gs.p2A === 0 ? 0 : Math.round((gs.p2M / gs.p2A) * 1000) / 10;
-                const ftP: number = gs.ftA === 0 ? 0 : Math.round((gs.ftM / gs.ftA) * 1000) / 10;
+                  // 各シュート成功率
+                  /* 【三項演算子】試行回数が0の時は成功率を0、
+                    そうでない場合は M/A で成功率を計算する */
+                  /* 【Math.round()】小数第二位を四捨五入して整数に
+                  -> 成功率を小数第一位まで表示 */
+                  const p3P: number = gs.p3A === 0 ? 0 : Math.round((gs.p3M / gs.p3A) * 1000) / 10;
+                  const p2P: number = gs.p2A === 0 ? 0 : Math.round((gs.p2M / gs.p2A) * 1000) / 10;
+                  const ftP: number = gs.ftA === 0 ? 0 : Math.round((gs.ftM / gs.ftA) * 1000) / 10;
 
-                // 総リバウンド数
-                const rbd: number = gs.oRbd + gs.dRbd;
+                  // 総リバウンド数
+                  const rbd: number = gs.oRbd + gs.dRbd;
 
-                // 試合出場時間
-                /* 【Math.floor()】小数部分を切り捨てて整数に
-                　-> 「分」を求める */
-                const min: number = gs.playSec === 0 ? 0 : Math.floor(gs.playSec / 60);
-                /* 60で割ったあまりから「秒」を求める */
-                const sec: number = gs.playSec === 0 ? 0 : gs.playSec % 60;
+                  // 試合出場時間
+                  /* 【Math.floor()】小数部分を切り捨てて整数に
+                  　-> 「分」を求める */
+                  const min: number = gs.playSec === 0 ? 0 : Math.floor(gs.playSec / 60);
+                  /* 60で割ったあまりから「秒」を求める */
+                  const sec: number = gs.playSec === 0 ? 0 : gs.playSec % 60;
 
-                return (
-                  <tr key={gs.playerId}>
-                    {/* 背番号 */}
-                    <td>{gs.player.jerseyNumber}</td>
-                    {/* 選手名(漢字) */}
-                    <td>{gs.player.playerNameKanji}</td>
+                  return (
+                    <tr key={gs.playerId}>
+                      {/* 背番号 */}
+                      <td>{gs.player.jerseyNumber}</td>
+                      {/* 選手名(漢字) */}
+                      <td>{gs.player.playerNameKanji}</td>
 
-                    {/* 総得点 */}
-                    <td>{pts}</td>
+                      {/* 総得点 */}
+                      <td>{pts}</td>
 
-                    {/* 3P成功 */}
-                    <td>{gs.p3M}</td>
-                    {/* 3P試行 */}
-                    <td>{gs.p3A}</td>
-                    {/* 3P成功率 */}
-                    <td>{p3P}%</td>
+                      {/* 3P成功 */}
+                      <td>{gs.p3M}</td>
+                      {/* 3P試行 */}
+                      <td>{gs.p3A}</td>
+                      {/* 3P成功率 */}
+                      <td>{p3P}%</td>
 
-                    {/* 2P成功 */}
-                    <td>{gs.p2M}</td>
-                    {/* 2P試行 */}
-                    <td>{gs.p2A}</td>
-                    {/* 2P成功率 */}
-                    <td>{p2P}%</td>
+                      {/* 2P成功 */}
+                      <td>{gs.p2M}</td>
+                      {/* 2P試行 */}
+                      <td>{gs.p2A}</td>
+                      {/* 2P成功率 */}
+                      <td>{p2P}%</td>
 
-                    {/* FT成功 */}
-                    <td>{gs.ftM}</td>
-                    {/* FT試行 */}
-                    <td>{gs.ftA}</td>
-                    {/* FT成功率 */}
-                    <td>{ftP}%</td>
+                      {/* FT成功 */}
+                      <td>{gs.ftM}</td>
+                      {/* FT試行 */}
+                      <td>{gs.ftA}</td>
+                      {/* FT成功率 */}
+                      <td>{ftP}%</td>
 
-                    {/* オフェンスリバウンド数 */}
-                    <td>{gs.oRbd}</td>
-                    {/* ディフェンスリバウンド数 */}
-                    <td>{gs.dRbd}</td>
-                    {/* 総リバウンド数 */}
-                    <td>{rbd}</td>
+                      {/* オフェンスリバウンド数 */}
+                      <td>{gs.oRbd}</td>
+                      {/* ディフェンスリバウンド数 */}
+                      <td>{gs.dRbd}</td>
+                      {/* 総リバウンド数 */}
+                      <td>{rbd}</td>
 
-                    {/* アシスト数 */}
-                    <td>{gs.ast}</td>
-                    {/* スティール数 */}
-                    <td>{gs.stl}</td>
-                    {/* シュートブロック数 */}
-                    <td>{gs.blk}</td>
-                    {/* ターンオーバー数 */}
-                    <td>{gs.tov}</td>
-                    {/* 個人ファウル数 */}
-                    <td>{gs.pf}</td>
-                    {/* テクニカルファウル数 */}
-                    <td>{gs.tf}</td>
-                    {/* ファウルオン数 */}
-                    <td>{gs.fo}</td>
-                    {/* 退場フラグ */}
-                    <td>{gs.dq}</td>
+                      {/* アシスト数 */}
+                      <td>{gs.ast}</td>
+                      {/* スティール数 */}
+                      <td>{gs.stl}</td>
+                      {/* シュートブロック数 */}
+                      <td>{gs.blk}</td>
+                      {/* ターンオーバー数 */}
+                      <td>{gs.tov}</td>
+                      {/* 個人ファウル数 */}
+                      <td>{gs.pf}</td>
+                      {/* テクニカルファウル数 */}
+                      <td>{gs.tf}</td>
+                      {/* ファウルオン数 */}
+                      <td>{gs.fo}</td>
+                      {/* 退場フラグ */}
+                      <td>{gs.dq}</td>
 
-                    {/* 試合出場時間 */}
-                    {gs.playSec === 0 ? (
-                      <td>DNP</td>
-                    ) : (
-                      /* String(sec).padStart(2, "0")
-                      -> 秒数が1桁の時も「00」のように2桁で表示する */
-                      <td>{min}:{String(sec).padStart(2, "0")}</td>
-                    )}
-                    
+                      {/* 試合出場時間 */}
+                      {gs.playSec === 0 ? (
+                        <td>DNP</td>
+                      ) : (
+                        /* String(sec).padStart(2, "0")
+                        -> 秒数が1桁の時も「00」のように2桁で表示する */
+                        <td>{min}:{String(sec).padStart(2, "0")}</td>
+                      )}
+                      
 
-                  </tr>
-                );
-              })}
-              
+                    </tr>
+                  );
+                })}
+                
 
-            </tbody>
+              </tbody>
 
-          </table>
+            </table>
+
+            <Link href={`/games/${id}/stats/edit?team=home`}>
+              スタッツを編集
+            </Link>
+          </>
         )}
         
-        <Link href={`/games/${id}/stats/edit?team=home`}>
-          スタッツを編集
-        </Link>
+        
         
       </section>
 
@@ -240,143 +249,152 @@ export default async function GameDetailPage({ params }: Props) {
         <h2>【{game.awayTeam.teamName}】スタッツ</h2>
         {/* 【三項演算子】アウェイチームの選手のスタッツの件数が0件かどうかで表示を切り替える */}
         {awayStats.length === 0 ? (
-          <p>スタッツが登録されていません</p>
+          <>
+            <p>スタッツが登録されていません</p>
+
+            <Link href={`/games/${id}/stats/new?team=away`}>
+              スタッツを登録
+            </Link>
+          </>
+          
         ) : (
           /* 1件以上の場合、表として表示 */
-          <table>
-          {/* 見出しを作る */}
-            <thead>
-              <tr>
-                <th>背番号</th>
-                <th>選手名</th>
-                <th>pts</th>
-                <th>3P(M)</th>
-                <th>3P(A)</th>
-                <th>3P(%)</th>
-                <th>2P(M)</th>
-                <th>2P(A)</th>
-                <th>2P(%)</th>
-                <th>FT(M)</th>
-                <th>FT(A)</th>
-                <th>FT(%)</th>
-                <th>RBD(OR)</th>
-                <th>RBD(DR)</th>
-                <th>RBD(TOT)</th>
-                <th>AST</th>
-                <th>STL</th>
-                <th>BLK</th>
-                <th>TO</th>
-                <th>PF</th>
-                <th>TF</th>
-                <th>FO</th>
-                <th>DQ</th>
-                <th>試合出場時間</th>
-              </tr>
-            </thead>
+          <>
+            <table>
+            {/* 見出しを作る */}
+              <thead>
+                <tr>
+                  <th>背番号</th>
+                  <th>選手名</th>
+                  <th>pts</th>
+                  <th>3P(M)</th>
+                  <th>3P(A)</th>
+                  <th>3P(%)</th>
+                  <th>2P(M)</th>
+                  <th>2P(A)</th>
+                  <th>2P(%)</th>
+                  <th>FT(M)</th>
+                  <th>FT(A)</th>
+                  <th>FT(%)</th>
+                  <th>RBD(OR)</th>
+                  <th>RBD(DR)</th>
+                  <th>RBD(TOT)</th>
+                  <th>AST</th>
+                  <th>STL</th>
+                  <th>BLK</th>
+                  <th>TO</th>
+                  <th>PF</th>
+                  <th>TF</th>
+                  <th>FO</th>
+                  <th>DQ</th>
+                  <th>試合出場時間</th>
+                </tr>
+              </thead>
 
-            {/* 1つ1つのデータを作る */}
-            <tbody>
-              {awayStats.map((gs) => {
-              // 計算が必要なものを定数に格納
-                // 総得点
-                const pts: number = gs.p3M * 3 + gs.p2M * 2 + gs.ftM;
+              {/* 1つ1つのデータを作る */}
+              <tbody>
+                {awayStats.map((gs) => {
+                // 計算が必要なものを定数に格納
+                  // 総得点
+                  const pts: number = gs.p3M * 3 + gs.p2M * 2 + gs.ftM;
 
-                // 各シュート成功率
-                /* 【三項演算子】試行回数が0の時は成功率を0、
-                  そうでない場合は M/A で成功率を計算する */
-                /* 【Math.round()】小数第二位を四捨五入
-                -> 成功率を小数第一位まで表示 */
-                const p3P: number = gs.p3A === 0 ? 0 : Math.round((gs.p3M / gs.p3A) * 1000) / 10;
-                const p2P: number = gs.p2A === 0 ? 0 : Math.round((gs.p2M / gs.p2A) * 1000) / 10;
-                const ftP: number = gs.ftA === 0 ? 0 : Math.round((gs.ftM / gs.ftA) * 1000) / 10;
+                  // 各シュート成功率
+                  /* 【三項演算子】試行回数が0の時は成功率を0、
+                    そうでない場合は M/A で成功率を計算する */
+                  /* 【Math.round()】小数第二位を四捨五入
+                  -> 成功率を小数第一位まで表示 */
+                  const p3P: number = gs.p3A === 0 ? 0 : Math.round((gs.p3M / gs.p3A) * 1000) / 10;
+                  const p2P: number = gs.p2A === 0 ? 0 : Math.round((gs.p2M / gs.p2A) * 1000) / 10;
+                  const ftP: number = gs.ftA === 0 ? 0 : Math.round((gs.ftM / gs.ftA) * 1000) / 10;
 
-                // 総リバウンド数
-                const rbd: number = gs.oRbd + gs.dRbd;
+                  // 総リバウンド数
+                  const rbd: number = gs.oRbd + gs.dRbd;
 
-                // 試合出場時間
-                /* 【Math.floor()】小数部分を切り捨てて整数に
-                　-> 「分」を求める */
-                const min: number = gs.playSec === 0 ? 0 : Math.floor(gs.playSec / 60);
-                /* 60で割ったあまりから「秒」を求める */
-                const sec: number = gs.playSec === 0 ? 0 : gs.playSec % 60;
-                
-                return(
-                  <tr key={gs.playerId}>
-                    {/* 背番号 */}
-                    <td>{gs.player.jerseyNumber}</td>
-                    {/* 選手名(漢字) */}
-                    <td>{gs.player.playerNameKanji}</td>
+                  // 試合出場時間
+                  /* 【Math.floor()】小数部分を切り捨てて整数に
+                  　-> 「分」を求める */
+                  const min: number = gs.playSec === 0 ? 0 : Math.floor(gs.playSec / 60);
+                  /* 60で割ったあまりから「秒」を求める */
+                  const sec: number = gs.playSec === 0 ? 0 : gs.playSec % 60;
+                  
+                  return(
+                    <tr key={gs.playerId}>
+                      {/* 背番号 */}
+                      <td>{gs.player.jerseyNumber}</td>
+                      {/* 選手名(漢字) */}
+                      <td>{gs.player.playerNameKanji}</td>
 
-                    {/* 総得点 */}
-                    <td>{pts}</td>
+                      {/* 総得点 */}
+                      <td>{pts}</td>
 
-                    {/* 3P成功 */}
-                    <td>{gs.p3M}</td>
-                    {/* 3P試行 */}
-                    <td>{gs.p3A}</td>
-                    {/* 3P成功率 */}
-                    <td>{p3P}%</td>
+                      {/* 3P成功 */}
+                      <td>{gs.p3M}</td>
+                      {/* 3P試行 */}
+                      <td>{gs.p3A}</td>
+                      {/* 3P成功率 */}
+                      <td>{p3P}%</td>
 
-                    {/* 2P成功 */}
-                    <td>{gs.p2M}</td>
-                    {/* 2P試行 */}
-                    <td>{gs.p2A}</td>
-                    {/* 2P成功率 */}
-                    <td>{p2P}%</td>
+                      {/* 2P成功 */}
+                      <td>{gs.p2M}</td>
+                      {/* 2P試行 */}
+                      <td>{gs.p2A}</td>
+                      {/* 2P成功率 */}
+                      <td>{p2P}%</td>
 
-                    {/* FT成功 */}
-                    <td>{gs.ftM}</td>
-                    {/* FT試行 */}
-                    <td>{gs.ftA}</td>
-                    {/* FT成功率 */}
-                    <td>{ftP}%</td>
+                      {/* FT成功 */}
+                      <td>{gs.ftM}</td>
+                      {/* FT試行 */}
+                      <td>{gs.ftA}</td>
+                      {/* FT成功率 */}
+                      <td>{ftP}%</td>
 
-                    {/* オフェンスリバウンド数 */}
-                    <td>{gs.oRbd}</td>
-                    {/* ディフェンスリバウンド数 */}
-                    <td>{gs.dRbd}</td>
-                    {/* 総リバウンド数 */}
-                    <td>{rbd}</td>
+                      {/* オフェンスリバウンド数 */}
+                      <td>{gs.oRbd}</td>
+                      {/* ディフェンスリバウンド数 */}
+                      <td>{gs.dRbd}</td>
+                      {/* 総リバウンド数 */}
+                      <td>{rbd}</td>
 
-                    {/* アシスト数 */}
-                    <td>{gs.ast}</td>
-                    {/* スティール数 */}
-                    <td>{gs.stl}</td>
-                    {/* シュートブロック数 */}
-                    <td>{gs.blk}</td>
-                    {/* ターンオーバー数 */}
-                    <td>{gs.tov}</td>
-                    {/* 個人ファウル数 */}
-                    <td>{gs.pf}</td>
-                    {/* テクニカルファウル数 */}
-                    <td>{gs.tf}</td>
-                    {/* ファウルオン数 */}
-                    <td>{gs.fo}</td>
-                    {/* 退場フラグ */}
-                    <td>{gs.dq}</td>
+                      {/* アシスト数 */}
+                      <td>{gs.ast}</td>
+                      {/* スティール数 */}
+                      <td>{gs.stl}</td>
+                      {/* シュートブロック数 */}
+                      <td>{gs.blk}</td>
+                      {/* ターンオーバー数 */}
+                      <td>{gs.tov}</td>
+                      {/* 個人ファウル数 */}
+                      <td>{gs.pf}</td>
+                      {/* テクニカルファウル数 */}
+                      <td>{gs.tf}</td>
+                      {/* ファウルオン数 */}
+                      <td>{gs.fo}</td>
+                      {/* 退場フラグ */}
+                      <td>{gs.dq}</td>
 
-                    {/* 試合出場時間 */}
-                    {gs.playSec === 0 ? (
-                      <td>DNP</td>
-                    ) : (
-                      /* String(sec).padStart(2, "0")
-                      -> 秒数が1桁の時も「00」のように2桁で表示する */
-                      <td>{min}:{String(sec).padStart(2, "0")}</td>
-                    )}
+                      {/* 試合出場時間 */}
+                      {gs.playSec === 0 ? (
+                        <td>DNP</td>
+                      ) : (
+                        /* String(sec).padStart(2, "0")
+                        -> 秒数が1桁の時も「00」のように2桁で表示する */
+                        <td>{min}:{String(sec).padStart(2, "0")}</td>
+                      )}
 
-                  </tr>
-                );
-              })}
-              
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            
+            <Link href={`/games/${id}/stats/edit?team=away`}>
+              スタッツを編集
+            </Link>
 
-            </tbody>
-
-          </table>
+          </>
         )}
 
-        <Link href={`/games/${id}/stats/edit?team=away`}>
-          スタッツを編集
-        </Link>
+        
         
       </section>
 
