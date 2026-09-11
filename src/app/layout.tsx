@@ -33,7 +33,11 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <div>{header}</div>
+
+        {/* 確認用 <p>header slot: {String(!!header)}</p> */}
+
         <main>{children}</main>
+
         <div>{footer}</div>
       </body>
     </html>
