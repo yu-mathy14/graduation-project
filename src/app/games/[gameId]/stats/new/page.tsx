@@ -1,7 +1,8 @@
-// そのURLにアクセスしたときに表示するページの土台を作る
+// URLのteamを受け取り、対象チームの選手を取得
 /* 1. DBから試合情報を取得
-   2. ホーム・アウェイの選手を取得
-   3. 取得したデータをStatsNewFormに渡す
+   2. URLのteamを確認
+   3. 指定されたチームの選手を取得
+   4. 取得したデータをStatsNewFormに渡す
 */
 // =========================================
 
@@ -15,22 +16,38 @@ import StatsNewForm from "./components/StatsNewForm";
 /* StatsNewPageが受け取るPropsの型定義 */
 type Props = {
   params: Promise<{ gameId: string }>;
+  searchParams: Promise<{ team?: string }>;
 };
 
 /**
  * スタッツ登録ページ
- * `/games/[gameId]/stats/new`に対応するサーバーコンポーネント
- * 入力フォームを表示し、送信時にServerAction(`createStats`)で試合を新規作成する。
- * 登録完了後は試合詳細 + スタッツ一覧ページへリダイレクトする。
+ * `/games/[gameId]/stats/new?team=home`
+ * `/games/[gameId]/stats/new?team=away`
+ * に対応するサーバーコンポーネント
  */
-
-export default async function StatsNewPage({ params }: Props) {
+export default async function StatsNewPage({
+  params,
+  searchParams,
+}: Props) {
+  /* URLからgameIdとteamを取得 */
   const { gameId } = await params;
-  const id = Number(gameId); // gameId(文字列)を数値に変換し、idに格納
+  const { team } = await searchParams;
 
-  /* URLから受け取った[gameId]と一致する試合を取得 */
+  /* gameId(文字列)を数値に変換 */
+  const id = Number(gameId);
+
+  /* gameIdが数値でない場合は404ページを表示 */
+  if (Number.isNaN(id)) notFound();
+
+  /* teamにhomeまたはaway以外が指定された場合は404ページを表示 */
+  if (team !== "home" && team !== "away") {
+    notFound();
+  }
+
+  /* URLから受け取ったgameIdと一致する試合を取得 */
   const game = await prisma.games.findUnique({
     where: { gameId: id },
+
     // include：関連するテーブルを一緒に取得する
     include: {
       /* Gamesに紐づいているhomeTeam/awayTeamも取得する */
@@ -39,32 +56,31 @@ export default async function StatsNewPage({ params }: Props) {
     },
   });
 
-  /* 試合が見つからなかった場合、404ページを表示する */
+  /* 試合が見つからなかった場合、404ページを表示 */
   if (!game) notFound();
 
-  /* ホーム・アウェイのチームを選択肢として使用する */
-  const teams = [game.homeTeam, game.awayTeam];
+  /* 登録対象のチームIDとチーム名を決める */
+  const teamId =
+    /* 【三項演算子】teamに"home"が指定されたか */
+    team === "home"
+      ? game.homeTeamId  // homeの場合
+      : game.awayTeamId; // homeじゃない場合
 
-  /*　ホームチームの選手のみ取得 */
-  const homePlayers = await prisma.players.findMany({
+  const teamName =
+    /* 【三項演算子】teamに"home"が指定されたか */
+    team === "home"
+      ? game.homeTeam.teamName  // homeの場合
+      : game.awayTeam.teamName; // homeじゃない場合
+
+  /* 登録対象チームの選手のみ取得 */
+  const players = await prisma.players.findMany({
     where: {
-      teamId: game.homeTeamId,
+      teamId: teamId,
     },
     orderBy: {
-      jerseyNumber: "asc",
+      jerseyNumber: "asc", // 背番号の昇順
     },
   });
-
-  /*　アウェイチームの選手のみ取得 */
-  const awayPlayers = await prisma.players.findMany({
-    where: {
-      teamId: game.awayTeamId,
-    },
-    orderBy: {
-      jerseyNumber: "asc",
-    },
-  });
-  
 
   return (
     <div>
@@ -73,17 +89,14 @@ export default async function StatsNewPage({ params }: Props) {
         ←試合詳細に戻る
       </Link>
 
-      <h1>スタッツを登録</h1>
+      <h1>{teamName} スタッツを登録</h1>
 
       <StatsNewForm
-      /* これは属性ではなくProps */
+        /* これは属性ではなくProps */
         gameId={game.gameId}
-        homeTeamName={game.homeTeam.teamName}
-        homePlayers={homePlayers}
-        awayTeamName={game.awayTeam.teamName}
-        awayPlayers={awayPlayers}
+        teamName={teamName}
+        players={players}
       />
-
     </div>
-  )
+  );
 }
