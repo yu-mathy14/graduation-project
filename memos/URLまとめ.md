@@ -20,6 +20,7 @@
 | /games/new | 試合登録(新規) |
 | /games/[gameId] | 試合詳細 + スタッツ一覧 |
 | /games/[gameId]/edit | 試合詳細編集 |
-| /games/[gameId]/stats/new | スタッツ登録(新規) |
+| /games/[gameId]/stats/new?team=home | ホームチームのスタッツ登録(新規) |
+| /games/[gameId]/stats/new?team=away | アウェイチームのスタッツ登録(新規) |
 | /games/[gameId]/stats/edit?team=home | ホームチームのスタッツ編集 |
 | /games/[gameId]/stats/edit?team=away | アウェイチームのスタッツ編集 |
