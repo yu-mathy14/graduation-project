@@ -94,6 +94,7 @@ export default async function StatsNewPage({
       <StatsNewForm
         /* これは属性ではなくProps */
         gameId={game.gameId}
+        teamId={teamId}
         teamName={teamName}
         players={players}
       />

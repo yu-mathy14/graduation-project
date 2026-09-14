@@ -21,6 +21,7 @@ import { createStats } from "../actions";
 /* StatsNewFormが受け取るPropsの型定義 */
 type Props = {
   gameId: number;
+  teamId: number;
   teamName: string;
   /* 複数の選手オブジェクトを格納した配列 */
   players: Player[];
@@ -29,6 +30,7 @@ type Props = {
 /* スタッツ入力画面の状態と処理を管理する関数 */
 export default function StatsNewForm({
   gameId,
+  teamId,
   teamName,
   players,
 }: Props) {
@@ -189,7 +191,7 @@ export default function StatsNewForm({
                 type="button"
                 /* ボタンクリックで非同期のcreateStats()関数を実行 */
                 onClick={async () => {
-                  await createStats(gameId, playerStats);
+                  await createStats(gameId, teamId, playerStats);
                 }}
               >
                 登録
