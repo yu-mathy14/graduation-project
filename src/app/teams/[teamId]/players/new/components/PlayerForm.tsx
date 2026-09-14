@@ -14,7 +14,7 @@ import { useForm,
 
 /* 他ファイルから必要なものを読み込み */
 import { createPlayer } from "../actions";
-import { playerSchema, type PlayerFormValues } from "../schema";
+import { playerSchema, type PlayerFormValues } from "../../schema";
 
 /* PlayerFormが受け取るPropsの型定義 */
 type Props = {
@@ -128,6 +128,10 @@ export default function PlayerForm({ teamId }: Props) {
           />
            {/* heightのバリデーションエラーがある場合、メッセージを表示 */}
           <div>{errors.height?.message}</div>
+
+          <p>
+            身長は任意です。入力する場合は整数で入力してください。
+          </p>
         </div>
 
         <div>
@@ -143,6 +147,10 @@ export default function PlayerForm({ teamId }: Props) {
           />
           {/* weightのバリデーションエラーがある場合、メッセージを表示 */}
           <div>{errors.weight?.message}</div>
+
+          <p>
+            体重は任意です。入力する場合は整数で入力してください。
+          </p>
         </div>
 
         <div>
