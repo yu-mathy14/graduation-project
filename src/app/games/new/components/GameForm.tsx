@@ -14,7 +14,7 @@ import { useForm,
 
 /* 他ファイルから必要なものを読み込み */
 import { createGame } from "../actions";
-import { gameSchema, type GameFormValues,} from "../schema";
+import { gameSchema, type GameFormValues,} from "../../schema";
 
 /* チームの型定義 */
 type Team = {

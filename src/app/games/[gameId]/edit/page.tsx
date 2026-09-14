@@ -1,6 +1,13 @@
+// Games編集ページを表示する
+/* 試合情報とチーム情報を取得し、
+入力フォームはGameForm.tsxに分離する */
+// ==================================================
+
 import { prisma } from "@/lib/prisma";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import Link from "next/link";
+
+import GameForm from "./components/GameForm";
 
 // このページに拡張されるデータの型定義
 /* paramsにはgameIdという文字列が入っている */
@@ -14,8 +21,8 @@ export default async function GameEditPage({ params }: Props) {
   const { gameId } = await params;
   const id = Number(gameId); // gameId(文字列)を数値に変換し、idに格納
 
-  // Prismaを使ってGameテーブルから1件取得
-  /* 戻り値はオブジェクト */
+  // Prismaを使ってGamesテーブルから1件取得
+  /* 該当する試合があれば試合オブジェクト、なければnullが返る */
   const game = await prisma.games.findUnique({
     where: { gameId: id },
   });
@@ -40,42 +47,8 @@ export default async function GameEditPage({ params }: Props) {
     },
   });
 
-  // フォームが送信された時に実行する関数
-  /* <form action={updateGame}>によって、フォーム送信時にupdateGameが実行される */  /* formData フォームに入力されたデータ */
-  /* FormData -> Web APIとして用意されている型
-     フォーム送信時にはFormDataオブジェクトがupdateGameに渡される */
-  /* フォーム送信時の処理をサーバー側で実行するため、
-     Server Actionとして定義する */
-  async function updateGame(formData: FormData) {
-    /* この関数はサーバー側で実行する処理です
-    とNext.jsに伝えるためのServer Actionの宣言 */
-    "use server";
-
-    // formDataの中から指定したキーの値を取り出して型アサーションし、定数に格納
-    /* 【.get()】-> FormDataの中から、指定したname(キー)のデータを1つ取り出すためのメソッド */
-    const tipoffTimeRaw = formData.get("tipoffTime") as string;
-    const homeTeamIdRaw = formData.get("homeTeamId") as string;
-    const awayTeamIdRaw = formData.get("awayTeamId") as string;
-    const homeScoreRaw = formData.get("homeScore") as string;
-    const awayScoreRaw = formData.get("awayScore") as string;
-
-    /* whereで指定したGameを1件更新する */
-    await prisma.games.update({
-      where: { gameId: id },
-      data: {
-        gameId: id,
-        tipoffTime: new Date(`${tipoffTimeRaw}:00+09:00`),
-        homeTeamId: Number(homeTeamIdRaw),
-        awayTeamId: Number(awayTeamIdRaw),
-        homeScore: Number(homeScoreRaw),
-        awayScore: Number(awayScoreRaw),
-      },
-    });
-
-    /* 編集画面から該当の試合の詳細画面へ戻す */
-    redirect(`/games/${id}`);
-
-  }
+  /* チームが2チーム未満の場合、試合を編集できないため404ページを表示 */
+  if (teams.length < 2) notFound();
   
   return (
     <div>
@@ -86,99 +59,23 @@ export default async function GameEditPage({ params }: Props) {
 
       <h1>試合情報を編集</h1>
 
-      {/* 編集用のフォーム */}
-      {/* action={updateGame} -> フォーム送信時に実行される関数 */}
-      <form action={updateGame}>
-        {/* 必須項目 */}
-        <div>
-          <label htmlFor="tipoffTime">試合開始日時 *</label>
-          <input
-            id="tipoffTime" // labelと対応
-            name="tipoffTime"
-            type="datetime-local"
-            required // 必須入力
-            defaultValue={tipoffTimeValue}
-          />
-        </div>
-        
-        {/* ホームチームの選択
-        現時点ではアウェイチームと重複しないようなバリデーションは未実装 */}
-        <div>
-          <label htmlFor="homeTeamId">ホームチーム *</label>
-          <select
-            name="homeTeamId"
-            id="homeTeamId"
-            required // 必須選択
-            defaultValue={game.homeTeamId}
-            >
-            <option value="">チームを選択してください</option>
-            {/* 配列からすべての登録済みのチームをプルダウンの選択肢にする */}
-            {/* 選択されたチームのteamIdがvalueになり、formDataへ送られる */}
-            {teams.map((t) => (
-              <option key={t.teamId} value={t.teamId}>
-                {t.teamName}
-              </option>
-            ))}
-          </select>
-        </div>
+      {/* React Hook Form + Yupを使った入力フォームを表示 */}
+      <GameForm
+        /* これらはすべてGameFormに渡すProps */
+        gameId={game.gameId}
+        tipoffTime={tipoffTimeValue}
+        homeTeamId={game.homeTeamId} 
+        awayTeamId={game.awayTeamId} 
+        homeScore={game.homeScore} 
+        awayScore={game.awayScore} 
+        teams={teams}
+      />
 
-        {/* アウェイチームの選択
-        現時点ではホームチームと重複しないようなバリデーションは未実装 */}
-        <div>
-          <label htmlFor="awayTeamId">アウェイチーム *</label>
-          <select
-            name="awayTeamId"
-            id="awayTeamId"
-            required // 必須選択
-            defaultValue={game.awayTeamId}
-            >
-            <option value="">チームを選択してください</option>
-            {/* 配列からすべての登録済みのチームをプルダウンの選択肢にする */}
-            {/* 選択されたチームのteamIdがvalueになり、formDataへ送られる */}
-            {teams.map((t) => (
-              <option key={t.teamId} value={t.teamId}>
-                {t.teamName}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label htmlFor="homeScore">ホーム最終スコア *</label>
-          <input
-            id="homeScore" // labelと対応
-            name="homeScore"
-            type="number" // 数値のみ許容
-            required // 必須入力
-            min="0" // 最小値のバリデーション
-            defaultValue={game.homeScore}
-          />
-        </div>
-
-        <div>
-          <label htmlFor="awayScore">アウェイ最終スコア *</label>
-          <input
-            id="awayScore" // labelと対応
-            name="awayScore"
-            type="number" // 数値のみ許容
-            required // 必須入力
-            min="0" // 最小値のバリデーション
-            defaultValue={game.awayScore}
-          />
-        </div>
-
-        <div>
-          {/* フォーム送信用ボタン */}
-          <button type="submit">
-            更新する
-          </button>
-          {/* 更新キャンセル時は試合詳細ページに遷移 */}
-          <Link href={`/games/${id}`}>
-            キャンセル
-          </Link>
-        </div>
-      </form>
-
+      {/* 更新キャンセル時は試合詳細ページに遷移 */}
+      <Link href={`/games/${id}`}>
+        キャンセル
+      </Link>
     </div>
-  )
+
+  );
 }
