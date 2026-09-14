@@ -9,7 +9,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import type { TeamFormValues } from "./schema";
+import type { TeamFormValues } from "../schema";
 
 /* フォームから受け取ったチーム情報を確認し、
 チーム名の重複がなければDBに登録して詳細ページへ遷移する関数 */
