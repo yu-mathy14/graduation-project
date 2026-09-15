@@ -50,6 +50,30 @@ export async function createGame(data: GameFormValues) {
   }
   // ---------------------------------------------------
 
+  // 所属選手数チェック -----------------------------------
+  /* ホームチームの所属選手数を取得 */
+  /* 【.count()】条件に合うデータの件数を取得 */
+  const homePlayerCount = await prisma.players.count({
+    where: {
+      teamId: homeTeamId,
+    },
+  });
+
+  /* アウェイチームの所属選手数を取得 */
+  const awayPlayerCount = await prisma.players.count({
+    where: {
+      teamId: awayTeamId,
+    },
+  });
+
+  /* どちらかのチームの所属選手が5人未満の場合は登録しない */
+  if (homePlayerCount < 5 || awayPlayerCount < 5) {
+    throw new Error(
+      "ホームチームとアウェイチームには所属選手が5人以上いる必要があります"
+    );
+  }
+  // ---------------------------------------------------
+
   /* Gameを1件登録する */
   const game = await prisma.games.create({
     data: {

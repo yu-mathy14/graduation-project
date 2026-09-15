@@ -67,6 +67,30 @@ export async function updateGame(
   }
   // ---------------------------------------------------
 
+  // 所属選手数チェック -----------------------------------
+  /* ホームチームの所属選手数を取得 */
+  /* 【.count()】条件に合うデータの件数を取得 */
+  const homePlayerCount = await prisma.players.count({
+    where: {
+      teamId: homeTeamId,
+    },
+  });
+
+  /* アウェイチームの所属選手数を取得 */
+  const awayPlayerCount = await prisma.players.count({
+    where: {
+      teamId: awayTeamId,
+    },
+  });
+
+  /* どちらかのチームの所属選手が5人未満の場合は更新しない */
+  if (homePlayerCount < 5 || awayPlayerCount < 5) {
+    throw new Error(
+      "ホームチームとアウェイチームには所属選手が5人以上いる必要があります"
+    );
+  }
+  // ---------------------------------------------------
+
   /* 指定した試合を更新 */
   await prisma.games.update({
     where: {

@@ -20,6 +20,10 @@ import { gameSchema, type GameFormValues,} from "../../schema";
 type Team = {
   teamId: number;
   teamName: string;
+  /* 所属選手数を管理 */
+  _count: {
+    player: number;
+  };
 };
 
 /* GameFormが受け取るPropsの型定義 */
@@ -95,8 +99,11 @@ export default function GameForm({ teams }: Props) {
           <option
             key={team.teamId} // チームを一意に識別するためのキー
             value={team.teamId}
+            disabled={team._count.player < 5} // 所属選手5人未満は選択不可
           >
             {team.teamName}
+            {/* 所属選手5人未満の場合は画面上に表示 */}
+            {team._count.player < 5 ? "（所属選手5人未満）" : ""}
           </option>
         ))}
       </select>
@@ -124,8 +131,11 @@ export default function GameForm({ teams }: Props) {
           <option
             key={team.teamId} // チームを一意に識別するためのキー
             value={team.teamId}
+            disabled={team._count.player < 5} // 所属選手5人未満は選択不可
           >
             {team.teamName}
+            {/* 所属選手5人未満の場合は画面上に表示 */}
+            {team._count.player < 5 ? "（所属選手5人未満）" : ""}
           </option>
         ))}
       </select>

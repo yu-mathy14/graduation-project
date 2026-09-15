@@ -45,6 +45,14 @@ export default async function GameEditPage({ params }: Props) {
     orderBy: {
       teamId: "asc", // チームIDの昇順
     },
+    // 所属選手数も一緒に取得する
+    include: {
+      _count: {
+        select: {
+          player: true,
+        },
+      },
+    },
   });
 
   /* チームが2チーム未満の場合、試合を編集できないため404ページを表示 */
