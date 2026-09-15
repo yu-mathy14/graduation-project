@@ -34,7 +34,7 @@ export async function createStats(
     },
   });
 
-  /* 試合が存在しない場合 */
+  /* 指定した試合が存在しない場合 */
   if (!game) {
     throw new Error("指定された試合が存在しません");
   }
@@ -48,7 +48,7 @@ export async function createStats(
     throw new Error("このチームは指定された試合に参加していません");
   }
 
-  /* playerStatsに含まれている選手IDを配列にする */
+  /* playerStatsのキーである選手IDを取り出し、数値型の配列に変換する */
   const playerIds = Object.keys(playerStats).map(Number);
 
   /* 登録対象の選手をDBから取得 */
@@ -65,7 +65,7 @@ export async function createStats(
      すべて指定したチームに所属しているか確認 */
   if (players.length !== playerIds.length) {
     throw new Error(
-      "試合に参加していないチームの選手が含まれています"
+      "指定したチームに所属していない選手が含まれています"
     );
   }
 
@@ -94,9 +94,11 @@ export async function createStats(
     })
   );
 
+  /* 複数選手分のスタッツをまとめてDBへ登録 */
   await prisma.stats.createMany({
     data: statsData,
   });
 
+  /* スタッツ登録後、試合詳細ページへ遷移 */
   redirect(`/games/${gameId}`);
 }
