@@ -161,32 +161,41 @@ export default function StatsNewForm({
     }
   };
 
-  // [登録]ボタンクリック時、選択した全選手のスタッツをYupで検証し、成功したらDBへ登録する
+  // [登録]ボタンクリック時、所属選手全員のスタッツをYupで検証し、成功したらDBへ登録する
   const handleRegister = async () => {
-    /* 現在選択されている選手のスタッツだけを登録対象として取得 */
-    const selectedPlayerStats = Object.fromEntries(
-      selectedPlayerIds.map((playerId) => [
-        playerId,
-        playerStats[playerId],
+    /* 所属選手全員を登録対象にする */
+    const allPlayerStats = Object.fromEntries(
+      players.map((player) => [
+        player.playerId,
+        /* 選択済み選手のIDが含まれているかで場合分け */
+        selectedPlayerIds.includes(player.playerId)
+          /* 選択済みの選手は入力済みのスタッツを渡す */
+          ? playerStats[player.playerId]
+          /* 未選択の選手はスタッツの初期値(すべて0のデータ)を渡す */
+          : { ...initialPlayerStats },
       ])
     );
 
     try {
       // 選択した全選手のスタッツを1人ずつ検証
       /* 配列の加工は不要なので.map()ではなく【for...of】を使う
-      -> 選択した各選手についてYupの非同期検証を順番に実行 */
-      /* Yupの検証でエラーが発生すると、その時点でfor...ofを抜けてcatchに進む */
-      for (const playerId of selectedPlayerIds) {
+      -> 所属選手全員についてYupの非同期検証を順番に実行 */
+      /* Yupの検証でエラーが発生すると、for...ofを抜けてcatchの処理へ進む */
+
+      /* Object.entries() → allPlayerStatsを「[キー, 値]」の配列に変換する
+      　 [playerId, stats] → 配列のキーをplayerId、値をstatsとして分割代入する
+     　　 for...of → 1選手分ずつ順番に取り出して処理する */
+      for (const [playerId, stats] of Object.entries(allPlayerStats)) {
         /* 【await】Yupの検証処理が完了するまで次の処理に進まないようにする */
-        /* 選択されている選手のスタッツをplayerStatsSchemaに渡して、Yupで検証 */
-        await playerStatsSchema.validate(selectedPlayerStats[playerId]);
+        /* 全選手のスタッツをplayerStatsSchemaに渡して、Yupで検証 */
+        await playerStatsSchema.validate(stats);
       }
 
       /* Yupの検証に成功時、以前表示されていたエラーメッセージがあれば消す */
       setStatsError("");
 
-      /* 検証に成功した選手のスタッツだけをDBへ登録 */
-      await createStats(gameId, teamId, selectedPlayerStats);
+      /* 所属選手全員のスタッツをDBへ登録 */
+      await createStats(gameId, teamId, allPlayerStats);
     } catch (error) {
       /* Yup検証失敗時、発生したerrorがYupのValidationErrorかどうかを確認
       -> 今回のようなYupによる検証エラーならこの条件はtrueになる */
