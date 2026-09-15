@@ -20,7 +20,7 @@ import PlayerSelect from "./PlayerSelect";
 import { createStats } from "../actions";
 
 /* Yupスキーマの読み込み */
-import { playerStatsSchema } from "../schema";
+import { playerStatsSchema } from "../../schema";
 import * as yup from "yup";
 
 /* StatsNewFormが受け取るPropsの型定義 */

@@ -9,7 +9,7 @@ yupという名前のオブジェクトとして読み込む */
 -> モジュールの全エクスポートをまとめて1つの名前空間オブジェクトにする */
 import * as yup from "yup";
 /* 型の読み込み */
-import type { PlayerStats } from "./types";
+import type { PlayerStats } from "./new/types";
 
 // 検証ルールを準備
 /* yup.object関数の中にオブジェクトを入れていく */
