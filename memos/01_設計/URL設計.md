@@ -11,6 +11,7 @@
 | /teams/[teamId]/players/new | 選手登録(新規) |
 | /teams/[teamId]/players/[playerId] | 選手詳細 |
 | /teams/[teamId]/players/[playerId]/edit | 選手詳細編集 |
+| /teams/[teamId]/players/[playerId]/delete | 選手削除確認 |
 
 ---
 ## 試合・スタッツ関連
