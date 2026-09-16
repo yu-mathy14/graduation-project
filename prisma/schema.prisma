@@ -12,10 +12,98 @@ datasource db {
   provider = "postgresql"
 }
 
-// prisma studio確認用に追加
-model Todo {
-  id        Int      @id @default(autoincrement())
-  title     String
-  done      Boolean  @default(false)
-  createdAt DateTime @default(now())
+// teams(チーム)
+model Teams {
+  teamId    Int    @id @default(autoincrement()) @map("team_id")
+  teamName  String @unique @db.VarChar(30) @map("team_name")
+  teamColor String @db.VarChar(7) @default("#FFFFFF") @map("team_color")
+
+// *1 Teamsは複数のPlayersを持つ
+  player Players[]
+// *2 Teamsは複数のGamesを持つ
+  // このhomeGamesは"HomeGames"を介してhomeTeamと対応している、と明示的に
+  homeGames Games[] @relation("HomeGames")
+  // このawayGamesは"AwayGames"を介してawayTeamと対応している、と明示的に
+  awayGames Games[] @relation("AwayGames")
+
+  @@map("teams")
+}
+
+// players(選手)
+model Players {
+  playerId        Int    @id @default(autoincrement()) @map("player_id")
+  teamId          Int    @map("team_id") // 外部キー 
+  playerNameKanji String @db.VarChar(30) @map("player_name_kanji")
+  playerNameKana  String @db.VarChar(30) @map("player_name_kana")
+  jerseyNumber    Int    @map("jersey_number")
+  almaMater       String @db.VarChar(30) @default("未設定") @map("alma_mater")
+  height          Int? 
+  weight          Int? 
+
+// 同じチーム内では背番号を重複させない
+  @@unique([teamId, jerseyNumber])
+
+// *1 Teamsは複数のPlayersを持つ
+  team Teams @relation(fields: [teamId], references: [teamId])
+
+// *3 Playersは複数のStatsを持つ
+  stats Stats[]
+
+  @@map("players")
+}
+
+// games(試合)
+model Games {
+  gameId     Int      @id @default(autoincrement()) @map("game_id")
+  tipoffTime DateTime @db.Timestamptz(3) @default(now()) @map("tipoff_time")
+  homeTeamId Int      @map("home_team_id") // 外部キー 
+  awayTeamId Int      @map("away_team_id") // 外部キー 
+  homeScore  Int      @default(0) @map("home_score") 
+  awayScore  Int      @default(0) @map("away_score") 
+
+// *2 Teamsは複数のGamesを持つ
+/* HOMEとAWAYで同じTeamsを2回参照するから、リレーションも2本必要 */
+  // このhomeTeamは"HomeGames"を介してhomeGamesと対応している、と明示的に
+  homeTeam Teams @relation("HomeGames", fields: [homeTeamId], references: [teamId])
+  // このawayTeamは"AwayGames"を介してawayGamesと対応している、と明示的に
+  awayTeam Teams @relation("AwayGames", fields: [awayTeamId], references: [teamId])
+
+// *4 Gamesは複数のStatsを持つ
+  stats Stats[]
+
+  @@map("games")
+}
+
+// stats(スタッツ)
+model Stats {
+  playerId Int @map("player_id") // 複合主キー 
+  gameId   Int @map("game_id") // 複合主キー 
+  p3A      Int @default(0) @map("p3_a") 
+  p3M      Int @default(0) @map("p3_m") 
+  p2A      Int @default(0) @map("p2_a") 
+  p2M      Int @default(0) @map("p2_m")
+  ftA      Int @default(0) @map("ft_a") 
+  ftM      Int @default(0) @map("ft_m")
+  oRbd     Int @default(0) @map("o_rbd")
+  dRbd     Int @default(0) @map("d_rbd")
+  ast      Int @default(0) @map("ast")
+  stl      Int @default(0) @map("stl")
+  blk      Int @default(0) @map("blk")
+  tov      Int @default(0) @map("tov")
+  pf       Int @default(0) @map("pf")
+  tf       Int @default(0) @map("tf")
+  fo       Int @default(0) @map("fo")
+  dq       Int @default(0) @map("dq")
+  playSec  Int @default(0) @map("play_sec")
+
+// 複合主キー
+  @@id([playerId, gameId])
+
+// *3 Playersは複数のStatsを持つ
+  player Players @relation(fields: [playerId], references: [playerId])
+
+// *4 Gamesは複数のStatsを持つ
+  game Games @relation(fields: [gameId], references: [gameId])
+
+  @@map("stats")
 }

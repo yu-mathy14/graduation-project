@@ -1,0 +1,2 @@
+ALTER TABLE "games"
+ALTER COLUMN "tipoff_time" TYPE TIMESTAMPTZ(3);
