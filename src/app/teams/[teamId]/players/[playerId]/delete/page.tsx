@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { deletePlayer } from "./actions";
 
 /* PlayerDeletePageが受け取るPropsの型定義 */
 type Props = {
@@ -60,9 +61,13 @@ export default async function PlayerDeletePage({ params }: Props) {
           </Link>
 
           {/* ((仮ボタン))次の段階でServer Actionを設定する */}
-          <button type="button">
-            削除
-          </button>
+          <form action={deletePlayer}>
+            <input type="hidden" name="playerId" value={pId} />
+            <input type="hidden" name="teamId" value={tId} />
+            <button type="submit">
+              削除
+            </button>
+          </form>
         </>
       ) : (
       /* ----- 以下、選手削除不可の場合に表示される部分 ----- */
