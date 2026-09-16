@@ -18,6 +18,14 @@ export default async function PlayerDetailPage({ params }: Props) {
   // Prismaを使ってPlayersテーブルから該当の選手情報(1件)を取得
   const player = await prisma.players.findUnique({
     where: { playerId: pId },
+    // スタッツ数も一緒に取得する
+    include: {
+      _count: {
+        select: {
+          stats: true,
+        },
+      },
+    },
   });
 
   /* 選手が見つからなかった場合、404ページを表示する */
@@ -27,6 +35,10 @@ export default async function PlayerDetailPage({ params }: Props) {
   if (player.teamId !== tId) {
     notFound();
   }
+
+  /* 選手削除可否を判定し、結果を定数に格納 */
+  const canDeletePlayer = player._count.stats === 0;
+  
 
   // Prismaを使ってTeamsテーブルから該当のチーム情報(1件)を取得
   const team = await prisma.teams.findUnique({
@@ -47,6 +59,20 @@ export default async function PlayerDetailPage({ params }: Props) {
       <Link href={`/teams/${tId}/players/${pId}/edit`}>
         編集
       </Link>
+
+      {/* 選手削除可能な場合、削除確認ページへの遷移リンクを表示 */}
+      {canDeletePlayer && (
+        <Link href={`/teams/${tId}/players/${pId}/delete`}>
+          削除
+        </Link>
+      )}
+
+      {/* 選手削除不可の場合、理由を表示 */}
+      {!canDeletePlayer && (
+        <p>
+          この選手には試合スタッツが登録されているため、削除できません。
+        </p>
+      )}
 
       <section>
         <h2>【{team.teamName}】選手情報</h2>
