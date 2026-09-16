@@ -222,12 +222,17 @@ export default function StatsNewForm({
             onChange={handlePlayerChange}
           />
 
+          {/* 5人未満の場合は注意書きを表示 */}
+          {selectedPlayerIds.length < 5 && (
+            <p>※出場選手を5人以上選択してください</p>
+          )}
+
           <button
             type="button"
             /* ボタンクリックでstepを2に更新 */
             onClick={() => setStep(2)}
-            /* 現在選択中の選手が0人の場合は押せない */
-            disabled={selectedPlayerIds.length === 0}
+            /* 現在選択中の選手が5人未満の場合は押せない */
+            disabled={selectedPlayerIds.length < 5}
           >
             スタッツ入力に進む
           </button>
