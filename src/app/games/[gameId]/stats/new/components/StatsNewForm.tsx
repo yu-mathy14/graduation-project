@@ -177,7 +177,7 @@ export default function StatsNewForm({
     );
 
     try {
-      // 選択した全選手のスタッツを1人ずつ検証
+      // 所属選手全員ののスタッツを1人ずつ検証
       /* 配列の加工は不要なので.map()ではなく【for...of】を使う
       -> 所属選手全員についてYupの非同期検証を順番に実行 */
       /* Yupの検証でエラーが発生すると、for...ofを抜けてcatchの処理へ進む */
@@ -191,14 +191,31 @@ export default function StatsNewForm({
         await playerStatsSchema.validate(stats);
       }
 
-      /* Yupの検証に成功時、以前表示されていたエラーメッセージがあれば消す */
+      /* 所属選手全員の試合出場時間を合計する */
+      const totalPlaySec = Object.values(allPlayerStats).reduce(
+        /* 第一引数：現在のStatsの試合出場時間(秒)を累積値に加える
+           第二引数：累積値(total)の初期値は0 */
+        (total, stats) => total + stats.playSec,
+        0
+      );
+
+      /* 試合出場時間の合計が12,000秒でない場合は登録しない */
+      if (totalPlaySec !== 12000) {
+        setStatsError(
+          "所属選手全員の試合出場時間の合計が12,000秒になるように入力してください"
+        );
+        return;
+      }
+
+      /* Yup検証と試合出場時間の合計チェックに成功したため、
+        以前表示されていたエラーメッセージがあれば消す */
       setStatsError("");
 
       /* 所属選手全員のスタッツをDBへ登録 */
       await createStats(gameId, teamId, allPlayerStats);
     } catch (error) {
-      /* Yup検証失敗時、発生したerrorがYupのValidationErrorかどうかを確認
-      -> 今回のようなYupによる検証エラーならこの条件はtrueになる */
+      /* エラーがYupのValidationErrorか確認する
+     -> Yupによる検証エラーの場合はエラーメッセージを表示する */
       if (error instanceof yup.ValidationError) {
         /* Yupが作成したエラーメッセージをstatsErrorに保存 */
         setStatsError(error.message);
