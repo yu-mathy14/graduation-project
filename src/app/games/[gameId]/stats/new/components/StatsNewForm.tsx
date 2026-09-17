@@ -157,6 +157,10 @@ export default function StatsNewForm({
       if (error instanceof yup.ValidationError) {
         /* Yupが作成したエラーメッセージをstatsErrorに保存 */
         setStatsError(error.message);
+        
+      /* Server Action側で発生したエラーの場合 */
+      } else if (error instanceof Error) {
+        setStatsError(error.message);
       }
     }
   };
