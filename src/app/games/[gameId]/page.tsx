@@ -33,6 +33,9 @@ export default async function GameDetailPage({ params }: Props) {
   /* 試合が見つからなかった場合、404ページを表示する */
   if (!game) notFound();
 
+  /* 試合削除可否を判定し、結果を変数に格納 */
+  const canDeleteGame = game.stats.length === 0;
+
   // ホームチームの選手のスタッツだけ取り出す
   const homeStats = game.stats.filter(
     (stat) => stat.player.teamId === game.homeTeamId
@@ -54,6 +57,20 @@ export default async function GameDetailPage({ params }: Props) {
       <Link href={`/games/${id}/edit`}>
         試合情報を編集
       </Link>
+
+      {/* 試合削除可能な場合、削除確認ページへの遷移リンクを表示 */}
+      {canDeleteGame && (
+        <Link href={`/games/${id}/delete`}>
+          試合を削除
+        </Link>
+      )}
+
+      {/* 試合削除不可の場合、理由を表示 */}
+      {!canDeleteGame && (
+        <p>
+          この試合にはスタッツが登録されているため、削除できません。
+        </p>
+      )}
 
       {/* 試合情報 */}
       <section>

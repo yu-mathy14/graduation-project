@@ -1,0 +1,116 @@
+import { prisma } from "@/lib/prisma";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { deleteTeam } from "./actions"; 
+
+/* TeamDeletePageが受け取るPropsの型定義 */
+type Props = {
+  params: Promise<{
+    teamId: string;
+  }>;
+};
+
+export default async function TeamDeletePage({ params }: Props) {
+  const { teamId } = await params;
+  const id = Number(teamId); // teamId(文字列)を数値に変換し、idに格納
+
+  // Prismaを使ってTeamsテーブルから該当のチーム情報(1件)を取得する
+  const team = await prisma.teams.findUnique({
+    where: { teamId: id },
+    // 件数も一緒に取得
+    include: {
+      _count: {
+        /* 取得する件数の項目 */
+        select: { 
+          player: true, // 所属選手
+          homeGames: true, // ホームチームとして参加した試合
+          awayGames: true, // アウェイチームとして参加した試合
+        }
+      }
+    }
+  });
+
+  /* チームが見つからなかった場合、404ページを表示する */
+  if (!team) notFound();
+
+  /* 削除不可理由特定のために理由毎に削除可否を判定する */
+  // 理由1：所属選手がいる
+  const hasPlayers = team._count.player > 0;
+  // 理由2：試合参加歴がある(仕様上単体では通常発生しない)
+  const hasGames =
+    team._count.homeGames > 0 || // ホームチームとして
+    team._count.awayGames > 0;   // アウェイチームとして
+
+  /* 2つの理由をもとにチーム削除可否を判定し、結果を定数に格納 */
+  const canDeleteTeam = !hasPlayers && !hasGames;
+
+  return (
+    <div>
+      {/* 【三項演算子】チーム削除可否によって表示内容を切り替える */}
+      {canDeleteTeam ? (
+      /* ----- 以下、チーム削除可能な場合に表示される部分 ----- */
+        <>
+          <h2>チーム削除確認</h2>
+
+          {/* 削除前の確認メッセージの表示 */}
+          <p>
+            【{team.teamName}】を本当に削除しますか？
+          </p>
+
+          {/* 削除キャンセルの場合はチーム詳細ページに遷移 */}
+          <Link href={`/teams/${id}/`}>
+            キャンセル
+          </Link>
+
+          {/* ((仮ボタン))次の段階でServer Actionを設定する */}
+          <form action={deleteTeam}>
+            <input type="hidden" name="teamId" value={id} />
+            <button type="submit">
+              削除
+            </button>
+          </form>
+        </>
+      ) : (
+      /* ----- 以下、チーム削除不可の場合に表示される部分 ----- */
+      /* 直接URLからアクセスした場合などに備えた、
+         通常用の操作ではほぼ表示されない削除不可時の画面 */
+        <>
+          <h2>チーム削除不可</h2>
+          
+          {/* エラーメッセージ(削除不可理由)の表示 */}
+          {/* パターン1：所属選手がいるのみ */}
+          {hasPlayers && !hasGames && (
+            <p>
+              このチームには所属選手がいるため、削除できません。
+            </p>
+          )}
+
+          {/* パターン2：試合参加歴があるのみ */}
+          {/* 通常操作では発生しない想定だが、安全性のために作成 */}
+          {!hasPlayers && hasGames && (
+            <p>
+              このチームは試合に参加した記録があるため、削除できません。
+            </p>
+          )}
+
+          {/* パターン3：理由1 かつ 理由2 */}
+          {hasPlayers && hasGames && (
+            <p>
+              このチームは以下の理由で削除できません。<br />
+              ・所属選手がいる<br />
+              ・試合に参加した記録がある
+            </p>
+          )}
+
+          {/* 削除不可理由を確認後、チーム詳細ページに遷移 */}
+          <Link href={`/teams/${id}`}>
+            了解
+          </Link>
+        </>
+      )}
+
+
+
+    </div>
+  )
+}
