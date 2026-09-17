@@ -55,6 +55,9 @@ export default function StatsEditForm({
   /* Yup検証で発生したエラーメッセージを配列で管理 */
   const [statsErrors, setStatsErrors] = useState<StatsError[]>([]);
 
+  /* 出場時間合計のバリデーションエラーを管理 */
+  const [playSecTotalError, setPlaySecTotalError] = useState("");
+
 /* イベントハンドラー */
   /* 指定した選手の指定したスタッツを変更する */
   const handleStatsChange = (
@@ -88,6 +91,10 @@ export default function StatsEditForm({
       playerId,
       stats,
     }));
+
+    /* 前回のバリデーションエラーをクリアする */
+    setStatsErrors([]);
+    setPlaySecTotalError("");
 
     /* エラー情報を一時的に格納する配列 */
     const errors: StatsError[] = [];
@@ -125,7 +132,7 @@ export default function StatsEditForm({
               message,
             });
           });
-        }
+        } 
       }
     }
 
@@ -136,8 +143,26 @@ export default function StatsEditForm({
       return;
     }
 
-    /* エラーがない場合、エラーメッセージをクリア */
+    /* 全選手の試合出場時間を合計する */
+    const totalPlaySec = statsData.reduce(
+      /* 第一引数：現在のStatsの試合出場時間(秒)を累積値に加える
+        第二引数：累積値(total)の初期値は0 */
+      (total, { stats }) => total + stats.playSec,
+      0
+    );
+
+    /* 試合出場時間の合計が12,000秒でない場合は保存しない */
+    if (totalPlaySec !== 12000) {
+      setPlaySecTotalError(
+        "所属選手全員の試合出場時間の合計が12,000秒になるように入力してください"
+      );
+      return;
+    } 
+
+    /* Yup検証と試合出場時間の合計チェックに成功したため、
+      以前表示されていたエラーメッセージを消す */
     setStatsErrors([]);
+    setPlaySecTotalError("");
 
     /* すべての選手の検証に成功した場合、DBへ保存 */
     await updateStats(gameId, statsData);
@@ -157,6 +182,9 @@ export default function StatsEditForm({
           ))}
         </div>
       )}
+
+      {/* 出場時間合計のバリデーションエラーがある場合、エラーメッセージを表示 */}
+      {playSecTotalError && <p>{playSecTotalError}</p>}
 
       <StatsEditTable
         /* これは属性ではなくProps */
