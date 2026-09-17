@@ -94,6 +94,21 @@ export async function createStats(
     })
   );
 
+    /* 各選手の試合出場時間を合計する */
+  const totalPlaySec = statsData.reduce(
+    /* 第一引数：現在までの累積秒数
+       第二引数：現在処理している選手のスタッツ */
+    (total, stats) => total + stats.playSec,
+    0
+  );
+
+  /* 試合出場時間の合計が12,000秒でない場合は登録させない */
+  if (totalPlaySec !== 12000) {
+    throw new Error(
+      "所属選手全員の試合出場時間の合計が12,000秒になるように入力してください"
+    );
+  }
+
   /* 複数選手分のスタッツをまとめてDBへ登録 */
   await prisma.stats.createMany({
     data: statsData,

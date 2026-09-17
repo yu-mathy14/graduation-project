@@ -1,4 +1,4 @@
-// ユーザーが編集手たスタッツを実際にDBへ保存する【サーバー側の処理】
+// ユーザーが編集したスタッツを実際にDBへ保存する【サーバー側の処理】
 /* StatsEditForm.tsx
     ↓
   actions.ts
@@ -27,12 +27,26 @@ type UpdateStatsData = {
 
 /* gameIdと編集後のスタッツを受け取ってstatsテーブルで更新する関数 */
 export async function updateStats(
-  /* createStats()はコンポーネントではなく
+  /* updateStats()はコンポーネントではなく
   Server Actionの普通の関数なのでPropsではなくただの引数 */
   gameId: number,
   statsData: UpdateStatsData[]
 ) {
-  console.log("updateStats gameId:", gameId);
+  /* 各選手の試合出場時間を合計する */
+  const totalPlaySec = statsData.reduce(
+    /* 第一引数：現在のStatsの試合出場時間(秒)を累積値に加える
+      第二引数：累積値(total)の初期値は0 */
+    (total, { stats }) => total + stats.playSec,
+    0
+  );
+
+  /* 試合出場時間の合計が12,000秒でない場合は保存させない */
+  if (totalPlaySec !== 12000) {
+    throw new Error(
+      "所属選手全員の試合出場時間の合計が12,000秒になるように入力してください"
+    );
+  }
+
   await prisma.$transaction(
     /* 変更されたスタッツの変更を1スタッツずつ更新 */
     statsData.map(({ playerId, stats }) =>
