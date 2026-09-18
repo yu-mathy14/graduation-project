@@ -5,7 +5,8 @@
 
 | 対象 | CSSファイル |
 | :---- | :---- |
-| アプリ全体 | src/app/globals.css | 
+| アプリ全体 | src/app/globals.css <br> src/app/layout.module.css | 
+| src/app/page.tsx | src/app/page.module.css |
 | src/app/teams/page.tsx | src/app/teams/page.module.css | 
 
 ---
