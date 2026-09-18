@@ -10,6 +10,7 @@
 | src/app/teams/page.tsx | src/app/teams/page.module.css | 
 | src/app/teams/[teamId]/page.tsx | src/app/teams/[teamId]/page.module.css |
 | src/app/teams/[teamId]/players/page.tsx | src/app/teams/[teamId]/players/page.module.css |
+| src/app/teams/[teamId]/players/[playerId]/page.tsx | src/app/teams/[teamId]/players/[playerId]/page.module.css |
 
 ---
 ### globals.css の役割
