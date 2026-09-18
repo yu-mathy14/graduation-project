@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import styles from "./page.module.css";
 
 type Props = {
   params: Promise<{ teamId: string }>;
@@ -31,38 +32,52 @@ export default async function TeamPlayersPage({ params }: Props) {
   if (!team) notFound();
 
   return (
-    <div>
-      <Link href={`/teams/${id}`}>
+    <div className={styles.container}>
+
+      {/* チーム情報へ戻るための遷移リンク */}
+      <Link
+        href={`/teams/${id}`}
+        className={styles.backLink}
+      >
         ←チーム情報へ戻る
       </Link>
 
-      {/* 選手登録画面へ遷移するリンク */}
-      <Link href={`/teams/${id}/players/new`}>
-        選手の登録
-      </Link>
-
-      <section>
-        <h1>【{team.teamName}】所属選手一覧</h1>
+      <section className={styles.playerList}>
+        <h1 className={styles.title}>
+          【{team.teamName}】所属選手一覧
+        </h1>
 
         {/* 【三項演算子】条件式：players配列の中身が0件かどうか */}
         {players.length === 0 ? (
-          <>
+          <div className={styles.empty}>
             <p>選手が登録されていません</p>
 
-            <Link href={`/teams/${id}/players/new`}>
+            <Link
+              href={`/teams/${id}/players/new`}
+              className={styles.newLink}
+            >
               選手の登録
             </Link>
-          </>
-          
+          </div>
+
         ) : (
-          /* players配列の中身が1件以上の場合、表として表示 */
-          <table>
+          /* 選手登録画面へ遷移するリンク */
+          <>
+          <Link
+            href={`/teams/${id}/players/new`}
+            className={styles.newLink}
+          >
+            選手の登録
+          </Link>
+          {/* players配列の中身が1件以上の場合、表として表示 */}
+          <table className={styles.table}>
+
             {/* 見出しを作る */}
             <thead>
               <tr>
-                <th>背番号</th>
-                <th>氏名</th>
-                <th></th>
+                <th className={styles.th}>背番号</th>
+                <th className={styles.th}>氏名</th>
+                <th className={styles.th}></th>
               </tr>
             </thead>
 
@@ -71,24 +86,31 @@ export default async function TeamPlayersPage({ params }: Props) {
               {players.map((p) => (
                 <tr key={p.playerId}>
                   {/* 背番号 */}
-                  <td>{p.jerseyNumber}</td>
+                  <td className={styles.td}>{p.jerseyNumber}</td>
 
                   {/* 氏名 */}
-                  <td>{p.playerNameKanji}</td>
+                  <td className={styles.td}>{p.playerNameKanji}</td>
 
                   {/* 選手詳細画面へ遷移するリンク */}
-                  <td>
-                    <Link href={`/teams/${id}/players/${p.playerId}`}>選手情報を見る</Link>
+                  <td className={styles.td}>
+                    <Link
+                      href={`/teams/${id}/players/${p.playerId}`}
+                      className={styles.detailLink}
+                    >
+                      選手情報を見る
+                    </Link>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          </>
         )}
 
-        <p>登録済選手：{players.length}人</p>
+        <p className={styles.count}>
+          登録済選手：{players.length}人
+        </p>
       </section>
-      
 
     </div>
   );

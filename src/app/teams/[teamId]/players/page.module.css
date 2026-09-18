@@ -1,0 +1,85 @@
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.backLink {
+  display: inline-block;
+  margin-bottom: 24px;
+  color: #171717;
+  text-decoration: underline;
+}
+
+.backLink:hover {
+  color: #2563eb;
+}
+
+.newLink {
+  display: inline-block;
+  margin-bottom: 32px;
+  padding: 10px 18px;
+  border-radius: 6px;
+  background-color: #171717;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.newLink:hover {
+  background-color: #f97316;
+}
+
+.playerList {
+  width: 100%;
+}
+
+.title {
+  margin: 0 0 20px;
+  font-size: 28px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.th,
+.td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #dddddd;
+  text-align: left;
+}
+
+.th {
+  background-color: #f5f5f5;
+  color: #171717;
+  font-weight: bold;
+}
+
+.detailLink {
+  color: #171717;
+  text-decoration: underline;
+}
+
+.detailLink:hover {
+  color: #2563eb;
+}
+
+.empty {
+  padding: 40px 0;
+  text-align: center;
+}
+
+.empty p {
+  margin: 0 0 20px;
+}
+
+.empty .newLink {
+  margin-bottom: 0;
+}
+
+.count {
+  margin-top: 16px;
+  text-align: right;
+}
