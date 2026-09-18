@@ -1,24 +1,26 @@
-//import Image from "next/image";
 import Link from "next/link";
+import styles from "./page.module.css";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <h2>ホーム</h2>
+    <main className={styles.container}>
+      <section className={styles.main}>
+        <h1 className={styles.title}>ホーム</h1>
 
-        <p>Basketball Managerへようこそ</p>
-        <nav>
-          <Link href="/teams">
+        <p className={styles.message}>
+          Basketball Managerへようこそ
+        </p>
+
+        <nav className={styles.nav}>
+          <Link href="/teams" className={styles.navLink}>
             チーム管理
           </Link>
 
-          <Link href="/games">
+          <Link href="/games" className={styles.navLink}>
             試合管理
           </Link>
         </nav>
-
-      </main>
-    </div>
+      </section>
+    </main>
   );
 }
