@@ -8,6 +8,7 @@
 | アプリ全体 | src/app/globals.css <br> src/app/layout.module.css | 
 | src/app/page.tsx | src/app/page.module.css |
 | src/app/teams/page.tsx | src/app/teams/page.module.css | 
+| src/app/teams/[teamId]/page.tsx | src/app/teams/[teamId]/page.module.css |
 
 ---
 ### globals.css の役割
