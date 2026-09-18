@@ -16,6 +16,7 @@ import { useForm,
 /* 他ファイルから必要なものを読み込み */
 import { createTeam } from "../actions";
 import { teamSchema, type TeamFormValues } from "../../schema";
+import styles from "./TeamForm.module.css";
 
 export default function TeamForm() {
   // デフォルト値
@@ -48,37 +49,60 @@ export default function TeamForm() {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit, onError)} noValidate>
-        <div>
-          <label htmlFor="teamName">チーム名 *</label>
+      <form
+        className={styles.form}
+        onSubmit={handleSubmit(onSubmit, onError)}
+        noValidate
+      >
+        <div className={styles.field}>
+          <label
+            htmlFor="teamName"
+            className={styles.label}
+          >
+            チーム名 *
+          </label>
+
           <input
             id="teamName" // labelと対応
             type="text"
+            className={styles.input}
             /* teamNameをReact Hook Formに登録 */
             {...register("teamName")}
             />
           {/* teamNameのバリデーションエラーがある場合、メッセージを表示 */}
-          <div>{errors.teamName?.message}</div>
+          <div className={styles.error}>
+            {errors.teamName?.message}
+          </div>
         </div>
 
-        <div>
-          <label htmlFor="teamColor">チームカラー *</label>
+        <div className={styles.field}>
+          <label
+            htmlFor="teamColor"
+            className={styles.label}
+          >
+            チームカラー *
+          </label>
+
           <input
             id="teamColor" // labelと対応
             type="text"
             placeholder="#FFFFFF"
+            className={styles.input}
             /* teamColorをReact Hook Formに登録 */
             {...register("teamColor")}
           />
           {/* teamColorのバリデーションエラーがある場合、メッセージを表示 */}
-          <div>{errors.teamColor?.message}</div>
+         <div className={styles.error}>
+          {errors.teamColor?.message}
+        </div>
 
-          <p>
+          <p className={styles.reference}>
             <a
               href="https://www.colordic.org"
               target="_blank" // サイトを別タブで開く
               /* target="_blank"で外部サイトを開くときによくセットで使用するもの */
               rel="noopener noreferrer"
+              className={styles.referenceLink}
             >
               カラーコードを選ぶ(参考サイト)
             </a>
@@ -86,7 +110,12 @@ export default function TeamForm() {
         </div>
 
         <div>
-          <button type="submit">登録する</button>
+          <button
+            type="submit"
+            className={styles.submitButton}
+          >
+            登録する
+          </button>
         </div>
       </form>
   </>
