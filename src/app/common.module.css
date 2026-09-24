@@ -80,3 +80,25 @@
   color: var(--color-error);
   font-size: 14px;
 }
+
+/* フォーム */
+.form {
+  width: 100%;
+}
+
+/* フォーム項目 */
+.field {
+  margin-bottom: 24px;
+}
+
+/* フォームラベル */
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+/* フォーム内の補足 */
+.formNote {
+  margin: 8px 0 0;
+}

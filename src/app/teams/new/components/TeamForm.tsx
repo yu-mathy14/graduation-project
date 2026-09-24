@@ -16,7 +16,6 @@ import { useForm,
 /* 他ファイルから必要なものを読み込み */
 import { createTeam } from "../actions";
 import { teamSchema, type TeamFormValues } from "../../schema";
-import styles from "./TeamForm.module.css";
 import common from "@/app/common.module.css";
 
 export default function TeamForm() {
@@ -51,14 +50,14 @@ export default function TeamForm() {
   return (
     <>
       <form
-        className={styles.form}
+        className={common.form}
         onSubmit={handleSubmit(onSubmit, onError)}
         noValidate
       >
-        <div className={styles.field}>
+        <div className={common.field}>
           <label
             htmlFor="teamName"
-            className={styles.label}
+            className={common.label}
           >
             チーム名 *
           </label>
@@ -76,10 +75,10 @@ export default function TeamForm() {
           </div>
         </div>
 
-        <div className={styles.field}>
+        <div className={common.field}>
           <label
             htmlFor="teamColor"
-            className={styles.label}
+            className={common.label}
           >
             チームカラー *
           </label>
@@ -97,7 +96,7 @@ export default function TeamForm() {
           {errors.teamColor?.message}
         </div>
 
-          <p className={styles.reference}>
+          <p className={common.formNote}>
             <a
               href="https://www.colordic.org"
               target="_blank" // サイトを別タブで開く
