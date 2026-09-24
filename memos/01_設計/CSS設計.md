@@ -14,14 +14,14 @@
 | src/app/teams/[teamId]/page.tsx | src/app/teams/[teamId]/page.module.css |
 | src/app/teams/[teamId]/edit/page.tsx | src/app/teams/[teamId]/edit/page.module.css |
 | src/app/teams/[teamId]/edit/components/TeamForm.tsx | src/app/common.module.css |
-| src/app/teams/[teamId]/delete/page.tsx | src/app/teams/[teamId]/delete/page.module.css |
+| src/app/teams/[teamId]/delete/page.tsx | src/app/common.module.css |
 | src/app/teams/[teamId]/players/page.tsx | src/app/teams/[teamId]/players/page.module.css |
 | src/app/teams/[teamId]/players/new/page.tsx | src/app/teams/[teamId]/players/new/page.module.css |
 | src/app/teams/[teamId]/players/new/components/PlayerForm.tsx | src/app/common.module.css |
 | src/app/teams/[teamId]/players/[playerId]/page.tsx | src/app/teams/[teamId]/players/[playerId]/page.module.css |
 | src/app/teams/[teamId]/players/[playerId]/edit/page.tsx | src/app/teams/[teamId]/players/[playerId]/edit/page.module.css |
-| src/app/teams/[teamId]/players/[playerId]/edit/components/PlayerFOrm.tsx | src/app/common.module.css |
-
+| src/app/teams/[teamId]/players/[playerId]/edit/components/PlayerForm.tsx | src/app/common.module.css |
+| src/app/teams/[teamId]/players/[playerId]/delete/page.tsx | src/app/common.module.css |
 ---
 ### globals.css の役割
 | 設定 | 内容 |
