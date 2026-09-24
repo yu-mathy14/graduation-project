@@ -4,9 +4,14 @@
 
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 
 /* コンポーネントの読み込み */
 import StatsEditForm from "./components/StatsEditForm";
+
+/* CSSファイルの読み込み */
+import styles from "../stats.module.css"
+import common from "@/app/common.module.css";
 
 // このページに拡張されるデータの型定義
 type Props = {
@@ -73,15 +78,26 @@ export default async function StatsEditPage({
       : game.awayTeam.teamName; // homeじゃない場合
 
   return (
-    <div>
-      <h2>{teamName} スタッツ編集</h2>
+    <div className={styles.container}>
+      <Link
+        href={`/games/${id}`}
+        className={common.link}
+      >
+        ← 試合詳細に戻る
+      </Link>
+  
+      <h1 className={styles.playerTitle}>
+        {teamName} スタッツ編集
+      </h1>
 
       <p>編集対象：{teamName}</p>
+
       {/* 【三項演算子】登録されているスタッツの件数が0件であるか */}
       {stats.length === 0 ? (
-        <p>スタッツが登録されていません</p>
+        <p className={common.notice}>
+          スタッツが登録されていません
+        </p>
       ) : (
-        
         <StatsEditForm
           /* これは属性ではなくProps */
           gameId={id}

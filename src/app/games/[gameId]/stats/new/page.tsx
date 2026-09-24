@@ -13,6 +13,9 @@ import Link from "next/link";
 /* コンポーネントの読み込み */
 import StatsNewForm from "./components/StatsNewForm";
 
+/* CSSファイルの読み込み */
+import common from "@/app/common.module.css";
+
 /* StatsNewPageが受け取るPropsの型定義 */
 type Props = {
   params: Promise<{ gameId: string }>;
@@ -85,7 +88,9 @@ export default async function StatsNewPage({
   return (
     <div>
       {/* 試合詳細 + スタッツ一覧画面に戻るためのリンク */}
-      <Link href={`/games/${id}`}>
+      <Link
+        href={`/games/${id}`}
+        className={common.link}>
         ←試合詳細に戻る
       </Link>
 

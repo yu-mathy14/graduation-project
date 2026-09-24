@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { deleteGame } from "./actions";
+import common from "@/app/common.module.css";
 
 /* GameDeletePageが受け取るPropsの型定義 */
 type Props = {
@@ -41,49 +42,71 @@ export default async function GameDeletePage({ params }: Props) {
   const canDeleteGame = game._count.stats === 0;
 
   return (
-    <div>
+    <div className={common.deleteContainer}>
       {/* 【三項演算子】試合削除可否によって表示内容を切り替える */}
       {canDeleteGame ? (
         /* ----- 以下、試合削除可能な場合に表示される部分 ----- */
-        <>
-          <h2>試合削除確認</h2>
+        <section className={common.deleteArea}>
+          <h1 className={common.deleteTitle}>
+            試合削除確認
+          </h1>
 
-          {/* 削除前の確認メッセージの表示 */}
-          <p>
+          {/* 削除前の確認メッセージ */}
+          <p className={common.deleteMessage}>
             【{game.homeTeam.teamName}】対【{game.awayTeam.teamName}】を
             本当に削除しますか？
           </p>
 
-          {/* 削除キャンセルの場合は試合詳細ページに遷移 */}
-          <Link href={`/games/${id}`}>
-            キャンセル
-          </Link>
+          <div className={common.deleteActions}>
+            {/* 削除キャンセルの場合は試合詳細ページに遷移 */}
+            <Link
+              href={`/games/${id}`}
+              className={common.link}
+            >
+              キャンセル
+            </Link>
 
-          {/* ((仮ボタン))次の段階でServer Actionを設定する */}
-          <form action={deleteGame}>
-            <input type="hidden" name="gameId" value={id} />
-            <button type="submit">
-              削除
-            </button>
-          </form>
-        </>
+            {/* Server Actionを実行 */}
+            <form action={deleteGame}>
+              <input
+                type="hidden"
+                name="gameId"
+                value={id}
+              />
+
+              <button
+                type="submit"
+                className={common.button}
+              >
+                削除
+              </button>
+            </form>
+          </div>
+        </section>
       ) : (
         /* ----- 以下、試合削除不可の場合に表示される部分 ----- */
         /* 直接URLからアクセスした場合などに備えた、
            通常用の操作ではほぼ表示されない削除不可時の画面 */
-        <>
-          <h2>試合削除不可</h2>
+        <section className={common.deleteArea}>
+          <h1 className={common.deleteTitle}>
+            試合削除不可
+          </h1>
 
-          {/* エラーメッセージ(削除不可理由)の表示 */}
-          <p>
-            この試合にはスタッツが登録されているため、削除できません。
-          </p>
+          {/* エラーメッセージ(削除不可理由) */}
+          <div className={common.notice}>
+            <p>
+              この試合にはスタッツが登録されているため、削除できません。
+            </p>
+          </div>
 
           {/* 削除不可理由を確認後、試合詳細ページに遷移 */}
-          <Link href={`/games/${id}`}>
+          <Link
+            href={`/games/${id}`}
+            className={common.button}
+          >
             了解
           </Link>
-        </>
+        </section>
       )}
     </div>
   );

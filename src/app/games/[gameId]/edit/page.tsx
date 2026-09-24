@@ -8,6 +8,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 
 import GameForm from "./components/GameForm";
+import styles from "./page.module.css";
+import common from "@/app/common.module.css";
 
 // このページに拡張されるデータの型定義
 /* paramsにはgameIdという文字列が入っている */
@@ -59,28 +61,35 @@ export default async function GameEditPage({ params }: Props) {
   if (teams.length < 2) notFound();
   
   return (
-    <div>
+    <div className={styles.container}>
       {/* 試合詳細に戻るための遷移リンク */}
-      <Link href={`/games/${id}`}>
+      <Link
+        href={`/games/${id}`}
+        className={common.link}
+      >
         ←試合詳細に戻る
       </Link>
 
-      <h1>試合情報を編集</h1>
+      <h1 className={styles.title}>
+        試合情報を編集
+      </h1>
 
       {/* React Hook Form + Yupを使った入力フォームを表示 */}
       <GameForm
-        /* これらはすべてGameFormに渡すProps */
         gameId={game.gameId}
         tipoffTime={tipoffTimeValue}
-        homeTeamId={game.homeTeamId} 
-        awayTeamId={game.awayTeamId} 
-        homeScore={game.homeScore} 
-        awayScore={game.awayScore} 
+        homeTeamId={game.homeTeamId}
+        awayTeamId={game.awayTeamId}
+        homeScore={game.homeScore}
+        awayScore={game.awayScore}
         teams={teams}
       />
 
       {/* 更新キャンセル時は試合詳細ページに遷移 */}
-      <Link href={`/games/${id}`}>
+      <Link
+        href={`/games/${id}`}
+        className={common.link}
+      >
         キャンセル
       </Link>
     </div>

@@ -1,0 +1,30 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+  margin-bottom: 32px;
+}
+
+.gameInfo {
+  margin-bottom: 40px;
+}
+
+.title {
+  margin: 0 0 20px;
+  font-size: 28px;
+}
+
+.statsSection {
+  margin-bottom: 40px;
+}
+
+.statsTitle {
+  margin: 0 0 20px;
+  font-size: 24px;
+}

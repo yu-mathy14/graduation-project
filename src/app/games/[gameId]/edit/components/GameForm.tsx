@@ -15,6 +15,7 @@ import { useForm,
 /* 他ファイルから必要なものを読み込み */
 import { updateGame } from "../actions";
 import { gameSchema, type GameFormValues,} from "../../../schema";
+import common from "@/app/common.module.css";
 
 /* チームの型定義 */
 type Team = {
@@ -83,27 +84,42 @@ export default function GameForm({
 
   return (
     <form
-    onSubmit={handleSubmit(onSubmit, onError)}
-    noValidate
+      className={common.form}
+      onSubmit={handleSubmit(onSubmit, onError)}
+      noValidate
     >
-      <div>
-        <label htmlFor="tipoffTime">試合開始日時 * </label>
+      <div className={common.field}>
+        <label
+          htmlFor="tipoffTime"
+          className={common.label}
+        >
+          試合開始日時 *
+        </label>
+
         <input
           id="tipoffTime" // labelと対応
           type="datetime-local" // 日時入力用の入力欄
+          className={common.input}
           /* tipoffTimeをReact Hook Formに登録 */
           {...register("tipoffTime")}
         />
         {/* tipoffTimeのバリデーションエラーがある場合、メッセージを表示 */}
-        <div>{errors.tipoffTime?.message}</div>
+        <div className={common.error}>
+          {errors.tipoffTime?.message}
+        </div>
       </div>
 
-      <div>
-        <label htmlFor="homeTeamId">
+      <div className={common.field}>
+        <label
+          htmlFor="homeTeamId"
+          className={common.label}
+        >
           ホームチーム *
         </label>
+
         <select
           id="homeTeamId" // labelと対応
+          className={common.select}
           /* homeTeamIdをReact Hook Formに登録 */
           {...register("homeTeamId")}
         >
@@ -127,15 +143,21 @@ export default function GameForm({
           ))}
         </select>
         {/* homeTeamIdのバリデーションエラーがある場合、メッセージを表示 */}
-        <div>{errors.homeTeamId?.message}</div>
+        <div className={common.error}>
+          {errors.homeTeamId?.message}
+        </div>
       </div>
 
-      <div>
-        <label htmlFor="awayTeamId">
+      <div className={common.field}>
+        <label
+          htmlFor="awayTeamId"
+          className={common.label}
+        >
           アウェイチーム *
         </label>
         <select
           id="awayTeamId" // labelと対応
+          className={common.select}
           /* awayTeamIdをReact Hook Formに登録 */
           {...register("awayTeamId")}
         >
@@ -159,44 +181,59 @@ export default function GameForm({
           ))}
         </select>
         {/* awayTeamIdのバリデーションエラーがある場合、メッセージを表示 */}
-        <div>{errors.awayTeamId?.message}</div>
+        <div className={common.error}>
+          {errors.awayTeamId?.message}
+        </div>
       </div>
 
-      <div>
-        <label htmlFor="homeScore">
+       <div className={common.field}>
+        <label
+          htmlFor="homeScore"
+          className={common.label}
+        >
           ホーム最終スコア *
         </label>
         <input
           id="homeScore" // labelと対応
           type="number" // 数値入力用の入力欄
           min={0} // ブラウザ側の最小値：0
+          className={common.input}
           /* homeScoreをReact Hook Formに登録 */
           {...register("homeScore")}
         />
         {/* homeScoreのバリデーションエラーがある場合、メッセージを表示 */}
-        <div>{errors.homeScore?.message}</div>
+        <div className={common.error}>
+          {errors.homeScore?.message}
+        </div>
       </div>
 
-      <div>
-        <label htmlFor="awayScore">
+      <div className={common.field}>
+        <label
+          htmlFor="awayScore"
+          className={common.label}
+        >
           アウェイ最終スコア *
         </label>
         <input
           id="awayScore" // labelと対応
           type="number" // 数値入力用の入力欄
           min={0} // ブラウザ側の最小値：0
+          className={common.input}
           /* awayScoreをReact Hook Formに登録 */
           {...register("awayScore")}
         />
         {/* awayScoreのバリデーションエラーがある場合、メッセージを表示 */}
-        <div>{errors.awayScore?.message}</div>
+        <div className={common.error}>
+          {errors.awayScore?.message}
+        </div>
       </div>
 
-      <div>
-        <button type="submit">
-          更新する
-        </button>
-      </div>
+      <button
+        type="submit"
+        className={common.button}
+      >
+        更新する
+      </button>
     </form>
 
   );

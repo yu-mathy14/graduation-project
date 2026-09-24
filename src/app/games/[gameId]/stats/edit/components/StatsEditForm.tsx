@@ -4,6 +4,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
 /* 型の読み込み */
 import type { PlayerStats } from "../../new/types";
@@ -17,6 +18,10 @@ import { updateStats } from "../actions";
 /* Yupスキーマの読み込み */
 import { playerStatsSchema } from "../../schema";
 import * as yup from "yup";
+
+/* CSSファイルの読み込み */
+import common from "@/app/common.module.css";
+import styles from "../../stats.module.css"
 
 /* 型の結合【インターセクション】 */
 /* 編集したスタッツと選手情報を1つのオブジェクトでまとめて管理 */
@@ -175,7 +180,10 @@ export default function StatsEditForm({
         <div>
           {statsErrors.map((error) => (
             /* 選手IDとエラーメッセージの組み合わせでエラーを一意に識別 */
-            <p key={`${error.playerId}-${error.message}`}>
+            <p
+              key={`${error.playerId}-${error.message}`}
+              className={common.error}
+            >
               背番号{error.jerseyNumber} {error.playerNameKanji}：
               {error.message}
             </p>
@@ -184,7 +192,11 @@ export default function StatsEditForm({
       )}
 
       {/* 出場時間合計のバリデーションエラーがある場合、エラーメッセージを表示 */}
-      {playSecTotalError && <p>{playSecTotalError}</p>}
+      {playSecTotalError && (
+        <p className={common.error}>
+          {playSecTotalError}
+        </p>
+      )}
 
       <StatsEditTable
         /* これは属性ではなくProps */
@@ -192,14 +204,23 @@ export default function StatsEditForm({
         onChange={handleStatsChange}
       />
 
-      {/*  */}
-      <button
-        /* これは属性 */
-        type="button"
-        onClick={handleSubmit}
-      >
-        変更を保存
-      </button>
+      <div className={styles.navigation}>
+        <button
+          type="button"
+          className={common.button}
+          onClick={handleSubmit}
+        >
+          変更を保存
+        </button>
+        
+        <Link
+          href={`/games/${gameId}`}
+          className={common.button}
+        >
+          キャンセル
+        </Link>
+
+      </div>
     </>
     
   );

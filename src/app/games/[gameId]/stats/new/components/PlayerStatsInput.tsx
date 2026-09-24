@@ -7,6 +7,10 @@
 /* 型の読み込み */
 import type { Player, PlayerStats } from "../types";
 
+/* CSSの読み込み */
+import styles from "../../stats.module.css";
+import common from "@/app/common.module.css";
+
 /* PlayerStatsInputが受け取るPropsの型定義 */
 type Props = {
   player: Player;
@@ -27,276 +31,305 @@ export default function PlayerStatsInput({
   onChange,
 }: Props) {
   return (
-    <div>
+    <div className={styles.container}>
       <h4>
         #{player.jerseyNumber} {player.playerNameKanji}
       </h4>
 
       {/* シュート系 */}
-      <div>
-        <h5>シュート</h5>
+      <div className={styles.statsGroup}>
+        <h5 className={styles.statsGroupTitle}>
+          シュート
+        </h5>
 
-        <label>
-          3P試投
-          <input
-            type="number" // 入力欄の種類は数値
-            min="0" // 最小値0
-            /* stats が存在すれば p3A を表示し、存在しなければ 0 を表示する */
-            value={stats?.p3A ?? 0}
-            /* 値が変わった時の処理 */
-            onChange={(e) =>
-              onChange(
-                player.playerId,
-                "p3A",
-                /* 入力された値を数値型に変換してonChangeに渡す */
-                Number(e.target.value)
-              )
-            }
-          />
-        </label>
+        <div className={styles.statsGrid}>
+          <label className={styles.statsField}>
+            3P試投
+            <input
+              type="number" // 入力欄の種類は数値
+              min="0" // 最小値0
+              className={common.input}
+              /* stats が存在すれば p3A を表示し、存在しなければ 0 を表示する */
+              value={stats?.p3A ?? 0}
+              /* 値が変わった時の処理 */
+              onChange={(e) =>
+                onChange(
+                  player.playerId,
+                  "p3A",
+                  /* 入力された値を数値型に変換してonChangeに渡す */
+                  Number(e.target.value)
+                )
+              }
+            />
+          </label>
 
-        <label>
-          3P成功
-          <input
-            type="number"
-            min="0"
-            value={stats?.p3M ?? 0}
-            onChange={(e) =>
-              onChange(
-                player.playerId,
-                "p3M",
-                Number(e.target.value)
-              )
-            }
-          />
-        </label>
+          <label className={styles.statsField}>
+            3P成功
+            <input
+              type="number"
+              min="0"
+              className={common.input}
+              value={stats?.p3M ?? 0}
+              onChange={(e) =>
+                onChange(
+                  player.playerId,
+                  "p3M",
+                  Number(e.target.value)
+                )
+              }
+            />
+          </label>
 
-        <label>
-          2P試投
-          <input
-            type="number"
-            min="0"
-            value={stats?.p2A ?? 0}
-            onChange={(e) =>
-              onChange(
-                player.playerId,
-                "p2A",
-                Number(e.target.value)
-              )
-            }
-          />
-        </label>
+          <label className={styles.statsField}>
+            2P試投
+            <input
+              type="number"
+              min="0"
+              className={common.input}
+              value={stats?.p2A ?? 0}
+              onChange={(e) =>
+                onChange(
+                  player.playerId,
+                  "p2A",
+                  Number(e.target.value)
+                )
+              }
+            />
+          </label>
 
-        <label>
-          2P成功
-          <input
-            type="number"
-            min="0"
-            value={stats?.p2M ?? 0}
-            onChange={(e) =>
-              onChange(
-                player.playerId,
-                "p2M",
-                Number(e.target.value)
-              )
-            }
-          />
-        </label>
+          <label className={styles.statsField}>
+            2P成功
+            <input
+              type="number"
+              min="0"
+              className={common.input}
+              value={stats?.p2M ?? 0}
+              onChange={(e) =>
+                onChange(
+                  player.playerId,
+                  "p2M",
+                  Number(e.target.value)
+                )
+              }
+            />
+          </label>
 
-        <label>
-          FT試投
-          <input
-            type="number"
-            min="0"
-            value={stats?.ftA ?? 0}
-            onChange={(e) =>
-              onChange(
-                player.playerId,
-                "ftA",
-                Number(e.target.value)
-              )
-            }
-          />
-        </label>
+          <label className={styles.statsField}>
+            FT試投
+            <input
+              type="number"
+              min="0"
+              className={common.input}
+              value={stats?.ftA ?? 0}
+              onChange={(e) =>
+                onChange(
+                  player.playerId,
+                  "ftA",
+                  Number(e.target.value)
+                )
+              }
+            />
+          </label>
 
-        <label>
-          FT成功
-          <input
-            type="number"
-            min="0"
-            value={stats?.ftM ?? 0}
-            onChange={(e) =>
-              onChange(
-                player.playerId,
-                "ftM",
-                Number(e.target.value)
-              )
-            }
-          />
-        </label>
+          <label className={styles.statsField}>
+            FT成功
+            <input
+              type="number"
+              min="0"
+              className={common.input}
+              value={stats?.ftM ?? 0}
+              onChange={(e) =>
+                onChange(
+                  player.playerId,
+                  "ftM",
+                  Number(e.target.value)
+                )
+              }
+            />
+          </label>
+        </div>
       </div>
 
       {/* リバウンド */}
-      <div>
-        <h5>リバウンド</h5>
+      <div className={styles.statsGroup}>
+        <h5 className={styles.statsGroupTitle}>
+          リバウンド
+        </h5>
 
-        <label>
-          OR
-          <input
-            type="number"
-            min="0"
-            value={stats?.oRbd ?? 0}
-            onChange={(e) =>
-              onChange(
-                player.playerId,
-                "oRbd",
-                Number(e.target.value)
-              )
-            }
-          />
-        </label>
+        <div className={styles.statsGrid}>
+          <label className={styles.statsField}>
+            OR
+            <input
+              type="number"
+              min="0"
+              className={common.input}
+              value={stats?.oRbd ?? 0}
+              onChange={(e) =>
+                onChange(
+                  player.playerId,
+                  "oRbd",
+                  Number(e.target.value)
+                )
+              }
+            />
+          </label>
 
-        <label>
-          DR
-          <input
-            type="number"
-            min="0"
-            value={stats?.dRbd ?? 0}
-            onChange={(e) =>
-              onChange(
-                player.playerId,
-                "dRbd",
-                Number(e.target.value)
-              )
-            }
-          />
-        </label>
+          <label className={styles.statsField}>
+            DR
+            <input
+              type="number"
+              min="0"
+              className={common.input}
+              value={stats?.dRbd ?? 0}
+              onChange={(e) =>
+                onChange(
+                  player.playerId,
+                  "dRbd",
+                  Number(e.target.value)
+                )
+              }
+            />
+          </label>
+        </div>
       </div>
 
       {/* その他のスタッツ */}
-      <div>
-        <h5>その他</h5>
+      <div className={styles.statsGroup}>
+        <h5 className={styles.statsGroupTitle}>
+          その他
+        </h5>
+        <div className={styles.statsGrid}>
+          <label className={styles.statsField}>
+            AST
+            <input
+              type="number"
+              min="0"
+              className={common.input}
+              value={stats?.ast ?? 0}
+              onChange={(e) =>
+                onChange(
+                  player.playerId,
+                  "ast",
+                  Number(e.target.value)
+                )
+              }
+            />
+          </label>
 
-        <label>
-          AST
-          <input
-            type="number"
-            min="0"
-            value={stats?.ast ?? 0}
-            onChange={(e) =>
-              onChange(
-                player.playerId,
-                "ast",
-                Number(e.target.value)
-              )
-            }
-          />
-        </label>
+          <label className={styles.statsField}>
+            STL
+            <input
+              type="number"
+              min="0"
+              className={common.input}
+              value={stats?.stl ?? 0}
+              onChange={(e) =>
+                onChange(
+                  player.playerId,
+                  "stl",
+                  Number(e.target.value)
+                )
+              }
+            />
+          </label>
 
-        <label>
-          STL
-          <input
-            type="number"
-            min="0"
-            value={stats?.stl ?? 0}
-            onChange={(e) =>
-              onChange(
-                player.playerId,
-                "stl",
-                Number(e.target.value)
-              )
-            }
-          />
-        </label>
+          <label className={styles.statsField}>
+            BLK
+            <input
+              type="number"
+              min="0"
+              className={common.input}
+              value={stats?.blk ?? 0}
+              onChange={(e) =>
+                onChange(
+                  player.playerId,
+                  "blk",
+                  Number(e.target.value)
+                )
+              }
+            />
+          </label>
 
-        <label>
-          BLK
-          <input
-            type="number"
-            min="0"
-            value={stats?.blk ?? 0}
-            onChange={(e) =>
-              onChange(
-                player.playerId,
-                "blk",
-                Number(e.target.value)
-              )
-            }
-          />
-        </label>
+          <label className={styles.statsField}>
+            TO
+            <input
+              type="number"
+              min="0"
+              className={common.input}
+              value={stats?.tov ?? 0}
+              onChange={(e) =>
+                onChange(
+                  player.playerId,
+                  "tov",
+                  Number(e.target.value)
+                )
+              }
+            />
+          </label>
 
-        <label>
-          TOV
-          <input
-            type="number"
-            min="0"
-            value={stats?.tov ?? 0}
-            onChange={(e) =>
-              onChange(
-                player.playerId,
-                "tov",
-                Number(e.target.value)
-              )
-            }
-          />
-        </label>
+          <label className={styles.statsField}>
+            PF
+            <input
+              type="number"
+              min="0"
+              className={common.input}
+              value={stats?.pf ?? 0}
+              onChange={(e) =>
+                onChange(
+                  player.playerId,
+                  "pf",
+                  Number(e.target.value)
+                )
+              }
+            />
+          </label>
 
-        <label>
-          PF
-          <input
-            type="number"
-            min="0"
-            value={stats?.pf ?? 0}
-            onChange={(e) =>
-              onChange(
-                player.playerId,
-                "pf",
-                Number(e.target.value)
-              )
-            }
-          />
-        </label>
+          <label className={styles.statsField}>
+            TF
+            <input
+              type="number"
+              min="0"
+              className={common.input}
+              value={stats?.tf ?? 0}
+              onChange={(e) =>
+                onChange(
+                  player.playerId,
+                  "tf",
+                  Number(e.target.value)
+                )
+              }
+            />
+          </label>
 
-        <label>
-          TF
-          <input
-            type="number"
-            min="0"
-            value={stats?.tf ?? 0}
-            onChange={(e) =>
-              onChange(
-                player.playerId,
-                "tf",
-                Number(e.target.value)
-              )
-            }
-          />
-        </label>
-
-        <label>
-          FO
-          <input
-            type="number"
-            min="0"
-            value={stats?.fo ?? 0}
-            onChange={(e) =>
-              onChange(
-                player.playerId,
-                "fo",
-                Number(e.target.value)
-              )
-            }
-          />
-        </label>
+          <label className={styles.statsField}>
+            FO
+            <input
+              type="number"
+              min="0"
+              className={common.input}
+              value={stats?.fo ?? 0}
+              onChange={(e) =>
+                onChange(
+                  player.playerId,
+                  "fo",
+                  Number(e.target.value)
+                )
+              }
+            />
+          </label>
+        </div>
       </div>
 
       {/* 退場 */}
-      <div>
-        <h5>退場</h5>
+      <div className={styles.statsGroup}>
+        <h5 className={styles.statsGroupTitle}>
+          退場
+        </h5>
 
-        <label>
+        <label className={styles.checkboxField}>
           <input
             type="checkbox"
+            className={common.input}
             checked={(stats?.dq ?? 0) === 1}
             onChange={(e) =>
               onChange(
@@ -311,14 +344,16 @@ export default function PlayerStatsInput({
       </div>
 
       {/* 出場時間 */}
-      <div>
-        <h5>出場時間</h5>
-
-        <label>
+      <div className={styles.statsGroup}>
+        <h5 className={styles.statsGroupTitle}>
+          出場時間
+        </h5>
+        <label className={styles.statsField}>
           出場時間（秒）
           <input
             type="number"
             min="0"
+            className={common.input}
             value={stats?.playSec ?? 0}
             onChange={(e) =>
               onChange(
