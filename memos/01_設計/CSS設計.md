@@ -29,6 +29,10 @@
 | src/app/games/[gameId]/edit/page.tsx | src/app/games/[gameId]/edit/page.module.css |
 | src/app/games/[gameId]/edit/components/GameForm.tsx | src/app/common.module.css |
 | src/app/games/[gameId]/delete/page.tsx | src/app/common.module.css |
+| src/app/games/[gameId]/stats/new/page.tsx | src/app/common.module.css |
+| src/app/games/[gameId]/stats/new/components/StatsNewForm.tsx | src/app/games/[gameId]/stats/stats.module.css |
+| src/app/games/[gameId]/stats/new/components/PlayerStatsInput.tsx | src/app/games/[gameId]/stats/stats.module.css |
+| src/app/games/[gameId]/stats/new/components/PlayerSelect.tsx | src/app/games/[gameId]/stats/stats.module.css |
 
 ---
 ### globals.css の役割
