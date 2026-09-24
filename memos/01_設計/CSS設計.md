@@ -22,6 +22,8 @@
 | src/app/teams/[teamId]/players/[playerId]/edit/page.tsx | src/app/teams/[teamId]/players/[playerId]/edit/page.module.css |
 | src/app/teams/[teamId]/players/[playerId]/edit/components/PlayerForm.tsx | src/app/common.module.css |
 | src/app/teams/[teamId]/players/[playerId]/delete/page.tsx | src/app/common.module.css |
+| src/app/games/page.tsx | src/app/games/page.module.css |
+
 ---
 ### globals.css の役割
 | 設定 | 内容 |
