@@ -16,6 +16,7 @@ import { useForm,
 import { updateTeam } from "../actions";
 import { teamSchema, type TeamFormValues } from "../../../schema";
 import common from "@/app/common.module.css";
+import Link from "next/link";
 
 /* TeamFormが受け取るPropsの型定義 */
 type Props = {
@@ -121,13 +122,20 @@ export default function TeamForm({
           </p>
         </div>
 
-        <div>
+        <div className={common.navigation}>
           <button
             type="submit"
             className={common.button}
           >
             更新する
           </button>
+
+          <Link
+            href={`/teams/${teamId}`}
+            className={common.buttonCancel}
+          >
+            キャンセル
+          </Link>
         </div>
       </form>
     </>

@@ -17,6 +17,7 @@ import { useForm,
 import { createTeam } from "../actions";
 import { teamSchema, type TeamFormValues } from "../../schema";
 import common from "@/app/common.module.css";
+import Link from "next/link";
 
 export default function TeamForm() {
   // デフォルト値
@@ -109,13 +110,20 @@ export default function TeamForm() {
           </p>
         </div>
 
-        <div>
+        <div className={common.navigation}>
           <button
             type="submit"
             className={common.button}
           >
             登録する
           </button>
+
+          <Link
+            href="/teams"
+            className={common.buttonCancel}
+          >
+            キャンセル
+          </Link>
         </div>
       </form>
   </>

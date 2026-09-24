@@ -49,14 +49,6 @@ export default async function TeamEditPage({ params }: Props) {
         teamName={team.teamName}
         teamColor={team.teamColor}
       />
-
-      {/* 編集キャンセル時はチーム詳細ページに遷移 */}
-      <Link
-        href={`/teams/${id}`}
-        className={common.link}
-      >
-        キャンセル
-      </Link>
     </div>
   );
 }

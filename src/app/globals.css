@@ -20,6 +20,12 @@
 
   /* 警告・削除確認などの色 */
   --color-danger: #dc2626;
+
+  /* キャンセルボタンに使用する色 */
+  --color-cancel-background: #ffffff;
+  --color-cancel-text: #444444;
+  --color-cancel-border: #999999;
+  --color-cancel-hover: #eeeeee;
 }
 
 @theme inline {

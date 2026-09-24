@@ -31,16 +31,6 @@ export default function TeamNewPage() {
       {/* React Hook Form + Yupを使った入力フォームを表示 */}
       <TeamForm />
 
-      {/* 登録キャンセル時はチーム一覧ページに遷移 */}
-      <Link
-        href="/teams"
-        className={common.link}
-      >
-        キャンセル
-      </Link>
     </div>
   );
-
-
-
 }
