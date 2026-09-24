@@ -83,7 +83,7 @@ export default function PlayerForm({ teamId }: Props) {
         </div>
 
 
-        <div>
+        <div className={common.field}>
           <label
             htmlFor="playerNameKana"
             className={common.label}
@@ -103,7 +103,7 @@ export default function PlayerForm({ teamId }: Props) {
           </div>
         </div>
 
-        <div>
+        <div className={common.field}>
           <label
             htmlFor="jerseyNumber"
             className={common.label}
@@ -125,7 +125,7 @@ export default function PlayerForm({ teamId }: Props) {
           </div>
         </div>
 
-        <div>
+        <div className={common.field}>
           <label
             htmlFor="almaMater"
             className={common.label}
@@ -148,7 +148,7 @@ export default function PlayerForm({ teamId }: Props) {
           <p>設定しない場合は「未設定」のままにしてください</p>
         </div>
 
-        <div>
+        <div className={common.field}>
           <label
             htmlFor="height"
             className={common.label}
@@ -173,7 +173,7 @@ export default function PlayerForm({ teamId }: Props) {
           </p>
         </div>
 
-        <div>
+        <div className={common.field}>
           <label
             htmlFor="weight"
             className={common.label}
