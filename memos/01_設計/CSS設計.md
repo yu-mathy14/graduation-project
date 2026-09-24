@@ -19,6 +19,8 @@
 | src/app/teams/[teamId]/players/new/page.tsx | src/app/teams/[teamId]/players/new/page.module.css |
 | src/app/teams/[teamId]/players/new/components/PlayerForm.tsx | src/app/common.module.css |
 | src/app/teams/[teamId]/players/[playerId]/page.tsx | src/app/teams/[teamId]/players/[playerId]/page.module.css |
+| src/app/teams/[teamId]/players/[playerId]/edit/page.tsx | src/app/teams/[teamId]/players/[playerId]/edit/page.module.css |
+| src/app/teams/[teamId]/players/[playerId]/edit/components/PlayerFOrm.tsx | src/app/common.module.css |
 
 ---
 ### globals.css の役割
