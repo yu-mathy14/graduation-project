@@ -6,6 +6,7 @@
 | 対象 | CSSファイル |
 | :---- | :---- |
 | アプリ全体 | src/app/globals.css <br> src/app/layout.module.css | 
+| アプリ共通のUI | src/app/common.module.css |
 | src/app/page.tsx | src/app/page.module.css |
 | src/app/teams/page.tsx | src/app/teams/page.module.css | 
 | src/app/teams/new/page.tsx | src/app/teams/new/page.module.css | 
