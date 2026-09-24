@@ -122,6 +122,12 @@
   outline-offset: 1px;
 }
 
+.select:disabled {
+  background-color: var(--color-disabled-background);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+}
+
 /* バリデーションエラー */
 .error {
   min-height: 24px;

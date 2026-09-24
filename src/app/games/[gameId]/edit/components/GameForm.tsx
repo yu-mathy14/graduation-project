@@ -37,6 +37,7 @@ type Props = {
   homeScore: number;
   awayScore: number;
   teams: Team[];
+  hasStats: boolean;
 };
 
 export default function GameForm({
@@ -47,6 +48,7 @@ export default function GameForm({
   homeScore,
   awayScore,
   teams,
+  hasStats,
 }: Props) {
   // フォームの初期値
   /* 編集対象の試合の現在値を初期値として設定 */
@@ -98,6 +100,13 @@ export default function GameForm({
       onSubmit={handleSubmit(onSubmit, onError)}
       noValidate
     >
+      {/* スタッツがある場合は変更不可、理由を画面に表示 */}
+      {hasStats && (
+        <p className={common.notice}>
+          スタッツが登録されているため、ホームチームとアウェイチームは変更できません。
+        </p>
+      )}
+
       <div className={common.field}>
         <label
           htmlFor="tipoffTime"
@@ -130,6 +139,7 @@ export default function GameForm({
         <select
           id="homeTeamId" // labelと対応
           className={common.select}
+          disabled={hasStats}
           /* homeTeamIdをReact Hook Formに登録 */
           {...register("homeTeamId")}
         >
@@ -177,6 +187,7 @@ export default function GameForm({
         <select
           id="awayTeamId" // labelと対応
           className={common.select}
+          disabled={hasStats}
           /* awayTeamIdをReact Hook Formに登録 */
           {...register("awayTeamId")}
         >
@@ -214,7 +225,7 @@ export default function GameForm({
         </div>
       </div>
 
-       <div className={common.field}>
+      <div className={common.field}>
         <label
           htmlFor="homeScore"
           className={common.label}

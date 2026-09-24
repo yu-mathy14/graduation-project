@@ -23,17 +23,39 @@ export async function updateGame(
   const homeScore = Number(data.homeScore);
   const awayScore = Number(data.awayScore);
 
-  // 試合存在確認 -----------------------------------------
+  // 1. 試合存在確認 -----------------------------------------
+  // 2. スタッツ登録後のチーム変更チェック -------------------
   /* 指定したGameが存在するか確認 */
   const existingGame = await prisma.games.findUnique({
     where: {
       gameId,
     },
+    // 件数も一緒に取得
+    include: {
+      _count: {
+        select: {
+          // スタッツ件数
+          stats: true,
+        },
+      },
+    },
   });
 
-  /* 試合が存在しない場合は更新しない */
+  /* 1. 試合が存在しない場合は更新しない */
   if (!existingGame) {
     throw new Error("指定された試合が存在しません");
+  }
+  /* 2. スタッツが登録されている場合は、
+   ホーム・アウェイチームの変更を禁止する */
+  if (existingGame._count.stats > 0) {
+    if (
+      homeTeamId !== existingGame.homeTeamId ||
+      awayTeamId !== existingGame.awayTeamId
+    ) {
+      throw new Error(
+        "スタッツが登録されているため、ホームチームとアウェイチームは変更できません"
+      );
+    }
   }
   // ---------------------------------------------------
 
