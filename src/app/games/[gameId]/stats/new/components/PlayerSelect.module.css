@@ -1,0 +1,17 @@
+.container {
+  margin: 24px 0;
+}
+
+.option {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.checkbox {
+  margin-right: 8px;
+}
+
+.count {
+  margin-top: 16px;
+  font-weight: bold;
+}

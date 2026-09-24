@@ -15,8 +15,9 @@ import { useState } from "react";
 import type { Player, PlayerStats, StatsError } from "../../types";
 
 /* コンポーネントの読み込み */
-import PlayerStatsInput from "./PlayerStatsInput";
+import PlayerStatsInput from "./PlayerStatsFirstInput";
 import PlayerSelect from "./PlayerSelect";
+import PlayerStatsFinalTable from "./PlayerStatsFinalTable";
 
 /* 関数の読み込み */
 import { createStats } from "../actions";
@@ -150,7 +151,7 @@ export default function StatsNewForm({
     const currentPlayerId = selectedPlayerIds[currentPlayerIndex];
     /* 現在の選手のスタッツを取得し、定数に格納 */
     const currentStats = playerStats[currentPlayerId];
-
+    /* 現在の選手のスタッツを取得 */
     const player = players.find(
       (player) => player.playerId === currentPlayerId
     );
@@ -168,12 +169,23 @@ export default function StatsNewForm({
         }
       );
 
-      /* Yupの検証に成功時、以前表示されていたエラーメッセージがあれば消す */
+      /* エラーを消す */
       setStatsErrors([]);
 
-      /* 現在の選手インデックスに+1して次の選手に進む */
-      setCurrentPlayerIndex((currentIndex) => currentIndex + 1);
+      /* 最後の選手でなければ次の選手へ進む */
+      if (
+        /* 現在の選手が最後の選手より前にいるか確認 */
+        currentPlayerIndex < selectedPlayerIds.length - 1
+      ) {
+        /* 現在の選手インデックスに+1して次の選手に進む */
+        setCurrentPlayerIndex(
+          (currentIndex) => currentIndex + 1
+        );
+        return;
+      }
 
+      /* 最後の選手まで入力が完了したら第2段階へ進む */
+      setStep(3);
     } catch (error) {
       /* Yup検証失敗時、発生したerrorがYupのValidationErrorかどうかを確認
       -> 今回のようなYupによる検証エラーならこの条件はtrueになる */
@@ -183,7 +195,7 @@ export default function StatsNewForm({
       ) {
         const errors: StatsError[] = [];
 
-        /* Yupが作成したエラーメッセージをstatsErrorsに保存 */
+        /* Yupで発生したすべてのエラーを取得 */
         error.errors.forEach((message) => {
           errors.push({
             playerId: player.playerId,
@@ -327,7 +339,7 @@ export default function StatsNewForm({
             </p>
           )}
 
-          <div className={styles.navigation}>
+          <div className={common.navigation}>
             <button
               type="button"
               className={common.button}
@@ -394,7 +406,7 @@ export default function StatsNewForm({
           )}
 
           {/* 現在の選手が最初の選手ではない場合は前の選手へ戻れる */}
-          <div className={styles.navigation}>
+          <div className={common.navigation}>
             <button
               type="button"
               className={common.button}
@@ -430,9 +442,9 @@ export default function StatsNewForm({
                   type="button"
                   className={common.button}
                   /* ボタンクリック時の処理 */
-                  onClick={handleRegister}
+                  onClick={handleNextPlayer}
                 >
-                  登録
+                  出場時間・得点入力へ
                 </button>
               )
             }
@@ -451,6 +463,70 @@ export default function StatsNewForm({
               }}
             >
               選手選択に戻る
+            </button>
+
+            <Link
+              href={`/games/${gameId}`}
+              className={common.buttonCancel}
+            >
+              キャンセル
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* ステップ3：出場時間・得点関連スタッツを入力 */}
+      {step === 3 && (
+        <div className={styles.step}>
+          <h3>【{teamName}】のスタッツ最終入力</h3>
+
+          <p>
+            全選手の出場時間・得点関連スタッツを入力してください。
+          </p>
+
+          {/* 表形式の入力用コンポーネント  */}
+          <PlayerStatsFinalTable
+            players={players}
+            selectedPlayerIds={selectedPlayerIds}
+            playerStats={playerStats}
+            teamScore={teamScore}
+            onChange={handleStatsChange}
+          />
+
+          {/* エラーがある場合、エラーメッセージを一覧表示 */}
+          {statsErrors.length > 0 && (
+            <div>
+              {statsErrors.map((error, index) => (
+                <p
+                  key={index}
+                  className={common.error}
+                >
+                  {error.playerId !== undefined &&
+                    `背番号${error.jerseyNumber} ${error.playerNameKanji}：`}
+                  {error.message}
+                </p>
+              ))}
+            </div>
+          )}
+
+          <div className={common.navigation}>
+            <button
+              type="button"
+              className={common.button}
+              onClick={() => {
+                setStatsErrors([]);
+                setStep(2);
+              }}
+            >
+              各選手のスタッツ入力に戻る
+            </button>
+
+            <button
+              type="button"
+              className={common.button}
+              onClick={handleRegister}
+            >
+              登録
             </button>
 
             <Link
