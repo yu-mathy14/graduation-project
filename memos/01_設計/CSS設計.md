@@ -14,6 +14,7 @@
 | src/app/teams/[teamId]/page.tsx | src/app/teams/[teamId]/page.module.css |
 | src/app/teams/[teamId]/edit/page.tsx | src/app/teams/[teamId]/edit/page.module.css |
 | src/app/teams/[teamId]/edit/components/TeamForm.tsx | src/app/teams/[teamId]/edit/components/TeamForm.module.css |
+| src/app/teams/[teamId]/delete/page.tsx | src/app/teams/[teamId]/delete/page.module.css |
 | src/app/teams/[teamId]/players/page.tsx | src/app/teams/[teamId]/players/page.module.css |
 | src/app/teams/[teamId]/players/[playerId]/page.tsx | src/app/teams/[teamId]/players/[playerId]/page.module.css |
 
