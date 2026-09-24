@@ -15,6 +15,7 @@ import { useForm,
 /* 他ファイルから必要なものを読み込み */
 import { updatePlayer } from "../actions";
 import { playerSchema, type PlayerFormValues,} from "../../../schema";
+import common from "@/app/common.module.css";
 
 /* PlayerFormが受け取るPropsの型定義 */
 type Props = {
@@ -78,112 +79,150 @@ export default function PlayerForm({
 
   return (
     <form
+      className={common.form}
       onSubmit={handleSubmit(onSubmit, onError)}
       noValidate
     >
-      <div>
-        <label htmlFor="playerNameKanji">
+      <div className={common.field}>
+        <label
+          htmlFor="playerNameKanji"
+          className={common.label}
+        >
           氏名(漢字) *
         </label>
         <input
           id="playerNameKanji" // labelと対応
           type="text"
+          className={common.input}
           /* playerNameKanjiをReact Hook Formに登録 */
           {...register("playerNameKanji")}
         />
         {/* playerNameKanjiのバリデーションエラーがある場合、メッセージを表示 */}
-        <div>{errors.playerNameKanji?.message}</div>
+        <div className={common.error}>
+          {errors.playerNameKanji?.message}
+        </div>
       </div>
 
-      <div>
-        <label htmlFor="playerNameKana">
+      <div className={common.field}>
+        <label
+          htmlFor="playerNameKana"
+          className={common.label}
+        >
           氏名(かな) *
         </label>
         <input
           id="playerNameKana" // labelと対応
           type="text"
+          className={common.input}
           /* playerNameKanaをReact Hook Formに登録 */
           {...register("playerNameKana")}
         />
         {/* playerNameKanaのバリデーションエラーがある場合、メッセージを表示 */}
-        <div>{errors.playerNameKana?.message}</div>
+        <div className={common.error}>
+          {errors.playerNameKana?.message}
+        </div>
       </div>
 
-      <div>
-        <label htmlFor="jerseyNumber">
+      <div className={common.field}>
+        <label
+          htmlFor="jerseyNumber"
+          className={common.label}
+        >
           背番号 *
         </label>
         <input
           id="jerseyNumber" // labelと対応
           type="number" // 数値入力用の入力欄
           min={1} // ブラウザ側の最小値：1
+          className={common.input}
           /* jerseyNumberをReact Hook Formに登録 */
           {...register("jerseyNumber")}
         />
         {/* jerseyNumberのバリデーションエラーがある場合、メッセージを表示 */}
-        <div>{errors.jerseyNumber?.message}</div>
+        <div className={common.error}>
+          {errors.jerseyNumber?.message}
+        </div>
       </div>
 
-      <div>
-        <label htmlFor="almaMater">
+      <div className={common.field}>
+        <label
+          htmlFor="almaMater"
+          className={common.label}
+        >
           出身校 *
         </label>
         <input
           id="almaMater" // labelと対応
           type="text"
+          className={common.input}
           /* almaMaterをReact Hook Formに登録 */
           {...register("almaMater")}
         />
         {/* almaMaterのバリデーションエラーがある場合、メッセージを表示 */}
-        <div>{errors.almaMater?.message}</div>
+        <div className={common.error}>
+          {errors.almaMater?.message}
+        </div>
 
         <p>出身校を設定する場合は書き換えてください</p>
         <p>設定しない場合は「未設定」にしてください</p>
       </div>
 
-      <div>
-        <label htmlFor="height">
+      <div className={common.field}>
+        <label
+          htmlFor="height"
+          className={common.label}
+        >
           身長(cm)
         </label>
         <input
           id="height" // labelと対応
           type="number" // 数値入力用の入力欄
           min={51} // ブラウザ側の最小値：51
+          className={common.input}
           /* heightをReact Hook Formに登録 */
           {...register("height")}
         />
         {/* heightのバリデーションエラーがある場合、メッセージを表示 */}
-        <div>{errors.height?.message}</div>
+        <div className={common.error}>
+          {errors.height?.message}
+        </div>
 
         <p>
           身長は任意です。入力する場合は整数で入力してください。
         </p>
       </div>
 
-      <div>
-        <label htmlFor="weight">
+      <div className={common.field}>
+        <label
+          htmlFor="weight"
+          className={common.label}
+        >
           体重(kg)
         </label>
         <input
           id="weight" // labelと対応
           type="number" // 数値入力用の入力欄
           min={4} // ブラウザ側の最小値：4
+          className={common.input}
           /* weightをReact Hook Formに登録 */
           {...register("weight")}
         />
         {/* weightのバリデーションエラーがある場合、メッセージを表示 */}
-        <div>{errors.weight?.message}</div>
+        <div className={common.error}>
+          {errors.weight?.message}
+        </div>
 
         <p>
           体重は任意です。入力する場合は整数で入力してください。
         </p>
       </div>
 
-      <div>
-        <button type="submit">
-          更新する
-        </button>
-      </div>
+      <button
+        type="submit"
+        className={common.button}
+      >
+        更新する
+      </button>
     </form>
   );
 }
