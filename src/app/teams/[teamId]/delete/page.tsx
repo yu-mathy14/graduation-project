@@ -2,7 +2,6 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { deleteTeam } from "./actions"; 
-import styles from "./page.module.css";
 import common from "@/app/common.module.css";
 
 /* TeamDeletePageが受け取るPropsの型定義 */
@@ -47,20 +46,20 @@ export default async function TeamDeletePage({ params }: Props) {
   const canDeleteTeam = !hasPlayers && !hasGames;
 
   return (
-    <div className={styles.container}>
+    <div className={common.deleteContainer}>
 
       {/* 【三項演算子】チーム削除可否によって表示内容を切り替える */}
       {canDeleteTeam ? (
         /* ----- 以下、チーム削除可能な場合に表示される部分 ----- */
-        <section className={styles.deleteArea}>
-          <h1 className={styles.title}>チーム削除確認</h1>
+        <section className={common.deleteArea}>
+          <h1 className={common.deleteTitle}>チーム削除確認</h1>
 
           {/* 削除前の確認メッセージの表示 */}
-          <p className={styles.message}>
+          <p className={common.deleteMessage}>
             【{team.teamName}】を本当に削除しますか？
           </p>
 
-          <div className={styles.actions}>
+          <div className={common.deleteActions}>
             {/* 削除キャンセルの場合はチーム詳細ページに遷移 */}
             <Link
               href={`/teams/${id}`}
@@ -90,8 +89,8 @@ export default async function TeamDeletePage({ params }: Props) {
         /* ----- 以下、チーム削除不可の場合に表示される部分 ----- */
         /* 直接URLからアクセスした場合などに備えた、
            通常用の操作ではほぼ表示されない削除不可時の画面 */
-        <section className={styles.deleteArea}>
-          <h1 className={styles.title}>チーム削除不可</h1>
+        <section className={common.deleteArea}>
+          <h1 className={common.deleteTitle}>チーム削除不可</h1>
 
           {/* エラーメッセージ(削除不可理由)の表示 */}
           <div className={common.notice}>

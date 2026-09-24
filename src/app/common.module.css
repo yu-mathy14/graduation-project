@@ -102,3 +102,32 @@
 .formNote {
   margin: 8px 0 0;
 }
+
+/* 削除画面 */
+.deleteContainer {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.deleteArea {
+  width: 100%;
+}
+
+.deleteTitle {
+  margin: 0 0 24px;
+  font-size: 28px;
+}
+
+.deleteMessage {
+  margin: 0 0 32px;
+  color: var(--color-danger);
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.deleteActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
