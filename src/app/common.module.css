@@ -23,7 +23,7 @@
   background-color: var(--color-hover-button);
 }
 
-/* テーブル */
+/* テーブル -------------------- */
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -43,6 +43,7 @@
   color: var(--color-main);
   font-weight: bold;
 }
+/* ------------------------------------------------ +/
 
 /* エラー・注意表示 */
 .notice {
@@ -58,7 +59,7 @@
   text-align: center;
 }
 
-/* フォーム入力欄 */
+/* フォーム入力欄 -------------------------------*/
 .input {
   width: 100%;
   padding: 10px 12px;
@@ -69,6 +70,21 @@
 }
 
 .input:focus {
+  outline: 2px solid var(--color-border);
+  outline-offset: 1px;
+}
+
+/* セレクトボックス */
+.select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--color-input-border);
+  border-radius: 4px;
+  background-color: #ffffff;
+  color: var(--color-main);
+}
+
+.select:focus {
   outline: 2px solid var(--color-border);
   outline-offset: 1px;
 }
@@ -102,6 +118,7 @@
 .formNote {
   margin: 8px 0 0;
 }
+/* ----------------------------------- */
 
 /* 削除画面 -------------*/
 .deleteContainer {

@@ -8,6 +8,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 
 import GameForm from "./components/GameForm";
+import styles from "./page.module.css";
+import common from "@/app/common.module.css";
 
 /**
  * 試合登録ページ
@@ -36,22 +38,27 @@ export default async function GameNewPage() {
 
 
   return (
-    <div>
-      {/*　試合一覧に戻るためのリンク */}
-      <Link href="/games">
+    <div className={styles.container}>
+      {/* 試合一覧に戻るためのリンク */}
+      <Link
+        href="/games"
+        className={common.link}
+      >
         ←試合一覧に戻る
       </Link>
 
-      <h1>試合を登録</h1>
+      <h1 className={styles.title}>試合を登録</h1>
 
       {/* React Hook Form + Yupを使った入力フォームを表示 */}
       <GameForm teams={teams} />
 
       {/* 登録キャンセル時は試合一覧ページに遷移 */}
-      <Link href="/games">
+      <Link
+        href="/games"
+        className={common.link}
+      >
         キャンセル
       </Link>
-
     </div>
 
   );

@@ -67,6 +67,26 @@ export const gameSchema = yup.object({
        【$】文字列の末尾*/
     /^\d+$/,
     "${label}を正しく選択してください。"
+    )
+    .test(
+      "different-team",
+      "ホームチームとアウェイチームは別のチームを選択してください。",
+      function (value) {
+        // 未選択の場合はrequiredに任せる
+        if (!value) {
+          return true;
+        }
+
+        // homeTeamIdと同じ場合はエラー
+        if (value === this.parent.homeTeamId) {
+          return this.createError({
+            message:
+              "ホームチームとアウェイチームは別のチームを選択してください。",
+          });
+        }
+
+        return true;
+      }
     ),
 
   homeScore: yup
