@@ -23,6 +23,10 @@ import { createStats } from "../actions";
 import { playerStatsSchema } from "../../schema";
 import * as yup from "yup";
 
+/* CSSファイルの読み込み */
+import styles from "../../stats.module.css";
+import common from "@/app/common.module.css";
+
 /* StatsNewFormが受け取るPropsの型定義 */
 type Props = {
   gameId: number;
@@ -228,10 +232,10 @@ export default function StatsNewForm({
   };
 
   return (
-    <section>
+    <section className={styles.container}>
       {/* ステップ1：出場選手を選択 */}
       {step === 1 && (
-        <>
+        <div className={styles.step}>
           <h3>【{teamName}】</h3>
 
           <p>出場選手を選択してください</p>
@@ -245,11 +249,14 @@ export default function StatsNewForm({
 
           {/* 5人未満の場合は注意書きを表示 */}
           {selectedPlayerIds.length < 5 && (
-            <p>※出場選手を5人以上選択してください</p>
+            <p className={common.error}>
+              ※出場選手を5人以上選択してください
+            </p>
           )}
 
           <button
             type="button"
+            className={common.button}
             /* ボタンクリックでstepを2に更新 */
             onClick={() => setStep(2)}
             /* 現在選択中の選手が5人未満の場合は押せない */
@@ -257,12 +264,12 @@ export default function StatsNewForm({
           >
             スタッツ入力に進む
           </button>
-        </>
+        </div>
       )}
 
       {/* ステップ2：スタッツを入力 */}
       {step === 2 && (
-        <>
+        <div className={styles.step}>
           <h3>【{teamName}】のスタッツ</h3>
 
           {players
@@ -291,63 +298,73 @@ export default function StatsNewForm({
             )}
 
           {/* Yup検証でエラーがある場合、メッセージを表示 */}
-          {statsError && <p>{statsError}</p>}
+          {statsError && (
+            <p className={common.error}>
+              {statsError}
+            </p>
+          )}
           
           {/* 現在の選手が最初の選手ではない場合は前の選手へ戻れる */}
-          <button
-            type="button"
-            /* ボタンクリックでインデックス番号を1減らし、
-            前の選手のスタッツ入力へ切り替える */
-            onClick={() =>
-              setCurrentPlayerIndex(
-                (currentIndex) => currentIndex - 1
+          <div className={styles.navigation}>
+            <button
+              type="button"
+              className={common.button}
+              /* ボタンクリックでインデックス番号を1減らし、
+              前の選手のスタッツ入力へ切り替える */
+              onClick={() =>
+                setCurrentPlayerIndex(
+                  (currentIndex) => currentIndex - 1
+                )
+              }
+              /* 現在の選手が最初の選手の場合は押せない */
+              disabled={currentPlayerIndex === 0}
+            >
+              前の選手へ
+            </button>
+
+            {/* 次の選手がいる場合は次の選手の入力に切り替える */}
+            {/* currentPlayerIndex：現在入力している選手の位置
+                selectedPlayerIds.length：選択した選手の人数 */}
+            {
+              /* 現在の選手が最後の選手より前にいるか確認 */
+              currentPlayerIndex < selectedPlayerIds.length - 1 ? (
+                <button
+                  type="button"
+                  className={common.button}
+                  /* ボタンクリック時の処理 */
+                  onClick={handleNextPlayer}
+                >
+                  次の選手へ
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className={common.button}
+                  /* ボタンクリック時の処理 */
+                  onClick={handleRegister}
+                >
+                  登録
+                </button>
               )
             }
-            /* 現在の選手が最初の選手の場合は押せない */
-            disabled={currentPlayerIndex === 0}
-          >
-            前の選手へ
-          </button>
 
-          {/* 次の選手がいる場合は次の選手の入力に切り替える */}
-          {/* currentPlayerIndex：現在入力している選手の位置
-              selectedPlayerIds.length：選択した選手の人数 */}
-          {
-            /* 現在の選手が最後の選手より前にいるか確認 */
-            currentPlayerIndex < selectedPlayerIds.length - 1 ? (
-              <button
-                type="button"
-                /* ボタンクリック時の処理 */
-                onClick={handleNextPlayer}
-              >
-                次の選手へ
-              </button>
-            ) : (
-              <button
-                type="button"
-                /* ボタンクリック時の処理 */
-                onClick={handleRegister}
-              >
-                登録
-              </button>
-            )
-          }
-
-          {/* 選手選択画面へ戻る */}
-          <button
-            type="button"
-            onClick={() => {
-              /* currentPlayerIndexを0に更新 */
-              setCurrentPlayerIndex(0);
-              /* stepを1に更新 */
-              setStep(1);
-              /* 表示中のYupエラーメッセージを消す */
-              setStatsError("");
-            }}
-          >
-            選手選択に戻る
-          </button>
-        </>
+            {/* 選手選択画面へ戻る */}
+            <button
+              type="button"
+              className={common.button}
+              onClick={() => {
+                /* currentPlayerIndexを0に更新 */
+                setCurrentPlayerIndex(0);
+                /* stepを1に更新 */
+                setStep(1);
+                /* 表示中のYupエラーメッセージを消す */
+                setStatsError("");
+              }}
+            >
+              選手選択に戻る
+            </button>
+          </div>
+        </div>
       )}
     </section>
   );
