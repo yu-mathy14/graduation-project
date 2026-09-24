@@ -16,6 +16,7 @@ import { useForm,
 import { updateGame } from "../actions";
 import { gameSchema, type GameFormValues,} from "../../../schema";
 import common from "@/app/common.module.css";
+import Link from "next/link";
 
 /* チームの型定義 */
 type Team = {
@@ -228,12 +229,21 @@ export default function GameForm({
         </div>
       </div>
 
-      <button
-        type="submit"
-        className={common.button}
-      >
-        更新する
-      </button>
+      <div className={common.navigation}>
+        <button
+          type="submit"
+          className={common.button}
+        >
+          更新する
+        </button>
+
+        <Link
+          href={`/games/${gameId}`}
+          className={common.buttonCancel}
+        >
+          キャンセル
+        </Link>
+      </div>
     </form>
 
   );

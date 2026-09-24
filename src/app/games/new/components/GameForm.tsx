@@ -16,6 +16,7 @@ import { useForm,
 import { createGame } from "../actions";
 import { gameSchema, type GameFormValues,} from "../../schema";
 import common from "@/app/common.module.css";
+import Link from "next/link";
 
 /* チームの型定義 */
 type Team = {
@@ -216,12 +217,21 @@ export default function GameForm({ teams }: Props) {
       </div>
     </div>
 
-    <button
-      type="submit"
-      className={common.button}
-    >
-      登録する
-    </button>
+    <div className={common.navigation}>
+      <button
+        type="submit"
+        className={common.button}
+      >
+        登録する
+      </button>
+
+      <Link
+        href="/games"
+        className={common.buttonCancel}
+      >
+        キャンセル
+      </Link>
+    </div>
   </form>
 
   );

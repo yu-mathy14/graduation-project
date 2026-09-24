@@ -51,16 +51,6 @@ export default async function GameNewPage() {
 
       {/* React Hook Form + Yupを使った入力フォームを表示 */}
       <GameForm teams={teams} />
-
-      {/* 登録キャンセル時は試合一覧ページに遷移 */}
-      <Link
-        href="/games"
-        className={common.link}
-      >
-        キャンセル
-      </Link>
     </div>
-
   );
-
 }
