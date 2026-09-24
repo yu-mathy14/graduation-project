@@ -74,14 +74,6 @@ export default async function PlayerEditPage({ params }: Props) {
         height={player.height}
         weight={player.weight}
       />
-
-      {/* 更新キャンセル時は選手詳細に遷移 */}
-      <Link
-        href={`/teams/${tId}/players/${pId}`}
-        className={common.link}
-      >
-        キャンセル
-      </Link>
     </div>
 
   );
