@@ -17,7 +17,10 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
 /* 型の読み込み */
-import type { PlayerStats } from "./types";
+import type { PlayerStats } from "../types";
+
+/* 得点計算関数の読み込み */
+import { calculatePlayerPoints } from "../utils";
 
 /* gameIdと各選手のスタッツを受け取ってstatsテーブルへ登録する関数 */
 export async function createStats(
@@ -94,11 +97,12 @@ export async function createStats(
     })
   );
 
-    /* 各選手の試合出場時間を合計する */
+  /* 各選手の試合出場時間を合計する */
   const totalPlaySec = statsData.reduce(
     /* 第一引数：現在までの累積秒数
        第二引数：現在処理している選手のスタッツ */
     (total, stats) => total + stats.playSec,
+    /* 累積値の初期値 */
     0
   );
 
@@ -106,6 +110,29 @@ export async function createStats(
   if (totalPlaySec !== 12000) {
     throw new Error(
       "所属選手全員の試合出場時間の合計が12,000秒になるように入力してください"
+    );
+  }
+
+  /* 各選手の得点を合計する */
+  const totalPoints = statsData.reduce(
+    /* 第一引数：現在までの得点合計
+      第二引数：現在処理している選手のスタッツ */
+    (total, stats) =>
+      total + calculatePlayerPoints(stats),
+    /* 累積値の初期値 */
+    0
+  );
+
+  /* 登録対象チームの最終スコアを取得 */
+  const teamScore =
+    teamId === game.homeTeamId
+      ? game.homeScore
+      : game.awayScore;
+
+  /* スタッツの得点合計と試合の最終スコアが一致しない場合は登録させない */
+  if (totalPoints !== teamScore) {
+    throw new Error(
+      "選手スタッツの得点合計と試合の最終スコアが一致するように入力してください"
     );
   }
 

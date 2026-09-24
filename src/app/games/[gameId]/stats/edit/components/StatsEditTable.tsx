@@ -4,7 +4,7 @@
 "use client";
 
 /* 型の読み込み */
-import type { PlayerStats } from "../../new/types";
+import type { PlayerStats } from "../../types";
 
 /* CSSの読み込み */
 import common from "@/app/common.module.css";

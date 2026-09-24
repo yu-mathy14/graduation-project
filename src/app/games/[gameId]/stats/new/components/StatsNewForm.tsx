@@ -12,7 +12,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 /* 型の読み込み */
-import type { Player, PlayerStats } from "../types";
+import type { Player, PlayerStats, StatsError } from "../../types";
 
 /* コンポーネントの読み込み */
 import PlayerStatsInput from "./PlayerStatsInput";
@@ -29,11 +29,15 @@ import * as yup from "yup";
 import styles from "../../stats.module.css";
 import common from "@/app/common.module.css";
 
+/* 得点計算関数の読み込み */
+import { calculatePlayerPoints } from "../../utils";
+
 /* StatsNewFormが受け取るPropsの型定義 */
 type Props = {
   gameId: number;
   teamId: number;
   teamName: string;
+  teamScore: number;
   /* 複数の選手オブジェクトを格納した配列 */
   players: Player[];
 };
@@ -64,6 +68,7 @@ export default function StatsNewForm({
   gameId,
   teamId,
   teamName,
+  teamScore,
   players,
 }: Props) {
 /* 画面の状態を管理するuseStateの定義 */
@@ -84,8 +89,8 @@ export default function StatsNewForm({
     /* キーがnumber型、値がPlayerStats型のオブジェクト */
     useState<Record<number, PlayerStats>>({});
 
-  // Yup検証で発生したエラーメッセージを管理
-  const [statsError, setStatsError] = useState("");
+  // 発生したエラーメッセージを管理
+  const [statsErrors, setStatsErrors] = useState<StatsError[]>([]);
 
 /* イベントハンドラー */
   // 出場選手のチェックを変更する
@@ -146,27 +151,49 @@ export default function StatsNewForm({
     /* 現在の選手のスタッツを取得し、定数に格納 */
     const currentStats = playerStats[currentPlayerId];
 
+    const player = players.find(
+      (player) => player.playerId === currentPlayerId
+    );
+
     /* 【try-catch構文】
     tryはエラーが発生する可能性のある処理、
     try実行中にエラーが起きたらcatch以降の処理を実行する */
     try {
       /* 【await】Yupの検証処理が終わるまで次の処理に進まないために使用 */
       /* currentStatsをplayerStatsSchemaに渡して、Yupで検証 */
-      await playerStatsSchema.validate(currentStats);
+      await playerStatsSchema.validate(
+        currentStats,
+        {
+          abortEarly: false,
+        }
+      );
+
       /* Yupの検証に成功時、以前表示されていたエラーメッセージがあれば消す */
-      setStatsError("");
+      setStatsErrors([]);
+
       /* 現在の選手インデックスに+1して次の選手に進む */
       setCurrentPlayerIndex((currentIndex) => currentIndex + 1);
+
     } catch (error) {
       /* Yup検証失敗時、発生したerrorがYupのValidationErrorかどうかを確認
       -> 今回のようなYupによる検証エラーならこの条件はtrueになる */
-      if (error instanceof yup.ValidationError) {
-        /* Yupが作成したエラーメッセージをstatsErrorに保存 */
-        setStatsError(error.message);
-        
-      /* Server Action側で発生したエラーの場合 */
-      } else if (error instanceof Error) {
-        setStatsError(error.message);
+      if (
+        error instanceof yup.ValidationError &&
+        player
+      ) {
+        const errors: StatsError[] = [];
+
+        /* Yupが作成したエラーメッセージをstatsErrorsに保存 */
+        error.errors.forEach((message) => {
+          errors.push({
+            playerId: player.playerId,
+            jerseyNumber: player.jerseyNumber,
+            playerNameKanji: player.playerNameKanji,
+            message,
+          });
+        });
+
+        setStatsErrors(errors);
       }
     }
   };
@@ -186,49 +213,93 @@ export default function StatsNewForm({
       ])
     );
 
-    try {
-      // 所属選手全員ののスタッツを1人ずつ検証
-      /* 配列の加工は不要なので.map()ではなく【for...of】を使う
-      -> 所属選手全員についてYupの非同期検証を順番に実行 */
-      /* Yupの検証でエラーが発生すると、for...ofを抜けてcatchの処理へ進む */
+    /* エラー情報を一時的に格納 */
+    const errors: StatsError[] = [];
 
-      /* Object.entries() → allPlayerStatsを「[キー, 値]」の配列に変換する
-      　 [playerId, stats] → 配列のキーをplayerId、値をstatsとして分割代入する
-     　　 for...of → 1選手分ずつ順番に取り出して処理する */
-      for (const [playerId, stats] of Object.entries(allPlayerStats)) {
-        /* 【await】Yupの検証処理が完了するまで次の処理に進まないようにする */
-        /* 全選手のスタッツをplayerStatsSchemaに渡して、Yupで検証 */
-        await playerStatsSchema.validate(stats);
-      }
+    // 所属選手全員ののスタッツを1人ずつ検証
+    /* 配列の加工は不要なので.map()ではなく【for...of】を使う
+    -> 所属選手全員についてYupの非同期検証を順番に実行 */
+    /* Yupの検証でエラーが発生すると、for...ofを抜けてcatchの処理へ進む */
 
-      /* 所属選手全員の試合出場時間を合計する */
-      const totalPlaySec = Object.values(allPlayerStats).reduce(
-        /* 第一引数：現在のStatsの試合出場時間(秒)を累積値に加える
-           第二引数：累積値(total)の初期値は0 */
-        (total, stats) => total + stats.playSec,
-        0
+    /* Object.entries() → allPlayerStatsを「[キー, 値]」の配列に変換する
+    　 [playerId, stats] → 配列のキーをplayerId、値をstatsとして分割代入する
+    　　 for...of → 1選手分ずつ順番に取り出して処理する */
+    for (const [playerId, stats] of Object.entries(allPlayerStats)) {
+      const player = players.find(
+        (player) => player.playerId === Number(playerId)
       );
 
-      /* 試合出場時間の合計が12,000秒でない場合は登録しない */
-      if (totalPlaySec !== 12000) {
-        setStatsError(
-          "所属選手全員の試合出場時間の合計が12,000秒になるように入力してください"
-        );
-        return;
+      try {
+        await playerStatsSchema.validate(stats, {
+          abortEarly: false,
+        });
+      } catch (error) {
+        if (
+          error instanceof yup.ValidationError &&
+          player
+        ) {
+          error.errors.forEach((message) => {
+            errors.push({
+              playerId: player.playerId,
+              jerseyNumber: player.jerseyNumber,
+              playerNameKanji: player.playerNameKanji,
+              message,
+            });
+          });
+        }
       }
+    }
 
-      /* Yup検証と試合出場時間の合計チェックに成功したため、
-        以前表示されていたエラーメッセージがあれば消す */
-      setStatsError("");
+    /* 各選手の試合出場時間を合計する */
+    const totalPlaySec = Object.values(allPlayerStats).reduce(
+      (total, stats) => total + stats.playSec,
+      0
+    );
 
-      /* 所属選手全員のスタッツをDBへ登録 */
-      await createStats(gameId, teamId, allPlayerStats);
+    /* 出場時間エラーを追加 */
+    if (totalPlaySec !== 12000) {
+      errors.push({
+        message:
+          "所属選手全員の試合出場時間の合計が12,000秒になるように入力してください",
+      });
+    }
+
+    /* 各選手の得点を合計する */
+    const totalPoints = Object.values(allPlayerStats).reduce(
+      (total, stats) =>
+        total + calculatePlayerPoints(stats),
+      0
+    );
+    
+    /* 得点エラーを追加 */
+    if (totalPoints !== teamScore) {
+      errors.push({
+        message:
+          "選手スタッツの得点合計と試合の最終スコアが一致するように入力してください",
+      });
+    }
+
+    /* エラーが1件以上ある場合は登録しない */
+    if (errors.length > 0) {
+      setStatsErrors(errors);
+      return;
+    }
+
+    /* エラーがなければServer Actionを実行 */
+    try {
+      await createStats(
+        gameId,
+        teamId,
+        allPlayerStats
+      );
     } catch (error) {
-      /* エラーがYupのValidationErrorか確認する
-     -> Yupによる検証エラーの場合はエラーメッセージを表示する */
-      if (error instanceof yup.ValidationError) {
-        /* Yupが作成したエラーメッセージをstatsErrorに保存 */
-        setStatsError(error.message);
+      /* Server Action側で発生したエラーを表示 */
+      if (error instanceof Error) {
+        setStatsErrors([
+          {
+            message: error.message,
+          },
+        ]);
       }
     }
   };
@@ -305,14 +376,23 @@ export default function StatsNewForm({
                 />
               ) : null
             )}
-
-          {/* Yup検証でエラーがある場合、メッセージを表示 */}
-          {statsError && (
-            <p className={common.error}>
-              {statsError}
-            </p>
-          )}
           
+          {/* エラーがある場合、エラーメッセージを一覧表示 */}
+          {statsErrors.length > 0 && (
+            <div>
+              {statsErrors.map((error, index) => (
+                <p
+                  key={index}
+                  className={common.error}
+                >
+                  {error.playerId !== undefined &&
+                    `背番号${error.jerseyNumber} ${error.playerNameKanji}：`}
+                  {error.message}
+                </p>
+              ))}
+            </div>
+          )}
+
           {/* 現在の選手が最初の選手ではない場合は前の選手へ戻れる */}
           <div className={styles.navigation}>
             <button
@@ -367,7 +447,7 @@ export default function StatsNewForm({
                 /* stepを1に更新 */
                 setStep(1);
                 /* 表示中のYupエラーメッセージを消す */
-                setStatsError("");
+                setStatsErrors([]);
               }}
             >
               選手選択に戻る

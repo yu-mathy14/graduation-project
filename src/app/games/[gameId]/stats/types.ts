@@ -27,3 +27,11 @@ export type PlayerStats = {
   dq: number;
   playSec: number;
 };
+
+// スタッツのバリデーションエラーを管理する型
+export type StatsError = {
+  playerId?: number;
+  jerseyNumber?: number;
+  playerNameKanji?: string;
+  message: string;
+};

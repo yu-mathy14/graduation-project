@@ -75,6 +75,12 @@ export default async function StatsNewPage({
       ? game.homeTeam.teamName  // homeの場合
       : game.awayTeam.teamName; // homeじゃない場合
 
+  const teamScore =
+    /* 【三項演算子】teamに"home"が指定されたか */
+    team === "home"
+      ? game.homeScore  // homeの場合
+      : game.awayScore; // homeじゃない場合
+
   /* 登録対象チームの選手のみ取得 */
   const players = await prisma.players.findMany({
     where: {
@@ -101,6 +107,7 @@ export default async function StatsNewPage({
         gameId={game.gameId}
         teamId={teamId}
         teamName={teamName}
+        teamScore={teamScore}
         players={players}
       />
     </div>

@@ -7,7 +7,7 @@ import { useState } from "react";
 import Link from "next/link";
 
 /* 型の読み込み */
-import type { PlayerStats } from "../../new/types";
+import type { PlayerStats, StatsError } from "../../types";
 
 /* コンポーネントの読み込み */
 import StatsEditTable from "./StatsEditTable";
@@ -22,6 +22,9 @@ import * as yup from "yup";
 /* CSSファイルの読み込み */
 import common from "@/app/common.module.css";
 import styles from "../../stats.module.css"
+
+/* 得点計算関数の読み込み */
+import { calculatePlayerPoints } from "../../utils";
 
 /* 型の結合【インターセクション】 */
 /* 編集したスタッツと選手情報を1つのオブジェクトでまとめて管理 */
@@ -38,30 +41,21 @@ type Props = {
   gameId: number;
   /* 編集済みのスタッツオブジェクトを格納した配列 */
   stats: EditStat[];
-};
-
-// スタッツのバリデーションエラーを管理する型
-type StatsError = {
-  playerId: number;
-  jerseyNumber: number;
-  playerNameKanji: string;
-  message: string;
+  teamScore: number;
 };
 
 /* スタッツ編集画面全体の状態と処理を管理する関数 */
 export default function StatsEditForm({
   gameId, 
   stats,
+  teamScore,
 }: Props) {
 /* 状態を管理するuseState値 */
   /* 編集中のスタッツを管理 */
   const [editStats, setEditStats] = useState<EditStat[]>(stats);
 
-  /* Yup検証で発生したエラーメッセージを配列で管理 */
+  /* Yup検証/試合出場時間・最終スコアチェックで発生したエラーメッセージを配列で管理 */
   const [statsErrors, setStatsErrors] = useState<StatsError[]>([]);
-
-  /* 出場時間合計のバリデーションエラーを管理 */
-  const [playSecTotalError, setPlaySecTotalError] = useState("");
 
 /* イベントハンドラー */
   /* 指定した選手の指定したスタッツを変更する */
@@ -99,7 +93,6 @@ export default function StatsEditForm({
 
     /* 前回のバリデーションエラーをクリアする */
     setStatsErrors([]);
-    setPlaySecTotalError("");
 
     /* エラー情報を一時的に格納する配列 */
     const errors: StatsError[] = [];
@@ -137,9 +130,39 @@ export default function StatsEditForm({
               message,
             });
           });
-        } 
+        }
       }
     }
+
+    /* 各選手の試合出場時間を合計する */
+    const totalPlaySec = statsData.reduce(
+      (total, { stats }) => total + stats.playSec,
+      0
+    );
+
+    /* 出場時間エラーを追加 */
+    if (totalPlaySec !== 12000) {
+      errors.push({
+        message:
+          "所属選手全員の試合出場時間の合計が12,000秒になるように入力してください",
+      });
+    }
+
+    /* 各選手の得点を合計する */
+    const totalPoints = statsData.reduce(
+      (total, { stats }) =>
+        total + calculatePlayerPoints(stats),
+      0
+    );
+
+    /* 得点エラーを追加 */
+    if (totalPoints !== teamScore) {
+      errors.push({
+        message:
+          "選手スタッツの得点合計と試合の最終スコアが一致するように入力してください",
+      });
+    }
+
 
     /* エラーが1件以上ある場合 */
     if (errors.length > 0) {
@@ -148,54 +171,38 @@ export default function StatsEditForm({
       return;
     }
 
-    /* 全選手の試合出場時間を合計する */
-    const totalPlaySec = statsData.reduce(
-      /* 第一引数：現在のStatsの試合出場時間(秒)を累積値に加える
-        第二引数：累積値(total)の初期値は0 */
-      (total, { stats }) => total + stats.playSec,
-      0
-    );
-
-    /* 試合出場時間の合計が12,000秒でない場合は保存しない */
-    if (totalPlaySec !== 12000) {
-      setPlaySecTotalError(
-        "所属選手全員の試合出場時間の合計が12,000秒になるように入力してください"
-      );
-      return;
-    } 
-
-    /* Yup検証と試合出場時間の合計チェックに成功したため、
-      以前表示されていたエラーメッセージを消す */
-    setStatsErrors([]);
-    setPlaySecTotalError("");
-
-    /* すべての選手の検証に成功した場合、DBへ保存 */
-    await updateStats(gameId, statsData);
+    /* すべての選手の検証に成功した場合のみServer Actionを実行 */
+    try {
+      await updateStats(gameId, statsData);
+    } catch (error) {
+      /* Server Action側で発生したエラーを画面に表示 */
+      if (error instanceof Error) {
+        setStatsErrors([
+          {
+            message: error.message,
+          },
+        ]);
+      }
+    }
   };
   
   return (
     <>
-      {/* Yup検証でエラーがある場合、エラーメッセージを一覧表示 */}
+      {/* エラーがある場合、エラーメッセージを一覧表示 */}
       {statsErrors.length > 0 && (
         <div>
-          {statsErrors.map((error) => (
-            /* 選手IDとエラーメッセージの組み合わせでエラーを一意に識別 */
+          {statsErrors.map((error, index) => (
+            /* インデックス番号でエラーを一意に識別 */
             <p
-              key={`${error.playerId}-${error.message}`}
+              key={index}
               className={common.error}
             >
-              背番号{error.jerseyNumber} {error.playerNameKanji}：
+              {error.playerId !== undefined &&
+                `背番号${error.jerseyNumber} ${error.playerNameKanji}：`}
               {error.message}
             </p>
           ))}
         </div>
-      )}
-
-      {/* 出場時間合計のバリデーションエラーがある場合、エラーメッセージを表示 */}
-      {playSecTotalError && (
-        <p className={common.error}>
-          {playSecTotalError}
-        </p>
       )}
 
       <StatsEditTable

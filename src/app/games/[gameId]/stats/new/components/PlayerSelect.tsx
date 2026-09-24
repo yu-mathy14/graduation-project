@@ -6,7 +6,7 @@
 "use client";
 
 /* 型の読み込み */
-import type { Player } from "../types";
+import type { Player } from "../../types";
 
 /* CSSファイルの読み込み */
 import styles from "../../stats.module.css";
