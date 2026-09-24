@@ -1,0 +1,44 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 24px;
+}
+
+.main {
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+}
+
+.title {
+  margin: 0 0 20px;
+  font-size: 36px;
+}
+
+.message {
+  margin: 0 0 40px;
+  font-size: 20px;
+}
+
+.nav {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.navLink {
+  display: inline-block;
+  min-width: 180px;
+  padding: 16px 24px;
+  border-radius: 6px;
+  background-color: #171717;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.navLink:hover {
+  background-color: #f97316;
+}

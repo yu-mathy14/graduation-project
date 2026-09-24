@@ -8,6 +8,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 
 import TeamForm from "./components/TeamForm";
+import styles from "./page.module.css";
+import common from "@/app/common.module.css";
 
 // このページに拡張されるデータの型定義
 /* paramsにはteamIdという文字列が入っている */
@@ -30,13 +32,16 @@ export default async function TeamEditPage({ params }: Props) {
   if (!team) notFound();
 
   return (
-    <div>
+    <div className={styles.container}>
       {/* チーム詳細に戻るための遷移リンク */}
-      <Link href={`/teams/${id}`}>
+      <Link
+        href={`/teams/${id}`}
+        className={common.link}
+      >
         ←チーム詳細に戻る
       </Link>
 
-      <h1>チーム情報を編集</h1>
+      <h1 className={styles.title}>チーム情報を編集</h1>
 
       {/* React Hook Form + Yupを使った入力フォームを表示 */}
       <TeamForm
@@ -45,10 +50,13 @@ export default async function TeamEditPage({ params }: Props) {
         teamColor={team.teamColor}
       />
 
-      {/* 編集キャンセル時はチーム一覧ページに遷移 */}
-      <Link href={`/teams/${id}`}>
+      {/* 編集キャンセル時はチーム詳細ページに遷移 */}
+      <Link
+        href={`/teams/${id}`}
+        className={common.link}
+      >
         キャンセル
       </Link>
-    </div>   
+    </div>
   );
 }

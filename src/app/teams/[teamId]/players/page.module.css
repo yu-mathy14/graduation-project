@@ -1,0 +1,20 @@
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.playerList {
+  width: 100%;
+  margin-top: 32px;
+}
+
+.title {
+  margin: 0 0 20px;
+  font-size: 28px;
+}
+
+.count {
+  margin-top: 16px;
+  text-align: right;
+}

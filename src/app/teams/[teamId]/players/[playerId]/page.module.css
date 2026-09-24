@@ -1,0 +1,21 @@
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+  margin-bottom: 32px;
+}
+
+.playerInfo {
+  margin-bottom: 32px;
+}
+
+.title {
+  margin: 0 0 20px;
+  font-size: 28px;
+}

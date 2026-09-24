@@ -9,6 +9,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 
 import PlayerForm from "./components/PlayerForm";
+import styles from "./page.module.css";
+import common from "@/app/common.module.css";
 
 // このページに拡張されるデータの型定義
 type Props = {
@@ -45,20 +47,24 @@ export default async function PlayerEditPage({ params }: Props) {
   if (!team) notFound();
 
   return (
-    <div>
-      {/*　選手詳細に戻るためのリンク */}
-      <Link href={`/teams/${tId}/players/${pId}`}>
+    <div className={styles.container}>
+      {/* 選手詳細に戻るためのリンク */}
+      <Link
+        href={`/teams/${tId}/players/${pId}`}
+        className={common.link}
+      >
         ←選手詳細に戻る
       </Link>
 
-      <h1>選手情報を編集</h1>
+      <h1 className={styles.title}>選手情報を編集</h1>
 
-      <p>所属チーム：{team.teamName}</p>
-      <p>※ 所属チームは登録後に変更できません。</p>
+      <div className={common.notice}>
+        <p>所属チーム：{team.teamName}</p>
+        <p>※ 所属チームは登録後に変更できません。</p>
+      </div>
 
       {/* React Hook Form + Yupを使った入力フォームを表示 */}
       <PlayerForm
-      /* これらはすべて属性ではなくProps */
         playerId={player.playerId}
         teamId={team.teamId}
         playerNameKanji={player.playerNameKanji}
@@ -70,7 +76,10 @@ export default async function PlayerEditPage({ params }: Props) {
       />
 
       {/* 更新キャンセル時は選手詳細に遷移 */}
-      <Link href={`/teams/${tId}/players/${pId}`}>
+      <Link
+        href={`/teams/${tId}/players/${pId}`}
+        className={common.link}
+      >
         キャンセル
       </Link>
     </div>

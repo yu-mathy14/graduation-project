@@ -1,0 +1,133 @@
+/* 通常の画面遷移リンク */
+.link {
+  color: var(--color-main);
+  text-decoration: underline;
+}
+
+.link:hover {
+  color: var(--color-hover-link);
+}
+
+/* ボタン形式 */
+.button {
+  display: inline-block;
+  padding: 10px 18px;
+  border-radius: 6px;
+  background-color: var(--color-main);
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.button:hover {
+  background-color: var(--color-hover-button);
+}
+
+/* テーブル */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* テーブルの見出し・セル */
+.th,
+.td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+}
+
+/* テーブルの見出し */
+.th {
+  background-color: var(--color-sub);
+  color: var(--color-main);
+  font-weight: bold;
+}
+
+/* エラー・注意表示 */
+.notice {
+  padding: 16px;
+  background-color: var(--color-sub);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-sub);
+}
+
+/* データが存在しない場合 */
+.empty {
+  padding: 40px 0;
+  text-align: center;
+}
+
+/* フォーム入力欄 */
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--color-input-border);
+  border-radius: 4px;
+  background-color: #ffffff;
+  color: var(--color-main);
+}
+
+.input:focus {
+  outline: 2px solid var(--color-border);
+  outline-offset: 1px;
+}
+
+/* バリデーションエラー */
+.error {
+  min-height: 24px;
+  margin-top: 6px;
+  color: var(--color-error);
+  font-size: 14px;
+}
+
+/* フォーム */
+.form {
+  width: 100%;
+}
+
+/* フォーム項目 */
+.field {
+  margin-bottom: 24px;
+}
+
+/* フォームラベル */
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+/* フォーム内の補足 */
+.formNote {
+  margin: 8px 0 0;
+}
+
+/* 削除画面 */
+.deleteContainer {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.deleteArea {
+  width: 100%;
+}
+
+.deleteTitle {
+  margin: 0 0 24px;
+  font-size: 28px;
+}
+
+.deleteMessage {
+  margin: 0 0 32px;
+  color: var(--color-danger);
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.deleteActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}

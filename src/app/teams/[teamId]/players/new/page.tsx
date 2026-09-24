@@ -8,6 +8,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 
 import PlayerForm from "./components/PlayerForm";
+import styles from "./page.module.css";
+import common from "@/app/common.module.css";
 
 type Props = {
   params: Promise<{ teamId: string }>;
@@ -32,34 +34,45 @@ export default async function PlayerNewPage({ params }: Props) {
   if (!team) notFound();
 
   return (
-    <div>
-      {/*　選手一覧に戻るためのリンク */}
-      <Link href={`/teams/${team.teamId}/players`}>
+    <div className={styles.container}>
+      {/* 選手一覧に戻るためのリンク */}
+      <Link
+        href={`/teams/${team.teamId}/players`}
+        className={common.link}
+      >
         ←選手一覧に戻る
       </Link>
 
-      <h1>選手を登録</h1>
+      <h1 className={styles.title}>選手を登録</h1>
 
-      <p>所属チーム：{team.teamName}</p>
-      <p>※ 所属チームは登録後に変更できません。
-        <br />
-        登録内容を確認してから登録してください。
-        <br />
-        登録後にチームを間違えた場合は、
-        <br />
-        スタッツが登録されていなければ選手を削除して、
-        <br />
-        正しいチームで再登録してください。
-      </p>
+      <div className={common.notice}>
+        <p>
+          所属チーム：{team.teamName}
+        </p>
+
+        <p>
+          ※ 所属チームは登録後に変更できません。
+          <br />
+          登録内容を確認してから登録してください。
+          <br />
+          登録後にチームを間違えた場合は、
+          <br />
+          スタッツが登録されていなければ選手を削除して、
+          <br />
+          正しいチームで再登録してください。
+        </p>
+      </div>
 
       {/* React Hook Form + Yupを使った入力フォームを表示 */}
       <PlayerForm teamId={team.teamId} />
 
       {/* 登録キャンセル時は選手一覧に遷移 */}
-      <Link href={`/teams/${team.teamId}/players`}>
+      <Link
+        href={`/teams/${team.teamId}/players`}
+        className={common.link}
+      >
         キャンセル
       </Link>
-
     </div>
   );
 }
