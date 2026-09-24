@@ -75,6 +75,25 @@
   margin-top: 32px;
 }
 
+/* スタッツ編集表 */
+.statsEditTable {
+  width: max-content;
+}
+
+/* スタッツ編集用入力欄 */
+.statsInput {
+  width: 80px;
+  min-width: 80px;
+  padding: 8px;
+  text-align: center;
+}
+
+/* DQチェックボックス */
+.statsCheckbox {
+  width: 18px;
+  height: 18px;
+}
+
 @media (max-width: 600px) {
   .statsGrid {
     grid-template-columns: 1fr;

@@ -528,7 +528,7 @@ export default async function GameDetailPage({ params }: Props) {
             </table>
             
             <Link
-              href={`/games/${id}/stats/edit?team=home`}
+              href={`/games/${id}/stats/edit?team=away`}
               className={common.button}
             >
               スタッツを編集
