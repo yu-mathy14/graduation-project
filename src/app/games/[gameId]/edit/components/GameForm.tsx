@@ -60,7 +60,12 @@ export default function GameForm({
   };
 
   // フォーム初期化
-  const { register, handleSubmit, formState: { errors },} = useForm<GameFormValues>({
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<GameFormValues>({
     // デフォルト値
     defaultValues: gameDefaultValue,
     /* バリデーションをYupに任せる */
@@ -68,6 +73,10 @@ export default function GameForm({
     /* yupResolver -> Yupの検証結果をReact Hook Formで扱えるようにするアダプタ */
     resolver: yupResolver(gameSchema),
   });
+
+  /* 現在選択されているホーム・アウェイチームを取得 */
+  const selectedHomeTeamId = watch("homeTeamId");
+  const selectedAwayTeamId = watch("awayTeamId");
 
   // サブミット時の処理
   /* バリデーション成功時に実行される処理 */
@@ -135,11 +144,20 @@ export default function GameForm({
             <option
               key={team.teamId} // チームを一意に識別するためのキー
               value={team.teamId}
-              disabled={team._count.player < 5} // 所属選手5人未満は選択不可
+              disabled={
+                // 所属選手5人未満は選択不可
+                team._count.player < 5 ||
+                // アウェイで選択中のチームは選択不可
+                String(team.teamId) === selectedAwayTeamId
+              }
             >
               {team.teamName}
-              {/* 所属選手5人未満の場合は画面上に表示 */}
-              {team._count.player < 5 ? "（所属選手5人未満）" : ""}
+              {/* 選択できない理由を表示 */}
+              {team._count.player < 5
+                ? "（所属選手5人未満）"
+                : String(team.teamId) === selectedAwayTeamId
+                  ? "（アウェイチーム選択中）"
+                  : ""}
             </option>
           ))}
         </select>
@@ -173,11 +191,20 @@ export default function GameForm({
             <option
               key={team.teamId} // チームを一意に識別するためのキー
               value={team.teamId}
-              disabled={team._count.player < 5} // 所属選手5人未満は選択不可
+              disabled={
+                // 所属選手5人未満は選択不可
+                team._count.player < 5 ||
+                // ホームで選択中のチームは選択不可
+                String(team.teamId) === selectedHomeTeamId
+              }
             >
               {team.teamName}
-              {/* 所属選手5人未満の場合は画面上に表示 */}
-              {team._count.player < 5 ? "（所属選手5人未満）" : ""}
+              {/* 選択できない理由を表示 */}
+              {team._count.player < 5
+                ? "（所属選手5人未満）"
+                : String(team.teamId) === selectedHomeTeamId
+                  ? "（ホームチーム選択中）"
+                  : ""}
             </option>
           ))}
         </select>
