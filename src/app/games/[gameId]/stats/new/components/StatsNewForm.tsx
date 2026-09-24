@@ -257,13 +257,6 @@ export default function StatsNewForm({
           )}
 
           <div className={styles.navigation}>
-            <Link
-              href={`/games/${gameId}`}
-              className={common.button}
-            >
-              キャンセル
-            </Link>
-
             <button
               type="button"
               className={common.button}
@@ -272,6 +265,13 @@ export default function StatsNewForm({
             >
               スタッツ入力に進む
             </button>
+            
+            <Link
+              href={`/games/${gameId}`}
+              className={common.buttonCancel}
+            >
+              キャンセル
+            </Link>
           </div>
         </div>
       )}
@@ -375,7 +375,7 @@ export default function StatsNewForm({
 
             <Link
               href={`/games/${gameId}`}
-              className={common.button}
+              className={common.buttonCancel}
             >
               キャンセル
             </Link>

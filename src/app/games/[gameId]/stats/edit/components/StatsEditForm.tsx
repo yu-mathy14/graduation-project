@@ -215,7 +215,7 @@ export default function StatsEditForm({
         
         <Link
           href={`/games/${gameId}`}
-          className={common.button}
+          className={common.buttonCancel}
         >
           キャンセル
         </Link>

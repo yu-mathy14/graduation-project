@@ -1,12 +1,21 @@
-/* 通常の画面遷移リンク */
+.navigation {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* 通常の画面遷移リンク ----------- */
 .link {
-  color: var(--color-main);
+  color: var(--color-link);
   text-decoration: underline;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .link:hover {
   color: var(--color-hover-link);
 }
+/* --------------------------- */
 
 /* ボタン形式 ------------------ */
 .button {
@@ -29,6 +38,23 @@
   pointer-events: none;
 }
 /* ----------------------------- */
+
+/* キャンセルボタン形式 ---------------- */
+.buttonCancel {
+  display: inline-block;
+  padding: 10px 18px;
+  border: 1px solid var(--color-cancel-border);
+  border-radius: 6px;
+  background-color: var(--color-cancel-background);
+  color: var(--color-cancel-text);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.buttonCancel:hover {
+  background-color: var(--color-cancel-hover);
+}
+/* ------------------------------------- */
 
 /* テーブル -------------------- */
 .table {

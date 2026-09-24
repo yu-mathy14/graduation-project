@@ -65,14 +65,6 @@ export default async function PlayerNewPage({ params }: Props) {
 
       {/* React Hook Form + Yupを使った入力フォームを表示 */}
       <PlayerForm teamId={team.teamId} />
-
-      {/* 登録キャンセル時は選手一覧に遷移 */}
-      <Link
-        href={`/teams/${team.teamId}/players`}
-        className={common.link}
-      >
-        キャンセル
-      </Link>
     </div>
   );
 }

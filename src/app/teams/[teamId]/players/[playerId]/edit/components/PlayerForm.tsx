@@ -5,6 +5,8 @@
 /* このコンポーネントはブラウザ上(クライアントサイド)で実行されることを明示 */
 "use client";
 
+import Link from "next/link";
+
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm,
          type FieldErrors,
@@ -217,12 +219,21 @@ export default function PlayerForm({
         </p>
       </div>
 
-      <button
-        type="submit"
-        className={common.button}
-      >
-        更新する
-      </button>
+      <div className={common.navigation}>
+        <button
+          type="submit"
+          className={common.button}
+        >
+          更新する
+        </button>
+
+        <Link
+          href={`/teams/${teamId}/players/${playerId}`}
+          className={common.buttonCancel}
+        >
+          キャンセル
+        </Link>
+      </div>
     </form>
   );
 }

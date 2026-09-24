@@ -84,14 +84,6 @@ export default async function GameEditPage({ params }: Props) {
         awayScore={game.awayScore}
         teams={teams}
       />
-
-      {/* 更新キャンセル時は試合詳細ページに遷移 */}
-      <Link
-        href={`/games/${id}`}
-        className={common.link}
-      >
-        キャンセル
-      </Link>
     </div>
 
   );
