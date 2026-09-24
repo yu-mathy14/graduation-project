@@ -28,6 +28,7 @@
 | src/app/games/new/components/GameForm.tsx | src/app/common.module.css |
 | src/app/games/[gameId]/edit/page.tsx | src/app/games/[gameId]/edit/page.module.css |
 | src/app/games/[gameId]/edit/components/GameForm.tsx | src/app/common.module.css |
+| src/app/games/[gameId]/delete/page.tsx | src/app/common.module.css |
 
 ---
 ### globals.css の役割
