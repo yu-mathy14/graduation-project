@@ -5,12 +5,12 @@
 
 | 対象 | CSSファイル |
 | :---- | :---- |
-| アプリ全体 | src/app/globals.css <br> src/app/layout.module.css | 
+| アプリ全体 | src/app/globals.css <br> src/app/layout.module.css |
 | アプリ共通のUI | src/app/common.module.css |
 | src/app/page.tsx | src/app/page.module.css |
-| src/app/teams/page.tsx | src/app/teams/page.module.css | 
-| src/app/teams/new/page.tsx | src/app/teams/new/page.module.css | 
-| src/app/teams/new/components/TeamForm.tsx | src/app/common.module.css | 
+| src/app/teams/page.tsx | src/app/teams/page.module.css |
+| src/app/teams/new/page.tsx | src/app/teams/new/page.module.css |
+| src/app/teams/new/components/TeamForm.tsx | src/app/common.module.css |
 | src/app/teams/[teamId]/page.tsx | src/app/teams/[teamId]/page.module.css |
 | src/app/teams/[teamId]/edit/page.tsx | src/app/teams/[teamId]/edit/page.module.css |
 | src/app/teams/[teamId]/edit/components/TeamForm.tsx | src/app/common.module.css |
@@ -29,10 +29,13 @@
 | src/app/games/[gameId]/edit/page.tsx | src/app/games/[gameId]/edit/page.module.css |
 | src/app/games/[gameId]/edit/components/GameForm.tsx | src/app/common.module.css |
 | src/app/games/[gameId]/delete/page.tsx | src/app/common.module.css |
-| src/app/games/[gameId]/stats/new/page.tsx | src/app/common.module.css |
-| src/app/games/[gameId]/stats/new/components/StatsNewForm.tsx | src/app/games/[gameId]/stats/stats.module.css |
+| src/app/games/[gameId]/stats/new/page.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/stats.module.css |
+| src/app/games/[gameId]/stats/new/components/StatsNewForm.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/stats.module.css |
 | src/app/games/[gameId]/stats/new/components/PlayerStatsInput.tsx | src/app/games/[gameId]/stats/stats.module.css |
 | src/app/games/[gameId]/stats/new/components/PlayerSelect.tsx | src/app/games/[gameId]/stats/stats.module.css |
+| src/app/games/[gameId]/stats/edit/page.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/stats.module.css |
+| src/app/games/[gameId]/stats/edit/components/StatsEditForm.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/stats.module.css |
+| src/app/games/[gameId]/stats/edit/components/StatsEditTable.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/stats.module.css |
 
 ---
 ### globals.css の役割
