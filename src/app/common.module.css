@@ -6,8 +6,10 @@
 
 /* 通常の画面遷移リンク ----------- */
 .link {
-  color: var(--color-main);
+  color: var(--color-link);
   text-decoration: underline;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .link:hover {

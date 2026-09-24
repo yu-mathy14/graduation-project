@@ -8,7 +8,7 @@ export default function Header() {
       {/* どのページからでもトップページに遷移できる */}
       <nav>
         <Link href="/">
-          ホーム
+          ホームへ戻る
         </Link>
       </nav>
     </header>
