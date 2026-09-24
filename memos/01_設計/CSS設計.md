@@ -12,6 +12,8 @@
 | src/app/teams/new/page.tsx | src/app/teams/new/page.module.css | 
 | src/app/teams/new/components/TeamForm.tsx | src/app/teams/new/components/TeamForm.module.css | 
 | src/app/teams/[teamId]/page.tsx | src/app/teams/[teamId]/page.module.css |
+| src/app/teams/[teamId]/edit/page.tsx | src/app/teams/[teamId]/edit/page.module.css |
+| src/app/teams/[teamId]/edit/components/TeamForm.tsx | src/app/teams/[teamId]/edit/components/TeamForm.module.css |
 | src/app/teams/[teamId]/players/page.tsx | src/app/teams/[teamId]/players/page.module.css |
 | src/app/teams/[teamId]/players/[playerId]/page.tsx | src/app/teams/[teamId]/players/[playerId]/page.module.css |
 

@@ -14,6 +14,9 @@
   /* ホバー時に使用する色 */
   --color-hover-button: #f97316;
   --color-hover-link: #2563eb;
+
+  /* エラー文に使用する色 */
+  --color-error: #dc2626; 
 }
 
 @theme inline {

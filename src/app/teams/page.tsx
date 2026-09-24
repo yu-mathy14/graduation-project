@@ -55,12 +55,14 @@ export default async function TeamsPage() {
               {teams.map((t) => (
                 <tr key={t.teamId}>
                   {/* チーム名 */}
-                  <Link
+                  <td className={common.td}>
+                    <Link
                       href={`/teams/${t.teamId}`}
                       className={common.link}
                     >
-                    <td className={common.td}>{t.teamName}</td>
-                  </Link>
+                      {t.teamName}
+                    </Link>
+                  </td>
 
                   {/* チームカラー */}
                   <td className={common.td}>
