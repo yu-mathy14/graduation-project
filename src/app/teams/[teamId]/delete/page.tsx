@@ -2,6 +2,8 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { deleteTeam } from "./actions"; 
+import styles from "./page.module.css";
+import common from "@/app/common.module.css";
 
 /* TeamDeletePageが受け取るPropsの型定義 */
 type Props = {
@@ -45,71 +47,87 @@ export default async function TeamDeletePage({ params }: Props) {
   const canDeleteTeam = !hasPlayers && !hasGames;
 
   return (
-    <div>
+    <div className={styles.container}>
+
       {/* 【三項演算子】チーム削除可否によって表示内容を切り替える */}
       {canDeleteTeam ? (
-      /* ----- 以下、チーム削除可能な場合に表示される部分 ----- */
-        <>
-          <h2>チーム削除確認</h2>
+        /* ----- 以下、チーム削除可能な場合に表示される部分 ----- */
+        <section className={styles.deleteArea}>
+          <h1 className={styles.title}>チーム削除確認</h1>
 
           {/* 削除前の確認メッセージの表示 */}
-          <p>
+          <p className={styles.message}>
             【{team.teamName}】を本当に削除しますか？
           </p>
 
-          {/* 削除キャンセルの場合はチーム詳細ページに遷移 */}
-          <Link href={`/teams/${id}/`}>
-            キャンセル
-          </Link>
+          <div className={styles.actions}>
+            {/* 削除キャンセルの場合はチーム詳細ページに遷移 */}
+            <Link
+              href={`/teams/${id}`}
+              className={common.link}
+            >
+              キャンセル
+            </Link>
 
-          {/* ((仮ボタン))次の段階でServer Actionを設定する */}
-          <form action={deleteTeam}>
-            <input type="hidden" name="teamId" value={id} />
-            <button type="submit">
-              削除
-            </button>
-          </form>
-        </>
+            {/* Server Actionを実行 */}
+            <form action={deleteTeam}>
+              <input
+                type="hidden"
+                name="teamId"
+                value={id}
+              />
+
+              <button
+                type="submit"
+                className={common.button}
+              >
+                削除
+              </button>
+            </form>
+          </div>
+        </section>
       ) : (
-      /* ----- 以下、チーム削除不可の場合に表示される部分 ----- */
-      /* 直接URLからアクセスした場合などに備えた、
-         通常用の操作ではほぼ表示されない削除不可時の画面 */
-        <>
-          <h2>チーム削除不可</h2>
-          
+        /* ----- 以下、チーム削除不可の場合に表示される部分 ----- */
+        /* 直接URLからアクセスした場合などに備えた、
+           通常用の操作ではほぼ表示されない削除不可時の画面 */
+        <section className={styles.deleteArea}>
+          <h1 className={styles.title}>チーム削除不可</h1>
+
           {/* エラーメッセージ(削除不可理由)の表示 */}
-          {/* パターン1：所属選手がいるのみ */}
-          {hasPlayers && !hasGames && (
-            <p>
-              このチームには所属選手がいるため、削除できません。
-            </p>
-          )}
+          <div className={common.notice}>
+            {/* パターン1：所属選手がいるのみ */}
+            {hasPlayers && !hasGames && (
+              <p>
+                このチームには所属選手がいるため、削除できません。
+              </p>
+            )}
 
-          {/* パターン2：試合参加歴があるのみ */}
-          {/* 通常操作では発生しない想定だが、安全性のために作成 */}
-          {!hasPlayers && hasGames && (
-            <p>
-              このチームは試合に参加した記録があるため、削除できません。
-            </p>
-          )}
+            {/* パターン2：試合参加歴があるのみ */}
+            {!hasPlayers && hasGames && (
+              <p>
+                このチームは試合に参加した記録があるため、削除できません。
+              </p>
+            )}
 
-          {/* パターン3：理由1 かつ 理由2 */}
-          {hasPlayers && hasGames && (
-            <p>
-              このチームは以下の理由で削除できません。<br />
-              ・所属選手がいる<br />
-              ・試合に参加した記録がある
-            </p>
-          )}
+            {/* パターン3：理由1 かつ 理由2 */}
+            {hasPlayers && hasGames && (
+              <p>
+                このチームは以下の理由で削除できません。<br />
+                ・所属選手がいる<br />
+                ・試合に参加した記録がある
+              </p>
+            )}
+          </div>
 
           {/* 削除不可理由を確認後、チーム詳細ページに遷移 */}
-          <Link href={`/teams/${id}`}>
+          <Link
+            href={`/teams/${id}`}
+            className={common.link}
+          >
             了解
           </Link>
-        </>
+        </section>
       )}
-
-
 
     </div>
   )

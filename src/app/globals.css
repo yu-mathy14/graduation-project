@@ -17,6 +17,9 @@
 
   /* エラー文に使用する色 */
   --color-error: #dc2626; 
+
+  /* 警告・削除確認などの色 */
+  --color-danger: #dc2626;
 }
 
 @theme inline {
