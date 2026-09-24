@@ -340,7 +340,7 @@ export default async function GameDetailPage({ params }: Props) {
             <p>スタッツが登録されていません</p>
 
             <Link
-              href={`/games/${id}/stats/new?team=home`}
+              href={`/games/${id}/stats/new?team=away`}
               className={common.button}
             >
               スタッツを登録
