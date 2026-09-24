@@ -31,8 +31,9 @@
 | src/app/games/[gameId]/delete/page.tsx | src/app/common.module.css |
 | src/app/games/[gameId]/stats/new/page.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/stats.module.css |
 | src/app/games/[gameId]/stats/new/components/StatsNewForm.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/stats.module.css |
-| src/app/games/[gameId]/stats/new/components/PlayerStatsInput.tsx | src/app/games/[gameId]/stats/stats.module.css |
-| src/app/games/[gameId]/stats/new/components/PlayerSelect.tsx | src/app/games/[gameId]/stats/stats.module.css |
+| src/app/games/[gameId]/stats/new/components/PlayerStatsFirstTable.tsx | src/app/games/[gameId]/stats/stats.module.css |
+| src/app/games/[gameId]/stats/new/components/PlayerStatsFinalTable.tsx | src/app/games/[gameId]/stats/new/components/PlayerStatsFinalTable.module.css |
+| src/app/games/[gameId]/stats/new/components/PlayerSelect.tsx | src/app/games/[gameId]/stats/new/components/PlayerSelect.module.css |
 | src/app/games/[gameId]/stats/edit/page.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/stats.module.css |
 | src/app/games/[gameId]/stats/edit/components/StatsEditForm.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/stats.module.css |
 | src/app/games/[gameId]/stats/edit/components/StatsEditTable.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/stats.module.css |
