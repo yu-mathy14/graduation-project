@@ -1,0 +1,17 @@
+.form {
+  width: 100%;
+}
+
+.field {
+  margin-bottom: 24px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.reference {
+  margin: 8px 0 0;
+}
