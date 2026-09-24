@@ -6,6 +6,8 @@
 /* このコンポーネントはブラウザ上(クライアントサイド)で実行されることを明示 */
 "use client";
 
+import Link from "next/link";
+
 /* 状態を管理するReactフックの読み込み */
 import { useState } from "react";
 
@@ -254,16 +256,23 @@ export default function StatsNewForm({
             </p>
           )}
 
-          <button
-            type="button"
-            className={common.button}
-            /* ボタンクリックでstepを2に更新 */
-            onClick={() => setStep(2)}
-            /* 現在選択中の選手が5人未満の場合は押せない */
-            disabled={selectedPlayerIds.length < 5}
-          >
-            スタッツ入力に進む
-          </button>
+          <div className={styles.navigation}>
+            <Link
+              href={`/games/${gameId}`}
+              className={common.button}
+            >
+              キャンセル
+            </Link>
+
+            <button
+              type="button"
+              className={common.button}
+              onClick={() => setStep(2)}
+              disabled={selectedPlayerIds.length < 5}
+            >
+              スタッツ入力に進む
+            </button>
+          </div>
         </div>
       )}
 
@@ -363,6 +372,13 @@ export default function StatsNewForm({
             >
               選手選択に戻る
             </button>
+
+            <Link
+              href={`/games/${gameId}`}
+              className={common.button}
+            >
+              キャンセル
+            </Link>
           </div>
         </div>
       )}
