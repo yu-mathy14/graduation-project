@@ -103,7 +103,7 @@
   margin: 8px 0 0;
 }
 
-/* 削除画面 */
+/* 削除画面 -------------*/
 .deleteContainer {
   max-width: 700px;
   margin: 0 auto;
@@ -130,4 +130,51 @@
   display: flex;
   align-items: center;
   gap: 16px;
+}
+/* -------------------------- */
+
+/* テーブルの横スクロール */
+.tableScroll {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* スタッツ一覧表 */
+.statsTable {
+  min-width: max-content;
+  white-space: nowrap;
+}
+
+/* 背番号列を固定 */
+.statsTable th:nth-child(1),
+.statsTable td:nth-child(1) {
+  position: sticky;
+  left: 0;
+  width: 64px;
+  min-width: 64px;
+  background-color: var(--color-sub);
+  z-index: 2;
+}
+
+/* 選手名列を固定 */
+.statsTable th:nth-child(2),
+.statsTable td:nth-child(2) {
+  position: sticky;
+  left: 64px;
+  width: 120px;
+  min-width: 120px;
+  background-color: var(--background);
+  z-index: 2;
+}
+
+/* ヘッダーの固定列は見出しの背景色を維持 */
+.statsTable th:nth-child(1),
+.statsTable th:nth-child(2) {
+  background-color: var(--color-sub);
+}
+
+/* 固定列との境界を分かりやすくする */
+.statsTable th:nth-child(2),
+.statsTable td:nth-child(2) {
+  border-right: 1px solid var(--color-border);
 }

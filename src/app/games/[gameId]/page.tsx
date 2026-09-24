@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import styles from "./page.module.css";
+import common from "@/app/common.module.css";
 
 type Props = {
   params: Promise<{ gameId: string }>;
@@ -47,23 +49,34 @@ export default async function GameDetailPage({ params }: Props) {
   );
  
   return (
-    <div>
+    <div className={styles.container}>
       {/* 試合一覧に戻るための遷移リンク */}
-      <Link href="/games">
-      ←試合一覧に戻る
+      <Link
+        href="/games"
+        className={common.link}
+      >
+        ←試合一覧に戻る
       </Link>
 
-      {/* 試合編集ページへの遷移リンク */}
-      <Link href={`/games/${id}/edit`}>
-        試合情報を編集
-      </Link>
-
-      {/* 試合削除可能な場合、削除確認ページへの遷移リンクを表示 */}
-      {canDeleteGame && (
-        <Link href={`/games/${id}/delete`}>
-          試合を削除
+      <div className={styles.actions}>
+        {/* 試合編集ページへの遷移リンク */}
+        <Link
+          href={`/games/${id}/edit`}
+          className={common.button}
+        >
+          試合情報を編集
         </Link>
-      )}
+
+        {/* 試合削除可能な場合、削除確認ページへの遷移リンクを表示 */}
+        {canDeleteGame && (
+          <Link
+            href={`/games/${id}/delete`}
+            className={common.button}
+          >
+            試合を削除
+          </Link>
+        )}
+      </div>
 
       {/* 試合削除不可の場合、理由を表示 */}
       {!canDeleteGame && (
@@ -73,14 +86,14 @@ export default async function GameDetailPage({ params }: Props) {
       )}
 
       {/* 試合情報 */}
-      <section>
-        <h2>試合情報</h2>
-        <table>
+      <section className={styles.gameInfo}>
+        <h1 className={styles.title}>試合情報</h1>
+
+        <table className={common.table}>
           <tbody>
-            {/* 対戦日時 */}
             <tr>
-              <th>対戦日時</th>
-              <td>
+              <th className={common.th}>対戦日時</th>
+              <td className={common.td}>
                 {game.tipoffTime.toLocaleString("ja-JP", {
                   timeZone: "Asia/Tokyo",
                   year: "numeric",
@@ -92,14 +105,11 @@ export default async function GameDetailPage({ params }: Props) {
               </td>
             </tr>
 
-            {/* スコア
-            -> ホームチーム名 点 - 点 アウェイチーム名 */}
             <tr>
-              <th>スコア</th>
-              <td>
-                <div>
-                  {game.homeTeam.teamName} {game.homeScore}-{game.awayScore} {game.awayTeam.teamName}
-                </div>
+              <th className={common.th}>スコア</th>
+              <td className={common.td}>
+                {game.homeTeam.teamName} {game.homeScore}-{game.awayScore}{" "}
+                {game.awayTeam.teamName}
               </td>
             </tr>
           </tbody>
@@ -107,47 +117,52 @@ export default async function GameDetailPage({ params }: Props) {
       </section>
 
       {/* ホームチームスタッツ一覧表 */}
-      <section>
-        <h2>【{game.homeTeam.teamName}】スタッツ</h2>
+      <section className={styles.statsSection}>
+        <h2 className={styles.statsTitle}>
+          【{game.homeTeam.teamName}】スタッツ
+        </h2>
         {/* 【三項演算子】ホームチームの選手のスタッツの件数が0件かどうかで表示を切り替える */}
         {homeStats.length === 0 ? (
           <>
             <p>スタッツが登録されていません</p>
-            <Link href={`/games/${id}/stats/new?team=home`}>
+            <Link
+              href={`/games/${id}/stats/new?team=home`}
+              className={common.button}
+            >
               スタッツを登録
             </Link>
           </>
         ) : (
           /* 1件以上の場合、表として表示 */
-          <>
-            <table>
+          <div className={common.tableScroll}>
+            <table className={`${common.table} ${common.statsTable}`}>
             {/* 見出しを作る */}
               <thead>
                 <tr>
-                  <th>背番号</th>
-                  <th>選手名</th>
-                  <th>pts</th>
-                  <th>3P(M)</th>
-                  <th>3P(A)</th>
-                  <th>3P(%)</th>
-                  <th>2P(M)</th>
-                  <th>2P(A)</th>
-                  <th>2P(%)</th>
-                  <th>FT(M)</th>
-                  <th>FT(A)</th>
-                  <th>FT(%)</th>
-                  <th>RBD(OR)</th>
-                  <th>RBD(DR)</th>
-                  <th>RBD(TOT)</th>
-                  <th>AST</th>
-                  <th>STL</th>
-                  <th>BLK</th>
-                  <th>TO</th>
-                  <th>PF</th>
-                  <th>TF</th>
-                  <th>FO</th>
-                  <th>DQ</th>
-                  <th>試合出場時間</th>
+                  <th className={common.th}>背番号</th>
+                  <th className={common.th}>選手名</th>
+                  <th className={common.th}>pts</th>
+                  <th className={common.th}>3P(M)</th>
+                  <th className={common.th}>3P(A)</th>
+                  <th className={common.th}>3P(%)</th>
+                  <th className={common.th}>2P(M)</th>
+                  <th className={common.th}>2P(A)</th>
+                  <th className={common.th}>2P(%)</th>
+                  <th className={common.th}>FT(M)</th>
+                  <th className={common.th}>FT(A)</th>
+                  <th className={common.th}>FT(%)</th>
+                  <th className={common.th}>RBD(OR)</th>
+                  <th className={common.th}>RBD(DR)</th>
+                  <th className={common.th}>RBD(TOT)</th>
+                  <th className={common.th}>AST</th>
+                  <th className={common.th}>STL</th>
+                  <th className={common.th}>BLK</th>
+                  <th className={common.th}>TO</th>
+                  <th className={common.th}>PF</th>
+                  <th className={common.th}>TF</th>
+                  <th className={common.th}>FO</th>
+                  <th className={common.th}>DQ</th>
+                  <th className={common.th}>試合出場時間</th>
                 </tr>
               </thead>
 
@@ -180,65 +195,115 @@ export default async function GameDetailPage({ params }: Props) {
                   return (
                     <tr key={gs.playerId}>
                       {/* 背番号 */}
-                      <td>{gs.player.jerseyNumber}</td>
+                      <td className={common.td}>
+                        {gs.player.jerseyNumber}
+                      </td>
                       {/* 選手名(漢字) */}
-                      <td>{gs.player.playerNameKanji}</td>
+                      <td className={common.td}>
+                        {gs.player.playerNameKanji}
+                      </td>
 
                       {/* 総得点 */}
-                      <td>{pts}</td>
+                      <td className={common.td}>
+                        {pts}
+                      </td>
 
                       {/* 3P成功 */}
-                      <td>{gs.p3M}</td>
+                      <td className={common.td}>
+                        {gs.p3M}
+                      </td>
                       {/* 3P試行 */}
-                      <td>{gs.p3A}</td>
+                      <td className={common.td}>
+                        {gs.p3A}
+                      </td>
                       {/* 3P成功率 */}
-                      <td>{p3P}%</td>
+                      <td className={common.td}>
+                        {p3P}%
+                      </td>
 
                       {/* 2P成功 */}
-                      <td>{gs.p2M}</td>
+                      <td className={common.td}>
+                        {gs.p2M}
+                      </td>
                       {/* 2P試行 */}
-                      <td>{gs.p2A}</td>
+                      <td className={common.td}>
+                        {gs.p2A}
+                      </td>
                       {/* 2P成功率 */}
-                      <td>{p2P}%</td>
+                      <td className={common.td}>
+                        {p2P}%
+                      </td>
 
                       {/* FT成功 */}
-                      <td>{gs.ftM}</td>
+                      <td className={common.td}>
+                        {gs.ftM}
+                      </td>
                       {/* FT試行 */}
-                      <td>{gs.ftA}</td>
+                      <td className={common.td}>
+                        {gs.ftA}
+                      </td>
                       {/* FT成功率 */}
-                      <td>{ftP}%</td>
+                      <td className={common.td}>
+                        {ftP}%
+                      </td>
 
                       {/* オフェンスリバウンド数 */}
-                      <td>{gs.oRbd}</td>
+                      <td className={common.td}>
+                        {gs.oRbd}
+                      </td>
                       {/* ディフェンスリバウンド数 */}
-                      <td>{gs.dRbd}</td>
+                      <td className={common.td}>
+                        {gs.dRbd}
+                      </td>
                       {/* 総リバウンド数 */}
-                      <td>{rbd}</td>
+                      <td className={common.td}>
+                        {rbd}
+                      </td>
 
                       {/* アシスト数 */}
-                      <td>{gs.ast}</td>
+                      <td className={common.td}>
+                        {gs.ast}
+                      </td>
                       {/* スティール数 */}
-                      <td>{gs.stl}</td>
+                      <td className={common.td}>
+                        {gs.stl}
+                      </td>
                       {/* シュートブロック数 */}
-                      <td>{gs.blk}</td>
+                      <td className={common.td}>
+                        {gs.blk}
+                      </td>
                       {/* ターンオーバー数 */}
-                      <td>{gs.tov}</td>
+                      <td className={common.td}>
+                        {gs.tov}
+                      </td>
                       {/* 個人ファウル数 */}
-                      <td>{gs.pf}</td>
+                      <td className={common.td}>
+                        {gs.pf}
+                      </td>
                       {/* テクニカルファウル数 */}
-                      <td>{gs.tf}</td>
+                      <td className={common.td}>
+                        {gs.tf}
+                      </td>
                       {/* ファウルオン数 */}
-                      <td>{gs.fo}</td>
+                      <td className={common.td}>
+                        {gs.fo}
+                      </td>
                       {/* 退場フラグ */}
-                      <td>{gs.dq}</td>
+                      <td className={common.td}>
+                        {gs.dq}
+                      </td>
 
                       {/* 試合出場時間 */}
                       {gs.playSec === 0 ? (
-                        <td>DNP</td>
+                        <td className={common.td}>
+                          DNP
+                        </td>
                       ) : (
                         /* String(sec).padStart(2, "0")
                         -> 秒数が1桁の時も「00」のように2桁で表示する */
-                        <td>{min}:{String(sec).padStart(2, "0")}</td>
+                        <td className={common.td}>
+                          {min}:{String(sec).padStart(2, "0")}
+                        </td>
                       )}
                       
 
@@ -251,10 +316,13 @@ export default async function GameDetailPage({ params }: Props) {
 
             </table>
 
-            <Link href={`/games/${id}/stats/edit?team=home`}>
+            <Link
+              href={`/games/${id}/stats/edit?team=home`}
+              className={common.button}
+            >
               スタッツを編集
             </Link>
-          </>
+          </div>
         )}
         
         
@@ -262,49 +330,54 @@ export default async function GameDetailPage({ params }: Props) {
       </section>
 
       {/* アウェイチームスタッツ一覧表 */}
-      <section>
-        <h2>【{game.awayTeam.teamName}】スタッツ</h2>
+      <section className={styles.statsSection}>
+        <h2 className={styles.statsTitle}>
+          【{game.awayTeam.teamName}】スタッツ
+        </h2>
         {/* 【三項演算子】アウェイチームの選手のスタッツの件数が0件かどうかで表示を切り替える */}
         {awayStats.length === 0 ? (
           <>
             <p>スタッツが登録されていません</p>
 
-            <Link href={`/games/${id}/stats/new?team=away`}>
+            <Link
+              href={`/games/${id}/stats/new?team=home`}
+              className={common.button}
+            >
               スタッツを登録
             </Link>
           </>
           
         ) : (
           /* 1件以上の場合、表として表示 */
-          <>
-            <table>
+          <div className={common.tableScroll}>
+            <table className={`${common.table} ${common.statsTable}`}>
             {/* 見出しを作る */}
               <thead>
                 <tr>
-                  <th>背番号</th>
-                  <th>選手名</th>
-                  <th>pts</th>
-                  <th>3P(M)</th>
-                  <th>3P(A)</th>
-                  <th>3P(%)</th>
-                  <th>2P(M)</th>
-                  <th>2P(A)</th>
-                  <th>2P(%)</th>
-                  <th>FT(M)</th>
-                  <th>FT(A)</th>
-                  <th>FT(%)</th>
-                  <th>RBD(OR)</th>
-                  <th>RBD(DR)</th>
-                  <th>RBD(TOT)</th>
-                  <th>AST</th>
-                  <th>STL</th>
-                  <th>BLK</th>
-                  <th>TO</th>
-                  <th>PF</th>
-                  <th>TF</th>
-                  <th>FO</th>
-                  <th>DQ</th>
-                  <th>試合出場時間</th>
+                  <th className={common.th}>背番号</th>
+                  <th className={common.th}>選手名</th>
+                  <th className={common.th}>pts</th>
+                  <th className={common.th}>3P(M)</th>
+                  <th className={common.th}>3P(A)</th>
+                  <th className={common.th}>3P(%)</th>
+                  <th className={common.th}>2P(M)</th>
+                  <th className={common.th}>2P(A)</th>
+                  <th className={common.th}>2P(%)</th>
+                  <th className={common.th}>FT(M)</th>
+                  <th className={common.th}>FT(A)</th>
+                  <th className={common.th}>FT(%)</th>
+                  <th className={common.th}>RBD(OR)</th>
+                  <th className={common.th}>RBD(DR)</th>
+                  <th className={common.th}>RBD(TOT)</th>
+                  <th className={common.th}>AST</th>
+                  <th className={common.th}>STL</th>
+                  <th className={common.th}>BLK</th>
+                  <th className={common.th}>TO</th>
+                  <th className={common.th}>PF</th>
+                  <th className={common.th}>TF</th>
+                  <th className={common.th}>FO</th>
+                  <th className={common.th}>DQ</th>
+                  <th className={common.th}>試合出場時間</th>
                 </tr>
               </thead>
 
@@ -337,65 +410,115 @@ export default async function GameDetailPage({ params }: Props) {
                   return(
                     <tr key={gs.playerId}>
                       {/* 背番号 */}
-                      <td>{gs.player.jerseyNumber}</td>
+                      <td className={common.td}>
+                        {gs.player.jerseyNumber}
+                      </td>
                       {/* 選手名(漢字) */}
-                      <td>{gs.player.playerNameKanji}</td>
+                      <td className={common.td}>
+                        {gs.player.playerNameKanji}
+                      </td>
 
                       {/* 総得点 */}
-                      <td>{pts}</td>
+                      <td className={common.td}>
+                        {pts}
+                      </td>
 
                       {/* 3P成功 */}
-                      <td>{gs.p3M}</td>
+                      <td className={common.td}>
+                        {gs.p3M}
+                      </td>
                       {/* 3P試行 */}
-                      <td>{gs.p3A}</td>
+                      <td className={common.td}>
+                        {gs.p3A}
+                      </td>
                       {/* 3P成功率 */}
-                      <td>{p3P}%</td>
+                      <td className={common.td}>
+                        {p3P}%
+                      </td>
 
                       {/* 2P成功 */}
-                      <td>{gs.p2M}</td>
+                      <td className={common.td}>
+                        {gs.p2M}
+                      </td>
                       {/* 2P試行 */}
-                      <td>{gs.p2A}</td>
+                      <td className={common.td}>
+                        {gs.p2A}
+                      </td>
                       {/* 2P成功率 */}
-                      <td>{p2P}%</td>
+                      <td className={common.td}>
+                        {p2P}%
+                      </td>
 
                       {/* FT成功 */}
-                      <td>{gs.ftM}</td>
+                      <td className={common.td}>
+                        {gs.ftM}
+                      </td>
                       {/* FT試行 */}
-                      <td>{gs.ftA}</td>
+                      <td className={common.td}>
+                        {gs.ftA}
+                      </td>
                       {/* FT成功率 */}
-                      <td>{ftP}%</td>
+                      <td className={common.td}>
+                        {ftP}%
+                      </td>
 
                       {/* オフェンスリバウンド数 */}
-                      <td>{gs.oRbd}</td>
+                      <td className={common.td}>
+                        {gs.oRbd}
+                      </td>
                       {/* ディフェンスリバウンド数 */}
-                      <td>{gs.dRbd}</td>
+                      <td className={common.td}>
+                        {gs.dRbd}
+                      </td>
                       {/* 総リバウンド数 */}
-                      <td>{rbd}</td>
+                      <td className={common.td}>
+                        {rbd}
+                      </td>
 
                       {/* アシスト数 */}
-                      <td>{gs.ast}</td>
+                      <td className={common.td}>
+                        {gs.ast}
+                      </td>
                       {/* スティール数 */}
-                      <td>{gs.stl}</td>
+                      <td className={common.td}>
+                        {gs.stl}
+                      </td>
                       {/* シュートブロック数 */}
-                      <td>{gs.blk}</td>
+                      <td className={common.td}>
+                        {gs.blk}
+                      </td>
                       {/* ターンオーバー数 */}
-                      <td>{gs.tov}</td>
+                      <td className={common.td}>
+                        {gs.tov}
+                      </td>
                       {/* 個人ファウル数 */}
-                      <td>{gs.pf}</td>
+                      <td className={common.td}>
+                        {gs.pf}
+                      </td>
                       {/* テクニカルファウル数 */}
-                      <td>{gs.tf}</td>
+                      <td className={common.td}>
+                        {gs.tf}
+                      </td>
                       {/* ファウルオン数 */}
-                      <td>{gs.fo}</td>
+                      <td className={common.td}>
+                        {gs.fo}
+                      </td>
                       {/* 退場フラグ */}
-                      <td>{gs.dq}</td>
+                      <td className={common.td}>
+                        {gs.dq}
+                      </td>
 
                       {/* 試合出場時間 */}
                       {gs.playSec === 0 ? (
-                        <td>DNP</td>
+                        <td className={common.td}>
+                          DNP
+                        </td>
                       ) : (
                         /* String(sec).padStart(2, "0")
                         -> 秒数が1桁の時も「00」のように2桁で表示する */
-                        <td>{min}:{String(sec).padStart(2, "0")}</td>
+                        <td className={common.td}>
+                          {min}:{String(sec).padStart(2, "0")}
+                        </td>
                       )}
 
                     </tr>
@@ -404,11 +527,14 @@ export default async function GameDetailPage({ params }: Props) {
               </tbody>
             </table>
             
-            <Link href={`/games/${id}/stats/edit?team=away`}>
+            <Link
+              href={`/games/${id}/stats/edit?team=home`}
+              className={common.button}
+            >
               スタッツを編集
             </Link>
 
-          </>
+          </div>
         )}
 
         
