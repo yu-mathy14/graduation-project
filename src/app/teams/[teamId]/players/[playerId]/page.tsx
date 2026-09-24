@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import styles from "./page.module.css";
+import common from "@/app/common.module.css";
 
 type Props = {
   params: Promise<{
@@ -55,7 +56,7 @@ export default async function PlayerDetailPage({ params }: Props) {
       {/* 所属選手一覧に戻るための遷移リンク */}
       <Link
         href={`/teams/${team.teamId}/players`}
-        className={styles.backLink}
+        className={common.link}
       >
         ←所属選手一覧へ戻る
       </Link>
@@ -65,7 +66,7 @@ export default async function PlayerDetailPage({ params }: Props) {
         {/* 選手情報編集ページへの遷移リンク */}
         <Link
           href={`/teams/${tId}/players/${pId}/edit`}
-          className={styles.editLink}
+          className={common.button}
         >
           編集
         </Link>
@@ -74,7 +75,7 @@ export default async function PlayerDetailPage({ params }: Props) {
         {canDeletePlayer && (
           <Link
             href={`/teams/${tId}/players/${pId}/delete`}
-            className={styles.deleteLink}
+            className={common.button}
           >
             削除
           </Link>
@@ -83,7 +84,7 @@ export default async function PlayerDetailPage({ params }: Props) {
 
       {/* 選手削除不可の場合、理由を表示 */}
       {!canDeletePlayer && (
-        <div className={styles.errorArea}>
+        <div className={common.notice}>
           <p>
             この選手には試合スタッツが登録されているため、削除できません。
           </p>
@@ -96,36 +97,36 @@ export default async function PlayerDetailPage({ params }: Props) {
           【{team.teamName}】選手情報
         </h1>
 
-        <table className={styles.table}>
+        <table className={common.table}>
           <tbody>
             <tr>
-              <th className={styles.th}>背番号</th>
-              <td className={styles.td}>{player.jerseyNumber}</td>
+              <th className={common.th}>背番号</th>
+              <td className={common.td}>{player.jerseyNumber}</td>
             </tr>
 
             <tr>
-              <th className={styles.th}>氏名</th>
-              <td className={styles.td}>{player.playerNameKanji}</td>
+              <th className={common.th}>氏名</th>
+              <td className={common.td}>{player.playerNameKanji}</td>
             </tr>
 
             <tr>
-              <th className={styles.th}>かな</th>
-              <td className={styles.td}>{player.playerNameKana}</td>
+              <th className={common.th}>かな</th>
+              <td className={common.td}>{player.playerNameKana}</td>
             </tr>
 
             <tr>
-              <th className={styles.th}>身長(cm)</th>
-              <td className={styles.td}>{player.height}</td>
+              <th className={common.th}>身長(cm)</th>
+              <td className={common.td}>{player.height}</td>
             </tr>
 
             <tr>
-              <th className={styles.th}>体重(kg)</th>
-              <td className={styles.td}>{player.weight}</td>
+              <th className={common.th}>体重(kg)</th>
+              <td className={common.td}>{player.weight}</td>
             </tr>
 
             <tr>
-              <th className={styles.th}>出身校</th>
-              <td className={styles.td}>{player.almaMater}</td>
+              <th className={common.th}>出身校</th>
+              <td className={common.td}>{player.almaMater}</td>
             </tr>
           </tbody>
         </table>

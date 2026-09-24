@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import styles from "./page.module.css";
+import common from "@/app/common.module.css";
 
 type Props = {
   params: Promise<{ teamId: string }>;
@@ -47,17 +48,18 @@ export default async function TeamDetailPage({ params }: Props) {
       {/* チーム一覧に戻るための遷移リンク */}
       <Link
         href="/teams"
-        className={styles.backLink}
+        className={common.link}
       >
         ←チーム一覧に戻る
       </Link>
 
       {/* チーム操作用リンク */}
       <div className={styles.actions}>
+
         {/* チーム情報編集ページへの遷移リンク */}
         <Link
           href={`/teams/${id}/edit`}
-          className={styles.editLink}
+          className={common.button}
         >
           編集する
         </Link>
@@ -66,7 +68,7 @@ export default async function TeamDetailPage({ params }: Props) {
         {canDeleteTeam && (
           <Link
             href={`/teams/${id}/delete`}
-            className={styles.deleteLink}
+            className={common.button}
           >
             削除
           </Link>
@@ -74,47 +76,49 @@ export default async function TeamDetailPage({ params }: Props) {
       </div>
 
       {/* 削除不可の場合、理由を表示 */}
-      <div className={styles.errorArea}>
-        {/* パターン1：所属選手がいるのみ */}
-        {hasPlayers && !hasGames && (
-          <p>
-            このチームには所属選手がいるため、削除できません。
-          </p>
-        )}
+      {(hasPlayers || hasGames) && (
+        <div className={common.notice}>
+          {/* パターン1：所属選手がいるのみ */}
+          {hasPlayers && !hasGames && (
+            <p>
+              このチームには所属選手がいるため、削除できません。
+            </p>
+          )}
 
-        {/* パターン2：試合参加歴があるのみ */}
-        {/* 通常操作では発生しない想定だが、安全性のために作成 */}
-        {!hasPlayers && hasGames && (
-          <p>
-            このチームは試合に参加した記録があるため、削除できません。
-          </p>
-        )}
+          {/* パターン2：試合参加歴があるのみ */}
+          {/* 通常操作では発生しない想定だが、安全性のために作成 */}
+          {!hasPlayers && hasGames && (
+            <p>
+              このチームは試合に参加した記録があるため、削除できません。
+            </p>
+          )}
 
-        {/* パターン3：理由1 かつ 理由2 */}
-        {hasPlayers && hasGames && (
-          <p>
-            このチームは以下の理由で削除できません。<br />
-            ・所属選手がいる<br />
-            ・試合に参加した記録がある
-          </p>
-        )}
-      </div>
+          {/* パターン3：理由1 かつ 理由2 */}
+          {hasPlayers && hasGames && (
+            <p>
+              このチームは以下の理由で削除できません。<br />
+              ・所属選手がいる<br />
+              ・試合に参加した記録がある
+            </p>
+          )}
+        </div>
+      )}
 
       {/* チーム情報 */}
       <section className={styles.teamInfo}>
         <h1 className={styles.title}>チーム情報</h1>
 
-        <table className={styles.table}>
+        <table className={common.table}>
           <tbody>
 
             <tr>
-              <th className={styles.th}>チーム名</th>
-              <td className={styles.td}>{team.teamName}</td>
+              <th className={common.th}>チーム名</th>
+              <td className={common.td}>{team.teamName}</td>
             </tr>
 
             <tr>
-              <th className={styles.th}>チームカラー</th>
-              <td className={styles.td}>
+              <th className={common.th}>チームカラー</th>
+              <td className={common.td}>
                 <div
                   className={styles.teamColor}
                   style={{
@@ -124,18 +128,13 @@ export default async function TeamDetailPage({ params }: Props) {
               </td>
             </tr>
 
-            <tr>
-              <th className={styles.th}>カラーコード</th>
-              <td className={styles.td}>{team.teamColor}</td>
-            </tr>
-
           </tbody>
         </table>
       </section>
 
       <Link
         href={`/teams/${id}/players`}
-        className={styles.playersLink}
+        className={common.link}
       >
         所属選手一覧へ
       </Link>

@@ -6,6 +6,7 @@
 import Link from "next/link";
 import TeamForm from "./components/TeamForm";
 import styles from "./page.module.css";
+import common from "@/app/common.module.css";
 
 /**
  * チーム登録ページ
@@ -20,7 +21,7 @@ export default function TeamNewPage() {
       {/* チーム一覧に戻るためのリンク */}
       <Link
         href="/teams"
-        className={styles.backLink}
+        className={common.link}
       >
         ←チーム一覧に戻る
       </Link>
@@ -33,7 +34,7 @@ export default function TeamNewPage() {
       {/* 登録キャンセル時はチーム一覧ページに遷移 */}
       <Link
         href="/teams"
-        className={styles.cancelLink}
+        className={common.link}
       >
         キャンセル
       </Link>

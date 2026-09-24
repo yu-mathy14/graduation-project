@@ -12,51 +12,6 @@
   font-weight: bold;
 }
 
-.input {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #aaaaaa;
-  border-radius: 4px;
-  background-color: #ffffff;
-  color: #171717;
-}
-
-.input:focus {
-  outline: 2px solid #cccccc;
-  outline-offset: 1px;
-}
-
-.error {
-  min-height: 24px;
-  margin-top: 6px;
-  color: #555555;
-  font-size: 14px;
-}
-
 .reference {
   margin: 8px 0 0;
-}
-
-.referenceLink {
-  color: #171717;
-  text-decoration: underline;
-}
-
-.referenceLink:hover {
-  color: #2563eb;
-}
-
-.submitButton {
-  display: inline-block;
-  padding: 10px 18px;
-  border: none;
-  border-radius: 6px;
-  background-color: #171717;
-  color: #ffffff;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.submitButton:hover {
-  background-color: #f97316;
 }

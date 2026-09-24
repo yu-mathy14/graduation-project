@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import styles from "./page.module.css";
+import common from "@/app/common.module.css";
 
 type Props = {
   params: Promise<{ teamId: string }>;
@@ -37,7 +38,7 @@ export default async function TeamPlayersPage({ params }: Props) {
       {/* チーム情報へ戻るための遷移リンク */}
       <Link
         href={`/teams/${id}`}
-        className={styles.backLink}
+        className={common.link}
       >
         ←チーム情報へ戻る
       </Link>
@@ -49,12 +50,12 @@ export default async function TeamPlayersPage({ params }: Props) {
 
         {/* 【三項演算子】条件式：players配列の中身が0件かどうか */}
         {players.length === 0 ? (
-          <div className={styles.empty}>
+          <div className={common.empty}>
             <p>選手が登録されていません</p>
 
             <Link
               href={`/teams/${id}/players/new`}
-              className={styles.newLink}
+              className={common.button}
             >
               選手の登録
             </Link>
@@ -65,19 +66,18 @@ export default async function TeamPlayersPage({ params }: Props) {
           <>
           <Link
             href={`/teams/${id}/players/new`}
-            className={styles.newLink}
+            className={common.link}
           >
             選手の登録
           </Link>
           {/* players配列の中身が1件以上の場合、表として表示 */}
-          <table className={styles.table}>
-
+          <table className={common.table}>
             {/* 見出しを作る */}
             <thead>
               <tr>
-                <th className={styles.th}>背番号</th>
-                <th className={styles.th}>氏名</th>
-                <th className={styles.th}></th>
+                <th className={common.th}>背番号</th>
+                <th className={common.th}>氏名</th>
+                <th className={common.th}></th>
               </tr>
             </thead>
 
@@ -86,16 +86,16 @@ export default async function TeamPlayersPage({ params }: Props) {
               {players.map((p) => (
                 <tr key={p.playerId}>
                   {/* 背番号 */}
-                  <td className={styles.td}>{p.jerseyNumber}</td>
+                  <td className={common.td}>{p.jerseyNumber}</td>
 
                   {/* 氏名 */}
-                  <td className={styles.td}>{p.playerNameKanji}</td>
+                  <td className={common.td}>{p.playerNameKanji}</td>
 
                   {/* 選手詳細画面へ遷移するリンク */}
-                  <td className={styles.td}>
+                  <td className={common.td}>
                     <Link
                       href={`/teams/${id}/players/${p.playerId}`}
-                      className={styles.detailLink}
+                      className={common.link}
                     >
                       選手情報を見る
                     </Link>

@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import styles from "./page.module.css";
+import common from "../common.module.css";
 
 export default async function TeamsPage() {
   // Prismaを使ってTeamsテーブルから全件取得
@@ -18,7 +19,7 @@ export default async function TeamsPage() {
         {/* チーム登録ページへのリンク */}
         <Link
           href="/teams/new"
-          className={styles.newLink}
+          className={common.button}
         >
           新規登録
         </Link>
@@ -27,24 +28,25 @@ export default async function TeamsPage() {
       <div className={styles.content}>
         {/* 【三項演算子】teamsが0件かどうかで表示を切り替える */}
         {teams.length === 0 ? (
-          <div className={styles.empty}>
+          <div className={common.empty}>
             <p>チームが登録されていません</p>
 
             <Link
               href="/teams/new"
-              className={styles.newLink}
+              className={common.button}
             >
               新規登録
             </Link>
           </div>
         ) : (
           /* teams配列の中身が1件以上の場合、表として表示 */
-          <table className={styles.table}>
+          <table className={common.table}>
             {/* 見出しを作る */}
             <thead>
               <tr>
-                <th className={styles.th}>チーム名</th>
-                <th className={styles.th}></th>
+                <th className={common.th}>チーム名</th>
+                <th className={common.th}> チームカラー</th>
+                <th className={common.th}></th>
               </tr>
             </thead>
 
@@ -52,18 +54,31 @@ export default async function TeamsPage() {
             <tbody>
               {teams.map((t) => (
                 <tr key={t.teamId}>
-                  {/* チーム名
-                  -> クリックでチーム詳細ページへ遷移 */}
-                  <td className={styles.td}>{t.teamName}</td>
+                  {/* チーム名 */}
+                  <Link
+                      href={`/teams/${t.teamId}`}
+                      className={common.link}
+                    >
+                    <td className={common.td}>{t.teamName}</td>
+                  </Link>
 
-                  {/* チーム詳細へ遷移するリンク
-                  → チーム情報すべてを確認することができる */}
-                  <td className={styles.td}>
+                  {/* チームカラー */}
+                  <td className={common.td}>
+                    <div
+                      className={styles.teamColor}
+                      style={{
+                        backgroundColor: t.teamColor,
+                      }}
+                    />
+                  </td>
+
+                  {/* チーム詳細へ遷移するリンク */}
+                  <td className={common.td}>
                     <Link
                       href={`/teams/${t.teamId}`}
-                      className={styles.detailLink}
+                      className={common.link}
                     >
-                      詳しく見る
+                      詳しく見る 
                     </Link>
                   </td>
                 </tr>

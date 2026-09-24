@@ -17,6 +17,7 @@ import { useForm,
 import { createTeam } from "../actions";
 import { teamSchema, type TeamFormValues } from "../../schema";
 import styles from "./TeamForm.module.css";
+import common from "@/app/common.module.css";
 
 export default function TeamForm() {
   // デフォルト値
@@ -65,12 +66,12 @@ export default function TeamForm() {
           <input
             id="teamName" // labelと対応
             type="text"
-            className={styles.input}
+            className={common.input}
             /* teamNameをReact Hook Formに登録 */
             {...register("teamName")}
             />
           {/* teamNameのバリデーションエラーがある場合、メッセージを表示 */}
-          <div className={styles.error}>
+          <div className={common.error}>
             {errors.teamName?.message}
           </div>
         </div>
@@ -87,12 +88,12 @@ export default function TeamForm() {
             id="teamColor" // labelと対応
             type="text"
             placeholder="#FFFFFF"
-            className={styles.input}
+            className={common.input}
             /* teamColorをReact Hook Formに登録 */
             {...register("teamColor")}
           />
           {/* teamColorのバリデーションエラーがある場合、メッセージを表示 */}
-         <div className={styles.error}>
+         <div className={common.error}>
           {errors.teamColor?.message}
         </div>
 
@@ -102,7 +103,7 @@ export default function TeamForm() {
               target="_blank" // サイトを別タブで開く
               /* target="_blank"で外部サイトを開くときによくセットで使用するもの */
               rel="noopener noreferrer"
-              className={styles.referenceLink}
+              className={common.link}
             >
               カラーコードを選ぶ(参考サイト)
             </a>
@@ -112,7 +113,7 @@ export default function TeamForm() {
         <div>
           <button
             type="submit"
-            className={styles.submitButton}
+            className={common.button}
           >
             登録する
           </button>

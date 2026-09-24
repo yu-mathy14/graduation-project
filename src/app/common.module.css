@@ -1,0 +1,82 @@
+/* 通常の画面遷移リンク */
+.link {
+  color: var(--color-main);
+  text-decoration: underline;
+}
+
+.link:hover {
+  color: var(--color-hover-link);
+}
+
+/* ボタン形式 */
+.button {
+  display: inline-block;
+  padding: 10px 18px;
+  border-radius: 6px;
+  background-color: var(--color-main);
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.button:hover {
+  background-color: var(--color-hover-button);
+}
+
+/* テーブル */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* テーブルの見出し・セル */
+.th,
+.td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+}
+
+/* テーブルの見出し */
+.th {
+  background-color: var(--color-sub);
+  color: var(--color-main);
+  font-weight: bold;
+}
+
+/* エラー・注意表示 */
+.notice {
+  padding: 16px;
+  background-color: var(--color-sub);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-sub);
+}
+
+/* データが存在しない場合 */
+.empty {
+  padding: 40px 0;
+  text-align: center;
+}
+
+/* フォーム入力欄 */
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--color-input-border);
+  border-radius: 4px;
+  background-color: #ffffff;
+  color: var(--color-main);
+}
+
+.input:focus {
+  outline: 2px solid var(--color-border);
+  outline-offset: 1px;
+}
+
+/* バリデーションエラー */
+.error {
+  min-height: 24px;
+  margin-top: 6px;
+  color: var(--color-text-sub);
+  font-size: 14px;
+}

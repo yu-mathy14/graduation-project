@@ -4,29 +4,7 @@
   padding: 40px 24px;
 }
 
-.backLink {
-  display: inline-block;
-  margin-bottom: 24px;
-  color: #171717;
-  text-decoration: underline;
-}
-
-.backLink:hover {
-  color: #2563eb;
-}
-
 .title {
-  margin: 0 0 32px;
+  margin: 24px 0 32px;
   font-size: 28px;
-}
-
-.cancelLink {
-  display: inline-block;
-  margin-top: 24px;
-  color: #171717;
-  text-decoration: underline;
-}
-
-.cancelLink:hover {
-  color: #2563eb;
 }
