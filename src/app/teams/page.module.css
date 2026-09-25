@@ -26,7 +26,11 @@
 }
 
 .teamColor {
-  width: 24px;
-  height: 24px;
-  border: 1px solid #cccccc;
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: 8px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  vertical-align: middle;
 }

@@ -45,7 +45,8 @@ export default async function TeamsPage() {
             <thead>
               <tr>
                 <th className={common.th}>チーム名</th>
-                <th className={common.th}> チームカラー</th>
+                <th className={common.th}> 都道府県</th>
+                <th className={common.th}> 監督</th>
                 <th className={common.th}></th>
               </tr>
             </thead>
@@ -60,18 +61,24 @@ export default async function TeamsPage() {
                       href={`/teams/${t.teamId}`}
                       className={common.link}
                     >
+                      <span
+                        className={styles.teamColor}
+                        style={{
+                          backgroundColor: t.teamColor,
+                        }}
+                      />
                       {t.teamName}
                     </Link>
                   </td>
 
-                  {/* チームカラー */}
+                  {/* 都道府県 */}
                   <td className={common.td}>
-                    <div
-                      className={styles.teamColor}
-                      style={{
-                        backgroundColor: t.teamColor,
-                      }}
-                    />
+                    {t.prefecture}
+                  </td>
+
+                  {/* 監督 */}
+                  <td className={common.td}>
+                    {t.coach}
                   </td>
 
                   {/* チーム詳細へ遷移するリンク */}
@@ -80,7 +87,7 @@ export default async function TeamsPage() {
                       href={`/teams/${t.teamId}`}
                       className={common.link}
                     >
-                      詳しく見る 
+                      もっと見る 
                     </Link>
                   </td>
                 </tr>

@@ -19,6 +19,7 @@ export async function updateTeam(
   /* 前後の空白を除去 */
   const teamName = data.teamName.trim();
   const teamColor = data.teamColor.trim();
+  const coach = data.coach.trim();
 
   // チーム名重複チェック ---------------------------------
   /* 自分自身を除いて、同じチーム名のチームを検索 */
@@ -50,6 +51,9 @@ export async function updateTeam(
     data: {
       teamName,
       teamColor,
+      prefecture: data.prefecture,
+      coach,
+      memo: data.memo,
     },
   });
 

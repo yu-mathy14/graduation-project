@@ -48,6 +48,9 @@ export default async function TeamEditPage({ params }: Props) {
         teamId={team.teamId}
         teamName={team.teamName}
         teamColor={team.teamColor}
+        prefecture={team.prefecture}
+        coach={team.coach}
+        memo={team.memo ?? ""}
       />
     </div>
   );

@@ -17,7 +17,7 @@ import { useForm,
 
 /* 他ファイルから必要なものを読み込み */
 import { createTeam } from "../actions";
-import { teamSchema, type TeamFormValues } from "../../schema";
+import { teamSchema, prefectures, type TeamFormValues,} from "../../schema";
 import common from "@/app/common.module.css";
 import Link from "next/link";
 
@@ -26,6 +26,9 @@ export default function TeamForm() {
   const teamDefaultValue: TeamFormValues = {
     teamName: "",
     teamColor: "#FFFFFF",
+    prefecture: "",
+    coach: "",
+    memo: "",
   };
 
   /* 確認画面に表示する入力内容を管理 */
@@ -82,6 +85,28 @@ export default function TeamForm() {
               {confirmData.teamColor}
             </span>
           </p>
+
+            <p className={common.confirmItem}>
+              都道府県 *：
+              <span className={common.confirmValue}>
+                {confirmData.prefecture}
+              </span>
+            </p>
+
+            <p className={common.confirmItem}>
+              監督 *：
+              <span className={common.confirmValue}>
+                {confirmData.coach}
+              </span>
+            </p>
+
+            <div className={common.confirmItem}>
+              <div>メモ：</div>
+
+              <div className={common.confirmMemo}>
+                {confirmData.memo}
+              </div>
+            </div>
 
           <div className={common.navigation}>
             <button
@@ -172,6 +197,81 @@ export default function TeamForm() {
               カラーコードを選ぶ(参考サイト)
             </a>
           </p>
+        </div>
+
+        {/* 都道府県 */}
+        <div className={common.field}>
+          <label
+            htmlFor="prefecture"
+            className={common.label}
+          >
+            都道府県 *
+          </label>
+
+          <select
+            id="prefecture"
+            className={common.select}
+            {...register("prefecture")}
+          >
+            <option value="">
+              都道府県を選択してください
+            </option>
+
+            {prefectures.map((prefecture) => (
+              <option
+                key={prefecture}
+                value={prefecture}
+              >
+                {prefecture}
+              </option>
+            ))}
+          </select>
+
+          <div className={common.error}>
+            {errors.prefecture?.message}
+          </div>
+        </div>
+
+        {/* 監督 */}
+        <div className={common.field}>
+          <label
+            htmlFor="coach"
+            className={common.label}
+          >
+            監督 *
+          </label>
+
+          <input
+            id="coach"
+            type="text"
+            className={common.input}
+            {...register("coach")}
+          />
+
+          <div className={common.error}>
+            {errors.coach?.message}
+          </div>
+        </div>
+
+        {/* メモ */}
+        <div className={common.field}>
+          <label
+            htmlFor="memo"
+            className={common.label}
+          >
+            メモ
+          </label>
+
+          <textarea
+            id="memo"
+            className={common.input}
+            rows={6}
+            {...register("memo")}
+          />
+
+          <div className={common.error}>
+            {errors.memo?.message}
+          </div>
         </div>
 
         <div className={common.navigation}>

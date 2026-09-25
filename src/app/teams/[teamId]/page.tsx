@@ -113,18 +113,35 @@ export default async function TeamDetailPage({ params }: Props) {
 
             <tr>
               <th className={common.th}>チーム名</th>
-              <td className={common.td}>{team.teamName}</td>
-            </tr>
-
-            <tr>
-              <th className={common.th}>チームカラー</th>
               <td className={common.td}>
-                <div
+                <span
                   className={styles.teamColor}
                   style={{
                     backgroundColor: team.teamColor,
                   }}
                 />
+                {team.teamName}
+              </td>
+            </tr>
+
+            <tr>
+              <th className={common.th}>都道府県</th>
+              <td className={common.td}>
+                {team.prefecture}
+              </td>
+            </tr>
+
+            <tr>
+              <th className={common.th}>監督</th>
+              <td className={common.td}>
+                {team.coach}
+              </td>
+            </tr>
+
+            <tr>
+              <th className={common.th}>メモ</th>
+              <td className={`${common.td} ${styles.memo}`}>
+                {team.memo}
               </td>
             </tr>
 
