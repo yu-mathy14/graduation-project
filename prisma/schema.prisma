@@ -14,9 +14,12 @@ datasource db {
 
 // teams(チーム)
 model Teams {
-  teamId    Int    @id @default(autoincrement()) @map("team_id")
-  teamName  String @unique @db.VarChar(30) @map("team_name")
-  teamColor String @db.VarChar(7) @default("#FFFFFF") @map("team_color")
+  teamId      Int     @id @default(autoincrement()) @map("team_id")
+  teamName    String  @unique @db.VarChar(30) @map("team_name")
+  teamColor   String  @db.VarChar(7) @default("#FFFFFF") @map("team_color")
+  prefecture  String  @db.VarChar(10)
+  coach       String  @db.VarChar(30)
+  memo        String? @db.Text
 
 // *1 Teamsは複数のPlayersを持つ
   player Players[]

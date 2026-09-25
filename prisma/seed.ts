@@ -21,6 +21,9 @@ async function main() {
     data: {
         teamName: '湘北高校',
         teamColor: '#E60012',
+        prefecture: '神奈川',
+        coach: '安西光義',
+        memo: '【昨年度の成績】\n・インターハイ神奈川県予選初戦敗退\n',
     },
   });
 
@@ -28,6 +31,9 @@ async function main() {
     data: {
         teamName: '陵南高校',
         teamColor: '#1E3A8A',
+        prefecture: '神奈川',
+        coach: '田岡茂一',
+        memo: '勇猛果敢\n\n【昨年度の成績】\n・インターハイ神奈川県予選ベスト4\n',
     },
   });
 
@@ -35,13 +41,19 @@ async function main() {
     data: {
         teamName: '翔陽高校',
         teamColor: '#15803D',
+        prefecture: '神奈川',
+        coach: '藤真健司',
+        memo: '闘魂\n\n【昨年度の成績】\n・インターハイ神奈川県予選2位\n・全国大会ベスト16',
     },
   });
 
   const kainan = await prisma.teams.create({
     data: {
-        teamName: '海南大付属高校',
+        teamName: '海南大附属高校',
         teamColor: '#552583',
+        prefecture: '神奈川',
+        coach: '高頭力',
+        memo: '常勝\n\n【昨年度の成績】\n・インターハイ神奈川県予選1位\n・全国大会ベスト4\n\n過去16年連続インターハイ出場',
     },
   });
 
@@ -49,13 +61,19 @@ async function main() {
     data: {
         teamName: '豊玉高校',
         teamColor: '#0077C0',
+        prefecture: '大阪',
+        coach: '金平',
+        memo: 'ラン&ガン\n\n【昨年度の成績】\n・インターハイ大阪府予選突破\n・全国大会ベスト8',
     },
   });
 
   const sannoh = await prisma.teams.create({
     data: {
-        teamName: '山王高校',
+        teamName: '山王工業高校',
         teamColor: '#FFFFFF',
+        prefecture: '秋田',
+        coach: '堂本五郎',
+        memo: '一意搏心\n\n【昨年度の成績】\n・インターハイ秋田県予選1位\n・全国大会優勝',
     },
   });
 
