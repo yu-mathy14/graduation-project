@@ -5,6 +5,8 @@
 /* このコンポーネントはブラウザ上(クライアントサイド)で実行されることを明示 */
 "use client";
 
+import { useState } from "react";
+
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm,
          type FieldErrors,
@@ -34,6 +36,9 @@ export default function PlayerForm({ teamId }: Props) {
     weight: "",
   };
 
+  /* 確認画面に表示する入力内容を管理 */
+  const [confirmData, setConfirmData] = useState<PlayerFormValues | null>(null);
+
   // フォーム初期化
   const { register, handleSubmit, formState: { errors },} = useForm<PlayerFormValues>({
     defaultValues: playerDefaultValue,
@@ -45,8 +50,8 @@ export default function PlayerForm({ teamId }: Props) {
 
   // サブミット時の処理
   /* バリデーション成功時に実行される処理 */
-  const onSubmit: SubmitHandler<PlayerFormValues> = async (data) => {
-    await createPlayer(teamId, data);
+  const onSubmit: SubmitHandler<PlayerFormValues> = (data) => {
+    setConfirmData(data);
   };
   /* バリデーション失敗時に実行される処理 */
   const onError: SubmitErrorHandler<PlayerFormValues> = (
@@ -54,6 +59,88 @@ export default function PlayerForm({ teamId }: Props) {
     ) => {
     console.log(errors);
   };
+
+  /* 確認画面で登録を確定する */
+  const handleConfirm = async () => {
+    if (!confirmData) return;
+    await createPlayer(teamId, confirmData);
+  };
+
+  /* 確認画面 */
+  if (confirmData) {
+    return (
+      <>
+        <div className={common.form}>
+          <p className={common.confirmItem}>
+            氏名(漢字) *：
+            <span className={common.confirmValue}>
+              {confirmData.playerNameKanji}
+            </span>
+          </p>
+          
+          <p className={common.confirmItem}>
+            氏名(かな) *：
+            <span className={common.confirmValue}>
+              {confirmData.playerNameKana}
+            </span>
+          </p>
+          
+          <p className={common.confirmItem}>
+            背番号 *：
+            <span className={common.confirmValue}>
+              {confirmData.jerseyNumber}
+            </span>
+          </p>
+          
+          <p className={common.confirmItem}>
+            出身校：
+            <span className={common.confirmValue}>
+              {confirmData.almaMater}
+            </span>
+          </p>
+          
+          <p className={common.confirmItem}>
+            身長(cm)：
+            <span className={common.confirmValue}>
+              {confirmData.height}
+            </span>
+          </p>
+          
+          <p className={common.confirmItem}>
+            体重(kg)：
+            <span className={common.confirmValue}>
+              {confirmData.weight}
+            </span>
+          </p>
+          
+          <div className={common.navigation}>
+            <button
+              type="button"
+              className={common.button}
+              onClick={handleConfirm}
+            >
+              この内容で登録
+            </button>
+            
+            <button
+              type="button"
+              className={common.button}
+              onClick={() => setConfirmData(null)}
+            >
+              入力内容を修正
+            </button>
+
+            <Link
+              href={`/teams/${teamId}/players`}
+              className={common.buttonCancel}
+            >
+              キャンセル
+            </Link>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>

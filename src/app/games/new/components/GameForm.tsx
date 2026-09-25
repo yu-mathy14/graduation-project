@@ -5,6 +5,8 @@
 /* このコンポーネントはブラウザ上(クライアントサイド)で実行されることを明示 */
 "use client";
 
+import { useState } from "react";
+
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm,
          type FieldErrors,
@@ -43,6 +45,10 @@ export default function GameForm({ teams }: Props) {
     awayScore: "0",
   };
 
+  /* 確認画面に表示する入力内容を管理 */
+  const [confirmData, setConfirmData] =
+    useState<GameFormValues | null>(null);
+
   // フォーム初期化
   const {
     register,
@@ -64,10 +70,8 @@ export default function GameForm({ teams }: Props) {
 
   // サブミット時の処理
   /* バリデーション成功時に実行される処理 */
-  const onSubmit: SubmitHandler<GameFormValues> = async (
-    data
-    ) => {
-    await createGame(data);
+  const onSubmit: SubmitHandler<GameFormValues> = (data) => {
+    setConfirmData(data);
   };
   /* バリデーション失敗時に実行される処理 */
   const onError: SubmitErrorHandler<GameFormValues> = (
@@ -75,6 +79,103 @@ export default function GameForm({ teams }: Props) {
     ) => {
     console.log(errors);
   };
+
+  /* 確認画面で登録を確定する */
+  const handleConfirm = async () => {
+    if (!confirmData) return;
+
+    await createGame(confirmData);
+  };
+
+  /* 確認画面 */
+  if (confirmData) {
+    /* teamsの中から以下のチーム(1件)を取得
+    teamIdがconfirmData.homeTeamIdと一致する */
+    const homeTeam = teams.find(
+      (team) =>
+        String(team.teamId) === confirmData.homeTeamId
+    );
+
+    /* teamsの中から以下のチーム(1件)を取得
+    teamIdがconfirmData.awayTeamIdと一致する */
+    const awayTeam = teams.find(
+      (team) =>
+        String(team.teamId) === confirmData.awayTeamId
+    );
+
+    return (
+      <>
+        <div className={common.form}>
+          <p className={common.confirmItem}>
+            試合開始日時：
+            <span className={common.confirmValue}>
+              {new Date(confirmData.tipoffTime).toLocaleString("ja-JP", {
+                timeZone: "Asia/Tokyo",
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </span>
+          </p>
+
+          <p className={common.confirmItem}>
+            ホームチーム *：
+            <span className={common.confirmValue}>
+              {homeTeam?.teamName}
+            </span>
+          </p>
+
+          <p className={common.confirmItem}>
+            アウェイチーム *：
+            <span className={common.confirmValue}>
+              {awayTeam?.teamName}
+            </span>
+          </p>
+
+          <p className={common.confirmItem}>
+            ホーム最終スコア *：
+            <span className={common.confirmValue}>
+              {confirmData.homeScore}点
+            </span>
+          </p>
+
+          <p className={common.confirmItem}>
+            アウェイ最終スコア *：
+            <span className={common.confirmValue}>
+              {confirmData.awayScore}点
+            </span>
+          </p>
+
+          <div className={common.navigation}>
+            <button
+              type="button"
+              className={common.button}
+              onClick={handleConfirm}
+            >
+              この内容で登録
+            </button>
+
+            <button
+              type="button"
+              className={common.button}
+              onClick={() => setConfirmData(null)}
+            >
+              入力内容を修正
+            </button>
+
+            <Link
+              href="/games"
+              className={common.buttonCancel}
+            >
+              キャンセル
+            </Link>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
   <form

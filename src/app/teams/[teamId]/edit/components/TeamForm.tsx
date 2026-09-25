@@ -5,6 +5,8 @@
 /* このコンポーネントはブラウザ上(クライアントサイド)で実行されることを明示 */
 "use client";
 
+import { useState } from "react";
+
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm,
          type FieldErrors,
@@ -37,6 +39,9 @@ export default function TeamForm({
     teamColor,
   };
 
+  /* 確認画面に表示する入力内容を管理 */
+  const [confirmData, setConfirmData] = useState<TeamFormValues | null>(null);
+
   // フォーム初期化
   const { register, handleSubmit, formState: { errors },} = useForm<TeamFormValues>({
   // デフォルト値
@@ -49,10 +54,8 @@ export default function TeamForm({
 
   // サブミット時の処理
   /* バリデーション成功時に実行される処理 */
-  const onSubmit: SubmitHandler<TeamFormValues> = async (
-  data
-  ) => {
-    await updateTeam(teamId, data);
+  const onSubmit: SubmitHandler<TeamFormValues> = (data) => {
+    setConfirmData(data);
   };
   /* バリデーション失敗時に実行される処理 */
   const onError: SubmitErrorHandler<TeamFormValues> = (
@@ -60,6 +63,61 @@ export default function TeamForm({
     ) => {
     console.log(errors);
   };
+
+  /* 確認画面で更新を確定する */
+  const handleConfirm = async () => {
+    if (!confirmData) return;
+    
+    await updateTeam(teamId, confirmData);
+  };
+
+  /* 確認画面 */
+  if (confirmData) {
+    return (
+      <>
+        <div className={common.form}>
+          <p className={common.confirmItem}>
+            チーム名 *：
+            <span className={common.confirmValue}>
+              {confirmData.teamName}
+            </span>
+          </p>
+
+          <p className={common.confirmItem}>
+            チームカラー *：
+            <span className={common.confirmValue}>
+              {confirmData.teamColor}
+            </span>
+          </p>
+          
+          <div className={common.navigation}>
+            <button 
+              type="button"
+              className={common.button}
+              onClick={handleConfirm}
+            > 
+              この内容で更新
+            </button>
+            
+            <button
+              type="button"
+              className={common.button}
+              onClick={() => setConfirmData(null)}
+            > 
+              入力内容を修正
+            </button>
+            
+            <Link
+              href={`/teams/${teamId}`}
+              className={common.buttonCancel}
+            > 
+              キャンセル
+            </Link>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
