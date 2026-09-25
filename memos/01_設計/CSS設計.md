@@ -39,4 +39,4 @@
 | src/app/games/[gameId]/stats/edit/components/StatsEditTable.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/edit/components/StatsEditTable.module.css |
 | src/app/games/[gameId]/stats/new/components/PlayerStatsFirstConfirmTable.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/new/components/PlayerStatsConfirmFirstTable.css |
 | src/app/games/[gameId]/stats/new/components/PlayerStatsFinalConfirmTable.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/new/components/PlayerStatsFinalConfirmTable.css |
-
+| src/app/games/[gameId]/stats/edit/components/StatsEditConfirmTable.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/edit/components/StatsEditConfirmTable.css |
