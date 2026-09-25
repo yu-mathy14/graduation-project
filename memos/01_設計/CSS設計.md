@@ -37,3 +37,6 @@
 | src/app/games/[gameId]/stats/edit/page.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/edit/page.module.css |
 | src/app/games/[gameId]/stats/edit/components/StatsEditForm.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/edit/components/StatsEditForm.module.css |
 | src/app/games/[gameId]/stats/edit/components/StatsEditTable.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/edit/components/StatsEditTable.module.css |
+| src/app/games/[gameId]/stats/new/components/PlayerStatsFirstConfirmTable.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/new/components/PlayerStatsConfirmFirstTable.css |
+| src/app/games/[gameId]/stats/new/components/PlayerStatsFinalConfirmTable.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/new/components/PlayerStatsFinalConfirmTable.css |
+
