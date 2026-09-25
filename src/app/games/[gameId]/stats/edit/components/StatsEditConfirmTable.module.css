@@ -1,0 +1,38 @@
+/* スタッツ編集確認画面 */
+.container {
+  width: 100%;
+}
+
+/* 背番号列を固定 */
+.playerNumber {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  width: 80px;
+  min-width: 80px;
+  max-width: 80px;
+  white-space: nowrap;
+  background-color: #fff;
+}
+
+/* 選手名列を固定 */
+.playerName {
+  position: sticky;
+  left: 80px;
+  z-index: 2;
+  width: 160px;
+  min-width: 160px;
+  max-width: 160px;
+  white-space: nowrap;
+  background-color: #fff;
+}
+
+/* 合計値 */
+.summary {
+  margin-top: 24px;
+}
+
+.summary p {
+  margin: 4px 0;
+  font-weight: bold;
+}

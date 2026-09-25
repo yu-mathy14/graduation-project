@@ -11,6 +11,7 @@ import type { PlayerStats, StatsError } from "../../types";
 
 /* コンポーネントの読み込み */
 import StatsEditTable from "./StatsEditTable";
+import StatsEditConfirmTable from "./StatsEditConfirmTable";
 
 /* 関数の読み込み */
 import { updateStats } from "../actions";
@@ -57,6 +58,9 @@ export default function StatsEditForm({
   /* Yup検証/試合出場時間・最終スコアチェックで発生したエラーメッセージを配列で管理 */
   const [statsErrors, setStatsErrors] = useState<StatsError[]>([]);
 
+  /* 確認画面に表示するスタッツを管理 */
+  const [confirmData, setConfirmData] = useState<EditStat[] | null>(null);
+
   /* 各選手の試合出場時間を合計 */
   const totalPlaySec = editStats.reduce(
     (total, stat) => total + stat.playSec,
@@ -95,7 +99,7 @@ export default function StatsEditForm({
     );
   };
 
-  /* 編集したスタッツをDBへ登録する */
+  /* 編集したスタッツを確認する */
   const handleSubmit = async () => {
     /* DBへ渡す形式に編集データを変換する */
     const statsData = editStats.map(({ playerId, player, ...stats }) => ({
@@ -183,7 +187,22 @@ export default function StatsEditForm({
       return;
     }
 
-    /* すべての選手の検証に成功した場合のみServer Actionを実行 */
+    /* すべての選手の検証に成功したら確認画面へ進む */
+    setStatsErrors([]);
+    setConfirmData(editStats);
+  };
+
+  /* 確認画面で更新を確定する */
+  const handleConfirm = async () => {
+    if (!confirmData) return;
+
+    const statsData = confirmData.map(
+      ({ playerId, player, ...stats }) => ({
+        playerId,
+        stats,
+      })
+    );
+
     try {
       await updateStats(gameId, statsData);
     } catch (error) {
@@ -197,6 +216,60 @@ export default function StatsEditForm({
       }
     }
   };
+
+  /* 確認画面 */
+  if (confirmData) {
+    const confirmStats = confirmData.map(
+      ({ playerId, player, ...stats }) => ({
+        playerId,
+        playerNameKanji: player.playerNameKanji,
+        jerseyNumber: player.jerseyNumber,
+        stats,
+      })
+    );
+    return (
+      <>
+        <h3>スタッツ編集内容の確認</h3>
+
+        <p>
+          以下の内容で更新します。内容を確認してください。
+        </p>
+
+        <StatsEditConfirmTable
+          stats={confirmStats}
+          teamScore={teamScore}
+        />
+
+        <div className={styles.navigation}>
+          <button
+            type="button"
+            className={common.button}
+            onClick={() => {
+              setStatsErrors([]);
+              setConfirmData(null);
+            }}
+          >
+            編集画面に戻る
+          </button>
+
+          <button
+            type="button"
+            className={common.button}
+            onClick={handleConfirm}
+          >
+            この内容で更新
+          </button>
+
+          <Link
+            href={`/games/${gameId}`}
+            className={common.buttonCancel}
+          >
+            キャンセル
+          </Link>
+        </div>
+      </>
+    );
+  }
   
   return (
     <>
