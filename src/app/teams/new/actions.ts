@@ -19,6 +19,7 @@ export async function createTeam(data: TeamFormValues) {
   新しい文字列を返す */
   const teamName = data.teamName.trim();
   const teamColor = data.teamColor.trim();
+  const coach = data.coach.trim()
 
 // チーム名重複チェック ---------------------------------
   /* 受け取ったデータのteamNameを条件にTeamsテーブルを検索、
@@ -41,6 +42,9 @@ export async function createTeam(data: TeamFormValues) {
     data: {
       teamName,
       teamColor,
+      prefecture: data.prefecture,
+      coach,
+      memo: data.memo,
     },
   });
 

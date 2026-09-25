@@ -245,3 +245,14 @@
 .confirmValue {
   font-weight: normal;
 }
+
+/* メモの確認画面専用の設定 */
+.confirmMemo {
+  margin-top: 8px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  white-space: pre-wrap;
+  font-weight: normal;
+}
