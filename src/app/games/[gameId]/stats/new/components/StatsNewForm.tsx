@@ -18,6 +18,8 @@ import type { Player, PlayerStats, StatsError } from "../../types";
 import PlayerStatsFirstInput from "./PlayerStatsFirstInput";
 import PlayerSelect from "./PlayerSelect";
 import PlayerStatsFinalTable from "./PlayerStatsFinalTable";
+import PlayerStatsFirstConfirmTable from "./PlayerStatsFirstConfirmTable";
+import PlayerStatsFinalConfirmTable from "./PlayerStatsFinalConfirmTable";
 
 /* 関数の読み込み */
 import { createStats } from "../actions";
@@ -184,7 +186,7 @@ export default function StatsNewForm({
         return;
       }
 
-      /* 最後の選手まで入力が完了したら第2段階へ進む */
+      /* 最後の選手まで入力が完了したら第1段階確認へ進む */
       setStep(3);
     } catch (error) {
       /* Yup検証失敗時、発生したerrorがYupのValidationErrorかどうかを確認
@@ -210,7 +212,7 @@ export default function StatsNewForm({
     }
   };
 
-  // [登録]ボタンクリック時、所属選手全員のスタッツをYupで検証し、成功したらDBへ登録する
+  // [出場時間・得点の確認へ]ボタンクリック時、所属選手全員のスタッツをYupで検証し、成功したら確認画面へ進む
   const handleRegister = async () => {
     /* 所属選手全員を登録対象にする */
     const allPlayerStats = Object.fromEntries(
@@ -291,13 +293,28 @@ export default function StatsNewForm({
       });
     }
 
-    /* エラーが1件以上ある場合は登録しない */
+    /* エラーが1件以上ある場合は確認画面へ進まない */
     if (errors.length > 0) {
       setStatsErrors(errors);
       return;
     }
 
-    /* エラーがなければServer Actionを実行 */
+    /* すべての検証に成功したら第2段階確認画面へ進む */
+    setStatsErrors([]);
+    setStep(5);
+  };
+
+  /* 第2段階確認画面で登録を確定する */
+  const handleConfirm = async () => {
+    const allPlayerStats = Object.fromEntries(
+      players.map((player) => [
+        player.playerId,
+        selectedPlayerIds.includes(player.playerId)
+          ? playerStats[player.playerId]
+          : { ...initialPlayerStats },
+      ])
+    );
+
     try {
       await createStats(
         gameId,
@@ -444,7 +461,7 @@ export default function StatsNewForm({
                   /* ボタンクリック時の処理 */
                   onClick={handleNextPlayer}
                 >
-                  出場時間・得点入力へ
+                  各選手のスタッツ確認へ
                 </button>
               )
             }
@@ -475,8 +492,57 @@ export default function StatsNewForm({
         </div>
       )}
 
-      {/* ステップ3：出場時間・得点関連スタッツを入力 */}
+      {/* ステップ3：第1段階入力内容の確認 */}
       {step === 3 && (
+        <div className={styles.step}>
+          <h3>【{teamName}】のスタッツ確認</h3>
+
+          <p>
+            入力した各選手のスタッツを確認してください。
+          </p>
+
+          <PlayerStatsFirstConfirmTable
+            players={players}
+            selectedPlayerIds={selectedPlayerIds}
+            playerStats={playerStats}
+          />
+
+          <div className={common.navigation}>
+            <button
+              type="button"
+              className={common.button}
+              onClick={() => {
+                setStatsErrors([]); // エラーを消す
+                setCurrentPlayerIndex(0); // 最初の選手
+                setStep(2); // step2へ
+              }}
+            >
+              各選手のスタッツ入力に戻る
+            </button>
+
+            <button
+              type="button"
+              className={common.button}
+              onClick={() => {
+                setStatsErrors([]); // エラーを消す
+                setStep(4); // step4へ
+              }}
+            >
+              出場時間・得点入力へ
+            </button>
+
+            <Link
+              href={`/games/${gameId}`}
+              className={common.buttonCancel}
+            >
+              キャンセル
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* ステップ4：出場時間・得点関連スタッツを入力 */}
+      {step === 4 && (
         <div className={styles.step}>
           <h3>【{teamName}】のスタッツ最終入力</h3>
 
@@ -515,6 +581,7 @@ export default function StatsNewForm({
               className={common.button}
               onClick={() => {
                 setStatsErrors([]);
+                setCurrentPlayerIndex(0); // 最初の選手
                 setStep(2);
               }}
             >
@@ -525,6 +592,52 @@ export default function StatsNewForm({
               type="button"
               className={common.button}
               onClick={handleRegister}
+            >
+              出場時間・得点の確認へ
+            </button>
+
+            <Link
+              href={`/games/${gameId}`}
+              className={common.buttonCancel}
+            >
+              キャンセル
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* ステップ5：第2段階入力内容の確認 */}
+      {step === 5 && (
+        <div className={styles.step}>
+          <h3>【{teamName}】のスタッツ最終確認</h3>
+
+          <p>
+            出場時間・得点関連スタッツの入力内容を確認してください。
+          </p>
+
+          <PlayerStatsFinalConfirmTable
+            players={players}
+            selectedPlayerIds={selectedPlayerIds}
+            playerStats={playerStats}
+            teamScore={teamScore}
+          />
+
+          <div className={common.navigation}>
+            <button
+              type="button"
+              className={common.button}
+              onClick={() => {
+                setStatsErrors([]);
+                setStep(4);
+              }}
+            >
+              出場時間・得点入力に戻る
+            </button>
+
+            <button
+              type="button"
+              className={common.button}
+              onClick={handleConfirm}
             >
               登録
             </button>
