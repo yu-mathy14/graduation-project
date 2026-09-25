@@ -8,7 +8,7 @@ import type { PlayerStats } from "../../types";
 
 /* CSSの読み込み */
 import common from "@/app/common.module.css";
-import styles from "../../stats.module.css";
+import styles from "./StatsEditTable.module.css";
 
 /* StatsEditTableが受け取るPropsの型定義 */
 type Props = {

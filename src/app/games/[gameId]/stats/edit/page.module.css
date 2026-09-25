@@ -1,0 +1,10 @@
+/* スタッツ編集画面全体 */
+.container {
+  width: 100%;
+}
+
+/* スタッツ編集画面の見出し */
+.playerTitle {
+  margin: 0 0 24px;
+  font-size: 24px;
+}

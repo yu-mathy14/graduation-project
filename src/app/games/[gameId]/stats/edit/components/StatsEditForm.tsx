@@ -21,7 +21,7 @@ import * as yup from "yup";
 
 /* CSSファイルの読み込み */
 import common from "@/app/common.module.css";
-import styles from "../../stats.module.css"
+import styles from "./StatsEditForm.module.css"
 
 /* 得点計算関数の読み込み */
 import { calculatePlayerPoints } from "../../utils";
@@ -56,6 +56,18 @@ export default function StatsEditForm({
 
   /* Yup検証/試合出場時間・最終スコアチェックで発生したエラーメッセージを配列で管理 */
   const [statsErrors, setStatsErrors] = useState<StatsError[]>([]);
+
+  /* 各選手の試合出場時間を合計 */
+  const totalPlaySec = editStats.reduce(
+    (total, stat) => total + stat.playSec,
+    0
+  );
+
+  /* 各選手の得点を合計 */
+  const totalPoints = editStats.reduce(
+    (total, stat) => total + calculatePlayerPoints(stat),
+    0
+  );
 
 /* イベントハンドラー */
   /* 指定した選手の指定したスタッツを変更する */
@@ -210,6 +222,15 @@ export default function StatsEditForm({
         stats={editStats}
         onChange={handleStatsChange}
       />
+
+      <div className={styles.summary}>
+        <p>
+          出場時間合計：{totalPlaySec.toLocaleString()} / 12,000秒
+        </p>
+        <p>
+          得点合計：{totalPoints} / {teamScore}点
+        </p>
+      </div>
 
       <div className={styles.navigation}>
         <button

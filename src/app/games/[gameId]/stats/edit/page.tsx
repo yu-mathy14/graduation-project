@@ -10,7 +10,7 @@ import Link from "next/link";
 import StatsEditForm from "./components/StatsEditForm";
 
 /* CSSファイルの読み込み */
-import styles from "../stats.module.css"
+import styles from "./page.module.css"
 import common from "@/app/common.module.css";
 
 // このページに拡張されるデータの型定義

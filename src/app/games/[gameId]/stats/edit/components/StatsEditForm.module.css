@@ -1,0 +1,12 @@
+/* 合計値の表示 */
+.summary {
+  margin-top: 24px;
+}
+
+/* ステップ操作 */
+.navigation {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 32px;
+}

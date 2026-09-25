@@ -8,7 +8,7 @@
 import type { Player, PlayerStats } from "../../types";
 
 /* CSSの読み込み */
-import styles from "../../stats.module.css";
+import styles from "./PlayerStatsFirstInput.module.css";
 import common from "@/app/common.module.css";
 
 /* PlayerStatsInputが受け取るPropsの型定義 */

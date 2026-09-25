@@ -15,7 +15,7 @@ import { useState } from "react";
 import type { Player, PlayerStats, StatsError } from "../../types";
 
 /* コンポーネントの読み込み */
-import PlayerStatsInput from "./PlayerStatsFirstInput";
+import PlayerStatsFirstInput from "./PlayerStatsFirstInput";
 import PlayerSelect from "./PlayerSelect";
 import PlayerStatsFinalTable from "./PlayerStatsFinalTable";
 
@@ -27,7 +27,7 @@ import { playerStatsSchema } from "../../schema";
 import * as yup from "yup";
 
 /* CSSファイルの読み込み */
-import styles from "../../stats.module.css";
+import styles from "./StatsNewForm.module.css";
 import common from "@/app/common.module.css";
 
 /* 得点計算関数の読み込み */
@@ -375,7 +375,7 @@ export default function StatsNewForm({
             .map((player, index) =>
               /* 現在入力する選手の位置と一致した場合だけ表示 */
               index === currentPlayerIndex ? (
-                <PlayerStatsInput
+                <PlayerStatsFirstInput
                   key={player.playerId}  // 選手を一意に識別するためのキー
 
                 /*　これは属性ではなくProps */
