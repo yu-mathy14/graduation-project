@@ -29,6 +29,10 @@
   --color-cancel-text: #444444;
   --color-cancel-border: #999999;
   --color-cancel-hover: #eeeeee;
+
+  /* ボタンがdisabledの時に使用する色 */
+  --color-disabled-background: #eeeeee;
+  --color-disabled-text: #888888;
 }
 
 @theme inline {

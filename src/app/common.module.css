@@ -122,6 +122,12 @@
   outline-offset: 1px;
 }
 
+.select:disabled {
+  background-color: var(--color-disabled-background);
+  color: var(--color-disabled-text);
+  cursor: not-allowed;
+}
+
 /* バリデーションエラー */
 .error {
   min-height: 24px;
@@ -227,4 +233,15 @@
 .statsTable th:nth-child(2),
 .statsTable td:nth-child(2) {
   border-right: 1px solid var(--color-border);
+}
+
+/* 確認画面の項目 */
+.confirmItem {
+  margin: 0;
+  font-weight: bold;
+}
+
+/* 確認画面の入力内容 */
+.confirmValue {
+  font-weight: normal;
 }

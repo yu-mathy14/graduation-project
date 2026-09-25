@@ -1,14 +1,14 @@
-// 1選手分のスタッツを入力
+// 第1段階：1選手分のスタッツを入力
 // ===========================================
 
 /* このコンポーネントはブラウザ上(クライアントサイド)で実行されることを明示 */
 "use client";
 
 /* 型の読み込み */
-import type { Player, PlayerStats } from "../types";
+import type { Player, PlayerStats } from "../../types";
 
 /* CSSの読み込み */
-import styles from "../../stats.module.css";
+import styles from "./PlayerStatsFirstInput.module.css";
 import common from "@/app/common.module.css";
 
 /* PlayerStatsInputが受け取るPropsの型定義 */
@@ -32,123 +32,9 @@ export default function PlayerStatsInput({
 }: Props) {
   return (
     <div className={styles.container}>
-      <h4>
+      <h4 className={styles.playerTitle}>
         #{player.jerseyNumber} {player.playerNameKanji}
       </h4>
-
-      {/* シュート系 */}
-      <div className={styles.statsGroup}>
-        <h5 className={styles.statsGroupTitle}>
-          シュート
-        </h5>
-
-        <div className={styles.statsGrid}>
-          <label className={styles.statsField}>
-            3P試投
-            <input
-              type="number" // 入力欄の種類は数値
-              min="0" // 最小値0
-              className={common.input}
-              /* stats が存在すれば p3A を表示し、存在しなければ 0 を表示する */
-              value={stats?.p3A ?? 0}
-              /* 値が変わった時の処理 */
-              onChange={(e) =>
-                onChange(
-                  player.playerId,
-                  "p3A",
-                  /* 入力された値を数値型に変換してonChangeに渡す */
-                  Number(e.target.value)
-                )
-              }
-            />
-          </label>
-
-          <label className={styles.statsField}>
-            3P成功
-            <input
-              type="number"
-              min="0"
-              className={common.input}
-              value={stats?.p3M ?? 0}
-              onChange={(e) =>
-                onChange(
-                  player.playerId,
-                  "p3M",
-                  Number(e.target.value)
-                )
-              }
-            />
-          </label>
-
-          <label className={styles.statsField}>
-            2P試投
-            <input
-              type="number"
-              min="0"
-              className={common.input}
-              value={stats?.p2A ?? 0}
-              onChange={(e) =>
-                onChange(
-                  player.playerId,
-                  "p2A",
-                  Number(e.target.value)
-                )
-              }
-            />
-          </label>
-
-          <label className={styles.statsField}>
-            2P成功
-            <input
-              type="number"
-              min="0"
-              className={common.input}
-              value={stats?.p2M ?? 0}
-              onChange={(e) =>
-                onChange(
-                  player.playerId,
-                  "p2M",
-                  Number(e.target.value)
-                )
-              }
-            />
-          </label>
-
-          <label className={styles.statsField}>
-            FT試投
-            <input
-              type="number"
-              min="0"
-              className={common.input}
-              value={stats?.ftA ?? 0}
-              onChange={(e) =>
-                onChange(
-                  player.playerId,
-                  "ftA",
-                  Number(e.target.value)
-                )
-              }
-            />
-          </label>
-
-          <label className={styles.statsField}>
-            FT成功
-            <input
-              type="number"
-              min="0"
-              className={common.input}
-              value={stats?.ftM ?? 0}
-              onChange={(e) =>
-                onChange(
-                  player.playerId,
-                  "ftM",
-                  Number(e.target.value)
-                )
-              }
-            />
-          </label>
-        </div>
-      </div>
 
       {/* リバウンド */}
       <div className={styles.statsGroup}>
@@ -160,14 +46,17 @@ export default function PlayerStatsInput({
           <label className={styles.statsField}>
             OR
             <input
-              type="number"
-              min="0"
+              type="number" // 入力欄の種類は数値
+              min="0" // 最小値0
               className={common.input}
+              /* stats が存在すれば oRbd を表示し、存在しなければ 0 を表示する */
               value={stats?.oRbd ?? 0}
+              /* 値が変わった時の処理 */
               onChange={(e) =>
                 onChange(
                   player.playerId,
                   "oRbd",
+                  /* 入力された値を数値型に変換してonChangeに渡す */
                   Number(e.target.value)
                 )
               }
@@ -340,29 +229,6 @@ export default function PlayerStatsInput({
             }
           />
           DQ
-        </label>
-      </div>
-
-      {/* 出場時間 */}
-      <div className={styles.statsGroup}>
-        <h5 className={styles.statsGroupTitle}>
-          出場時間
-        </h5>
-        <label className={styles.statsField}>
-          出場時間（秒）
-          <input
-            type="number"
-            min="0"
-            className={common.input}
-            value={stats?.playSec ?? 0}
-            onChange={(e) =>
-              onChange(
-                player.playerId,
-                "playSec",
-                Number(e.target.value)
-              )
-            }
-          />
         </label>
       </div>
     </div>

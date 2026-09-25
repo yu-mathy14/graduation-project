@@ -5,6 +5,8 @@
 /* このコンポーネントはブラウザ上(クライアントサイド)で実行されることを明示 */
 "use client";
 
+import { useState } from "react";
+
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm,
          type FieldErrors,
@@ -37,6 +39,7 @@ type Props = {
   homeScore: number;
   awayScore: number;
   teams: Team[];
+  hasStats: boolean;
 };
 
 export default function GameForm({
@@ -47,6 +50,7 @@ export default function GameForm({
   homeScore,
   awayScore,
   teams,
+  hasStats,
 }: Props) {
   // フォームの初期値
   /* 編集対象の試合の現在値を初期値として設定 */
@@ -59,8 +63,17 @@ export default function GameForm({
     awayScore: String(awayScore),
   };
 
+  /* 確認画面に表示する入力内容を管理 */
+  const [confirmData, setConfirmData] =
+    useState<GameFormValues | null>(null);
+
   // フォーム初期化
-  const { register, handleSubmit, formState: { errors },} = useForm<GameFormValues>({
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<GameFormValues>({
     // デフォルト値
     defaultValues: gameDefaultValue,
     /* バリデーションをYupに任せる */
@@ -69,12 +82,14 @@ export default function GameForm({
     resolver: yupResolver(gameSchema),
   });
 
+  /* 現在選択されているホーム・アウェイチームを取得 */
+  const selectedHomeTeamId = watch("homeTeamId");
+  const selectedAwayTeamId = watch("awayTeamId");
+
   // サブミット時の処理
   /* バリデーション成功時に実行される処理 */
-  const onSubmit: SubmitHandler<GameFormValues> = async (
-    data
-  ) => {
-    await updateGame(gameId, data);
+  const onSubmit: SubmitHandler<GameFormValues> = (data) => {
+    setConfirmData(data);
   };
   /* バリデーション失敗時に実行される処理 */
   const onError: SubmitErrorHandler<GameFormValues> = (
@@ -83,12 +98,115 @@ export default function GameForm({
     console.log(errors);
   };
 
+  /* 確認画面で更新を確定する */
+  const handleConfirm = async () => {
+    if (!confirmData) return;
+    await updateGame(gameId, confirmData);
+  };
+
+  /* 確認画面 */
+  if (confirmData) {
+    /* teamsの中から以下のチーム(1件)を取得
+    teamIdがconfirmData.homeTeamIdと一致する */
+    const homeTeam = teams.find(
+      (team) =>
+        String(team.teamId) === confirmData.homeTeamId
+    );
+
+    /* teamsの中から以下のチーム(1件)を取得
+    teamIdがconfirmData.awayTeamIdと一致する */
+    const awayTeam = teams.find(
+      (team) =>
+        String(team.teamId) === confirmData.awayTeamId
+    );
+
+    return (
+      <>
+        <div className={common.form}>
+          <p className={common.confirmItem}>
+            試合開始日時：
+            <span className={common.confirmValue}>
+              {new Date(confirmData.tipoffTime).toLocaleString("ja-JP", {
+                timeZone: "Asia/Tokyo",
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </span>
+          </p>
+          
+          <p className={common.confirmItem}>
+            ホームチーム：
+            <span className={common.confirmValue}>
+              {homeTeam?.teamName}
+            </span>
+          </p>
+
+          <p className={common.confirmItem}>
+            アウェイチーム：
+            <span className={common.confirmValue}>
+              {awayTeam?.teamName}
+            </span>
+          </p>
+
+          <p className={common.confirmItem}>
+            ホーム最終スコア：
+            <span className={common.confirmValue}>
+              {confirmData.homeScore}点
+            </span>
+          </p>
+
+          <p className={common.confirmItem}>
+            アウェイ最終スコア：
+            <span className={common.confirmValue}>
+              {confirmData.awayScore}点
+            </span>
+          </p>
+
+          <div className={common.navigation}>
+            <button
+              type="button"
+              className={common.button}
+              onClick={handleConfirm}
+            >
+              この内容で更新
+            </button>
+
+            <button
+              type="button"
+              className={common.button}
+              onClick={() => setConfirmData(null)}
+            >
+              入力内容を修正
+            </button>
+
+            <Link
+              href={`/games/${gameId}`}
+              className={common.buttonCancel}
+            >
+              キャンセル
+            </Link>
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <form
       className={common.form}
       onSubmit={handleSubmit(onSubmit, onError)}
       noValidate
     >
+      {/* スタッツがある場合は変更不可、理由を画面に表示 */}
+      {hasStats && (
+        <p className={common.notice}>
+          スタッツが登録されているため、ホームチームとアウェイチームは変更できません。
+        </p>
+      )}
+
       <div className={common.field}>
         <label
           htmlFor="tipoffTime"
@@ -121,6 +239,7 @@ export default function GameForm({
         <select
           id="homeTeamId" // labelと対応
           className={common.select}
+          disabled={hasStats}
           /* homeTeamIdをReact Hook Formに登録 */
           {...register("homeTeamId")}
         >
@@ -135,11 +254,20 @@ export default function GameForm({
             <option
               key={team.teamId} // チームを一意に識別するためのキー
               value={team.teamId}
-              disabled={team._count.player < 5} // 所属選手5人未満は選択不可
+              disabled={
+                // 所属選手5人未満は選択不可
+                team._count.player < 5 ||
+                // アウェイで選択中のチームは選択不可
+                String(team.teamId) === selectedAwayTeamId
+              }
             >
               {team.teamName}
-              {/* 所属選手5人未満の場合は画面上に表示 */}
-              {team._count.player < 5 ? "（所属選手5人未満）" : ""}
+              {/* 選択できない理由を表示 */}
+              {team._count.player < 5
+                ? "（所属選手5人未満）"
+                : String(team.teamId) === selectedAwayTeamId
+                  ? "（アウェイチーム選択中）"
+                  : ""}
             </option>
           ))}
         </select>
@@ -159,6 +287,7 @@ export default function GameForm({
         <select
           id="awayTeamId" // labelと対応
           className={common.select}
+          disabled={hasStats}
           /* awayTeamIdをReact Hook Formに登録 */
           {...register("awayTeamId")}
         >
@@ -173,11 +302,20 @@ export default function GameForm({
             <option
               key={team.teamId} // チームを一意に識別するためのキー
               value={team.teamId}
-              disabled={team._count.player < 5} // 所属選手5人未満は選択不可
+              disabled={
+                // 所属選手5人未満は選択不可
+                team._count.player < 5 ||
+                // ホームで選択中のチームは選択不可
+                String(team.teamId) === selectedHomeTeamId
+              }
             >
               {team.teamName}
-              {/* 所属選手5人未満の場合は画面上に表示 */}
-              {team._count.player < 5 ? "（所属選手5人未満）" : ""}
+              {/* 選択できない理由を表示 */}
+              {team._count.player < 5
+                ? "（所属選手5人未満）"
+                : String(team.teamId) === selectedHomeTeamId
+                  ? "（ホームチーム選択中）"
+                  : ""}
             </option>
           ))}
         </select>
@@ -187,7 +325,7 @@ export default function GameForm({
         </div>
       </div>
 
-       <div className={common.field}>
+      <div className={common.field}>
         <label
           htmlFor="homeScore"
           className={common.label}

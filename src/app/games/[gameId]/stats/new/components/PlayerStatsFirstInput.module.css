@@ -1,0 +1,49 @@
+/* スタッツ入力画面全体 */
+.container {
+  width: 100%;
+}
+
+/* 選手見出し */
+.playerTitle {
+  margin: 0 0 24px;
+  font-size: 24px;
+}
+
+/* スタッツグループ */
+.statsGroup {
+  margin-bottom: 28px;
+}
+
+/* スタッツグループ見出し */
+.statsGroupTitle {
+  margin: 0 0 16px;
+  font-size: 18px;
+}
+
+/* スタッツ入力欄 */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+/* 1つのスタッツ項目 */
+.statsField {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* DQなどのチェックボックス項目 */
+.checkboxField {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* スマートフォン */
+@media (max-width: 600px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+}

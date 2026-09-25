@@ -17,7 +17,10 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
 /* 型の読み込み */
-import type { PlayerStats } from "../new/types";
+import type { PlayerStats } from "../types";
+
+/* 得点計算関数の読み込み */
+import { calculatePlayerPoints } from "../utils";
 
 /* 更新するスタッツデータの型定義 */
 type UpdateStatsData = {
@@ -32,6 +35,80 @@ export async function updateStats(
   gameId: number,
   statsData: UpdateStatsData[]
 ) {
+  /* 試合情報を取得 */
+  const game = await prisma.games.findUnique({
+    where: {
+      gameId,
+    },
+  });
+
+  /* 指定した試合が存在しない場合 */
+  if (!game) {
+    throw new Error("指定された試合が存在しません");
+  }
+
+  /* スタッツ対象選手のIDを取得 */
+  const playerIds = statsData.map(({ playerId }) => playerId);
+
+  /* 選手の所属チームを取得 */
+  const players = await prisma.players.findMany({
+    where: {
+      playerId: {
+        in: playerIds,
+      },
+    },
+    select: {
+      playerId: true,
+      teamId: true,
+    },
+  });
+
+  /* playerStatsに含まれている選手が、
+     すべて指定したチームに所属しているか確認 */
+  if (players.length !== playerIds.length) {
+    throw new Error("指定された選手が存在しません");
+  }
+
+  /* スタッツ対象チームを取得 */
+  const teamId = players[0].teamId;
+
+  /* すべての選手が同じチームに所属しているか確認 */
+  if (players.some((player) => player.teamId !== teamId)) {
+    throw new Error(
+      "異なるチームの選手が含まれているため、スタッツを更新できません"
+    );
+  }
+
+  /* 各選手の得点を合計する */
+  const totalPoints = statsData.reduce(
+    (total, { stats }) =>
+      total + calculatePlayerPoints(stats),
+    0
+  );
+
+  /* 対象チームの最終スコアを取得 */
+  const teamScore =
+    teamId === game.homeTeamId
+      ? game.homeScore
+      : game.awayScore;
+
+  /* 試合に参加していないチームの場合は更新させない */
+  if (
+    teamId !== game.homeTeamId &&
+    teamId !== game.awayTeamId
+  ) {
+    throw new Error(
+      "このチームは指定された試合に参加していません"
+    );
+  }
+
+  /* スタッツの得点合計と試合の最終スコアが一致しない場合は更新させない */
+  if (totalPoints !== teamScore) {
+    throw new Error(
+      "選手スタッツの得点合計と試合の最終スコアが一致するように入力してください"
+    );
+  }
+  
   /* 各選手の試合出場時間を合計する */
   const totalPlaySec = statsData.reduce(
     /* 第一引数：現在のStatsの試合出場時間(秒)を累積値に加える

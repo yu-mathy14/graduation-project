@@ -10,7 +10,7 @@ import Link from "next/link";
 import StatsEditForm from "./components/StatsEditForm";
 
 /* CSSファイルの読み込み */
-import styles from "../stats.module.css"
+import styles from "./page.module.css"
 import common from "@/app/common.module.css";
 
 // このページに拡張されるデータの型定義
@@ -77,6 +77,13 @@ export default async function StatsEditPage({
       ? game.homeTeam.teamName  // homeの場合
       : game.awayTeam.teamName; // homeじゃない場合
 
+  /* 編集対象のチームの最終スコアを取得 */
+  const teamScore =
+    /* 【三項演算子】teamに"home"が指定されたか */
+    team === "home"
+      ? game.homeScore  // homeの場合
+      : game.awayScore; // homeじゃない場合
+
   return (
     <div className={styles.container}>
       <Link
@@ -102,6 +109,7 @@ export default async function StatsEditPage({
           /* これは属性ではなくProps */
           gameId={id}
           stats={stats}
+          teamScore={teamScore}
         />
       )}
     </div>

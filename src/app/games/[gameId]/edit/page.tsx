@@ -27,6 +27,15 @@ export default async function GameEditPage({ params }: Props) {
   /* 該当する試合があれば試合オブジェクト、なければnullが返る */
   const game = await prisma.games.findUnique({
     where: { gameId: id },
+    // 件数も一緒に取得
+    include: {
+      _count: {
+        select: {
+          // スタッツ件数
+          stats: true,
+        },
+      },
+    },
   });
 
   /* 試合が見つからなかったら404ページを表示する */
@@ -47,10 +56,11 @@ export default async function GameEditPage({ params }: Props) {
     orderBy: {
       teamId: "asc", // チームIDの昇順
     },
-    // 所属選手数も一緒に取得する
+    // 件数も一緒に取得
     include: {
       _count: {
         select: {
+          // 所属選手数
           player: true,
         },
       },
@@ -83,6 +93,7 @@ export default async function GameEditPage({ params }: Props) {
         homeScore={game.homeScore}
         awayScore={game.awayScore}
         teams={teams}
+        hasStats={game._count.stats > 0}
       />
     </div>
 

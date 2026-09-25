@@ -12,11 +12,14 @@ import Link from "next/link";
 import { useState } from "react";
 
 /* 型の読み込み */
-import type { Player, PlayerStats } from "../types";
+import type { Player, PlayerStats, StatsError } from "../../types";
 
 /* コンポーネントの読み込み */
-import PlayerStatsInput from "./PlayerStatsInput";
+import PlayerStatsFirstInput from "./PlayerStatsFirstInput";
 import PlayerSelect from "./PlayerSelect";
+import PlayerStatsFinalTable from "./PlayerStatsFinalTable";
+import PlayerStatsFirstConfirmTable from "./PlayerStatsFirstConfirmTable";
+import PlayerStatsFinalConfirmTable from "./PlayerStatsFinalConfirmTable";
 
 /* 関数の読み込み */
 import { createStats } from "../actions";
@@ -26,14 +29,18 @@ import { playerStatsSchema } from "../../schema";
 import * as yup from "yup";
 
 /* CSSファイルの読み込み */
-import styles from "../../stats.module.css";
+import styles from "./StatsNewForm.module.css";
 import common from "@/app/common.module.css";
+
+/* 得点計算関数の読み込み */
+import { calculatePlayerPoints } from "../../utils";
 
 /* StatsNewFormが受け取るPropsの型定義 */
 type Props = {
   gameId: number;
   teamId: number;
   teamName: string;
+  teamScore: number;
   /* 複数の選手オブジェクトを格納した配列 */
   players: Player[];
 };
@@ -64,6 +71,7 @@ export default function StatsNewForm({
   gameId,
   teamId,
   teamName,
+  teamScore,
   players,
 }: Props) {
 /* 画面の状態を管理するuseStateの定義 */
@@ -84,8 +92,8 @@ export default function StatsNewForm({
     /* キーがnumber型、値がPlayerStats型のオブジェクト */
     useState<Record<number, PlayerStats>>({});
 
-  // Yup検証で発生したエラーメッセージを管理
-  const [statsError, setStatsError] = useState("");
+  // 発生したエラーメッセージを管理
+  const [statsErrors, setStatsErrors] = useState<StatsError[]>([]);
 
 /* イベントハンドラー */
   // 出場選手のチェックを変更する
@@ -145,6 +153,10 @@ export default function StatsNewForm({
     const currentPlayerId = selectedPlayerIds[currentPlayerIndex];
     /* 現在の選手のスタッツを取得し、定数に格納 */
     const currentStats = playerStats[currentPlayerId];
+    /* 現在の選手のスタッツを取得 */
+    const player = players.find(
+      (player) => player.playerId === currentPlayerId
+    );
 
     /* 【try-catch構文】
     tryはエラーが発生する可能性のある処理、
@@ -152,26 +164,55 @@ export default function StatsNewForm({
     try {
       /* 【await】Yupの検証処理が終わるまで次の処理に進まないために使用 */
       /* currentStatsをplayerStatsSchemaに渡して、Yupで検証 */
-      await playerStatsSchema.validate(currentStats);
-      /* Yupの検証に成功時、以前表示されていたエラーメッセージがあれば消す */
-      setStatsError("");
-      /* 現在の選手インデックスに+1して次の選手に進む */
-      setCurrentPlayerIndex((currentIndex) => currentIndex + 1);
+      await playerStatsSchema.validate(
+        currentStats,
+        {
+          abortEarly: false,
+        }
+      );
+
+      /* エラーを消す */
+      setStatsErrors([]);
+
+      /* 最後の選手でなければ次の選手へ進む */
+      if (
+        /* 現在の選手が最後の選手より前にいるか確認 */
+        currentPlayerIndex < selectedPlayerIds.length - 1
+      ) {
+        /* 現在の選手インデックスに+1して次の選手に進む */
+        setCurrentPlayerIndex(
+          (currentIndex) => currentIndex + 1
+        );
+        return;
+      }
+
+      /* 最後の選手まで入力が完了したら第1段階確認へ進む */
+      setStep(3);
     } catch (error) {
       /* Yup検証失敗時、発生したerrorがYupのValidationErrorかどうかを確認
       -> 今回のようなYupによる検証エラーならこの条件はtrueになる */
-      if (error instanceof yup.ValidationError) {
-        /* Yupが作成したエラーメッセージをstatsErrorに保存 */
-        setStatsError(error.message);
-        
-      /* Server Action側で発生したエラーの場合 */
-      } else if (error instanceof Error) {
-        setStatsError(error.message);
+      if (
+        error instanceof yup.ValidationError &&
+        player
+      ) {
+        const errors: StatsError[] = [];
+
+        /* Yupで発生したすべてのエラーを取得 */
+        error.errors.forEach((message) => {
+          errors.push({
+            playerId: player.playerId,
+            jerseyNumber: player.jerseyNumber,
+            playerNameKanji: player.playerNameKanji,
+            message,
+          });
+        });
+
+        setStatsErrors(errors);
       }
     }
   };
 
-  // [登録]ボタンクリック時、所属選手全員のスタッツをYupで検証し、成功したらDBへ登録する
+  // [出場時間・得点の確認へ]ボタンクリック時、所属選手全員のスタッツをYupで検証し、成功したら確認画面へ進む
   const handleRegister = async () => {
     /* 所属選手全員を登録対象にする */
     const allPlayerStats = Object.fromEntries(
@@ -186,49 +227,108 @@ export default function StatsNewForm({
       ])
     );
 
-    try {
-      // 所属選手全員ののスタッツを1人ずつ検証
-      /* 配列の加工は不要なので.map()ではなく【for...of】を使う
-      -> 所属選手全員についてYupの非同期検証を順番に実行 */
-      /* Yupの検証でエラーが発生すると、for...ofを抜けてcatchの処理へ進む */
+    /* エラー情報を一時的に格納 */
+    const errors: StatsError[] = [];
 
-      /* Object.entries() → allPlayerStatsを「[キー, 値]」の配列に変換する
-      　 [playerId, stats] → 配列のキーをplayerId、値をstatsとして分割代入する
-     　　 for...of → 1選手分ずつ順番に取り出して処理する */
-      for (const [playerId, stats] of Object.entries(allPlayerStats)) {
-        /* 【await】Yupの検証処理が完了するまで次の処理に進まないようにする */
-        /* 全選手のスタッツをplayerStatsSchemaに渡して、Yupで検証 */
-        await playerStatsSchema.validate(stats);
-      }
+    // 所属選手全員ののスタッツを1人ずつ検証
+    /* 配列の加工は不要なので.map()ではなく【for...of】を使う
+    -> 所属選手全員についてYupの非同期検証を順番に実行 */
+    /* Yupの検証でエラーが発生すると、for...ofを抜けてcatchの処理へ進む */
 
-      /* 所属選手全員の試合出場時間を合計する */
-      const totalPlaySec = Object.values(allPlayerStats).reduce(
-        /* 第一引数：現在のStatsの試合出場時間(秒)を累積値に加える
-           第二引数：累積値(total)の初期値は0 */
-        (total, stats) => total + stats.playSec,
-        0
+    /* Object.entries() → allPlayerStatsを「[キー, 値]」の配列に変換する
+    　 [playerId, stats] → 配列のキーをplayerId、値をstatsとして分割代入する
+    　　 for...of → 1選手分ずつ順番に取り出して処理する */
+    for (const [playerId, stats] of Object.entries(allPlayerStats)) {
+      const player = players.find(
+        (player) => player.playerId === Number(playerId)
       );
 
-      /* 試合出場時間の合計が12,000秒でない場合は登録しない */
-      if (totalPlaySec !== 12000) {
-        setStatsError(
-          "所属選手全員の試合出場時間の合計が12,000秒になるように入力してください"
-        );
-        return;
+      try {
+        await playerStatsSchema.validate(stats, {
+          abortEarly: false,
+        });
+      } catch (error) {
+        if (
+          error instanceof yup.ValidationError &&
+          player
+        ) {
+          error.errors.forEach((message) => {
+            errors.push({
+              playerId: player.playerId,
+              jerseyNumber: player.jerseyNumber,
+              playerNameKanji: player.playerNameKanji,
+              message,
+            });
+          });
+        }
       }
+    }
 
-      /* Yup検証と試合出場時間の合計チェックに成功したため、
-        以前表示されていたエラーメッセージがあれば消す */
-      setStatsError("");
+    /* 各選手の試合出場時間を合計する */
+    const totalPlaySec = Object.values(allPlayerStats).reduce(
+      (total, stats) => total + stats.playSec,
+      0
+    );
 
-      /* 所属選手全員のスタッツをDBへ登録 */
-      await createStats(gameId, teamId, allPlayerStats);
+    /* 出場時間エラーを追加 */
+    if (totalPlaySec !== 12000) {
+      errors.push({
+        message:
+          "所属選手全員の試合出場時間の合計が12,000秒になるように入力してください",
+      });
+    }
+
+    /* 各選手の得点を合計する */
+    const totalPoints = Object.values(allPlayerStats).reduce(
+      (total, stats) =>
+        total + calculatePlayerPoints(stats),
+      0
+    );
+    
+    /* 得点エラーを追加 */
+    if (totalPoints !== teamScore) {
+      errors.push({
+        message:
+          "選手スタッツの得点合計と試合の最終スコアが一致するように入力してください",
+      });
+    }
+
+    /* エラーが1件以上ある場合は確認画面へ進まない */
+    if (errors.length > 0) {
+      setStatsErrors(errors);
+      return;
+    }
+
+    /* すべての検証に成功したら第2段階確認画面へ進む */
+    setStatsErrors([]);
+    setStep(5);
+  };
+
+  /* 第2段階確認画面で登録を確定する */
+  const handleConfirm = async () => {
+    const allPlayerStats = Object.fromEntries(
+      players.map((player) => [
+        player.playerId,
+        selectedPlayerIds.includes(player.playerId)
+          ? playerStats[player.playerId]
+          : { ...initialPlayerStats },
+      ])
+    );
+
+    try {
+      await createStats(
+        gameId,
+        teamId,
+        allPlayerStats
+      );
     } catch (error) {
-      /* エラーがYupのValidationErrorか確認する
-     -> Yupによる検証エラーの場合はエラーメッセージを表示する */
-      if (error instanceof yup.ValidationError) {
-        /* Yupが作成したエラーメッセージをstatsErrorに保存 */
-        setStatsError(error.message);
+      /* Server Action側で発生したエラーを表示 */
+      if (error instanceof Error) {
+        setStatsErrors([
+          {
+            message: error.message,
+          },
+        ]);
       }
     }
   };
@@ -256,7 +356,7 @@ export default function StatsNewForm({
             </p>
           )}
 
-          <div className={styles.navigation}>
+          <div className={common.navigation}>
             <button
               type="button"
               className={common.button}
@@ -292,7 +392,7 @@ export default function StatsNewForm({
             .map((player, index) =>
               /* 現在入力する選手の位置と一致した場合だけ表示 */
               index === currentPlayerIndex ? (
-                <PlayerStatsInput
+                <PlayerStatsFirstInput
                   key={player.playerId}  // 選手を一意に識別するためのキー
 
                 /*　これは属性ではなくProps */
@@ -305,16 +405,25 @@ export default function StatsNewForm({
                 />
               ) : null
             )}
-
-          {/* Yup検証でエラーがある場合、メッセージを表示 */}
-          {statsError && (
-            <p className={common.error}>
-              {statsError}
-            </p>
-          )}
           
+          {/* エラーがある場合、エラーメッセージを一覧表示 */}
+          {statsErrors.length > 0 && (
+            <div>
+              {statsErrors.map((error, index) => (
+                <p
+                  key={index}
+                  className={common.error}
+                >
+                  {error.playerId !== undefined &&
+                    `背番号${error.jerseyNumber} ${error.playerNameKanji}：`}
+                  {error.message}
+                </p>
+              ))}
+            </div>
+          )}
+
           {/* 現在の選手が最初の選手ではない場合は前の選手へ戻れる */}
-          <div className={styles.navigation}>
+          <div className={common.navigation}>
             <button
               type="button"
               className={common.button}
@@ -350,9 +459,9 @@ export default function StatsNewForm({
                   type="button"
                   className={common.button}
                   /* ボタンクリック時の処理 */
-                  onClick={handleRegister}
+                  onClick={handleNextPlayer}
                 >
-                  登録
+                  各選手のスタッツ確認へ
                 </button>
               )
             }
@@ -367,10 +476,170 @@ export default function StatsNewForm({
                 /* stepを1に更新 */
                 setStep(1);
                 /* 表示中のYupエラーメッセージを消す */
-                setStatsError("");
+                setStatsErrors([]);
               }}
             >
               選手選択に戻る
+            </button>
+
+            <Link
+              href={`/games/${gameId}`}
+              className={common.buttonCancel}
+            >
+              キャンセル
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* ステップ3：第1段階入力内容の確認 */}
+      {step === 3 && (
+        <div className={styles.step}>
+          <h3>【{teamName}】のスタッツ確認</h3>
+
+          <p>
+            入力した各選手のスタッツを確認してください。
+          </p>
+
+          <PlayerStatsFirstConfirmTable
+            players={players}
+            selectedPlayerIds={selectedPlayerIds}
+            playerStats={playerStats}
+          />
+
+          <div className={common.navigation}>
+            <button
+              type="button"
+              className={common.button}
+              onClick={() => {
+                setStatsErrors([]); // エラーを消す
+                setCurrentPlayerIndex(0); // 最初の選手
+                setStep(2); // step2へ
+              }}
+            >
+              各選手のスタッツ入力に戻る
+            </button>
+
+            <button
+              type="button"
+              className={common.button}
+              onClick={() => {
+                setStatsErrors([]); // エラーを消す
+                setStep(4); // step4へ
+              }}
+            >
+              出場時間・得点入力へ
+            </button>
+
+            <Link
+              href={`/games/${gameId}`}
+              className={common.buttonCancel}
+            >
+              キャンセル
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* ステップ4：出場時間・得点関連スタッツを入力 */}
+      {step === 4 && (
+        <div className={styles.step}>
+          <h3>【{teamName}】のスタッツ最終入力</h3>
+
+          <p>
+            全選手の出場時間・得点関連スタッツを入力してください。
+          </p>
+
+          {/* 表形式の入力用コンポーネント  */}
+          <PlayerStatsFinalTable
+            players={players}
+            selectedPlayerIds={selectedPlayerIds}
+            playerStats={playerStats}
+            teamScore={teamScore}
+            onChange={handleStatsChange}
+          />
+
+          {/* エラーがある場合、エラーメッセージを一覧表示 */}
+          {statsErrors.length > 0 && (
+            <div>
+              {statsErrors.map((error, index) => (
+                <p
+                  key={index}
+                  className={common.error}
+                >
+                  {error.playerId !== undefined &&
+                    `背番号${error.jerseyNumber} ${error.playerNameKanji}：`}
+                  {error.message}
+                </p>
+              ))}
+            </div>
+          )}
+
+          <div className={common.navigation}>
+            <button
+              type="button"
+              className={common.button}
+              onClick={() => {
+                setStatsErrors([]);
+                setCurrentPlayerIndex(0); // 最初の選手
+                setStep(2);
+              }}
+            >
+              各選手のスタッツ入力に戻る
+            </button>
+
+            <button
+              type="button"
+              className={common.button}
+              onClick={handleRegister}
+            >
+              出場時間・得点の確認へ
+            </button>
+
+            <Link
+              href={`/games/${gameId}`}
+              className={common.buttonCancel}
+            >
+              キャンセル
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* ステップ5：第2段階入力内容の確認 */}
+      {step === 5 && (
+        <div className={styles.step}>
+          <h3>【{teamName}】のスタッツ最終確認</h3>
+
+          <p>
+            出場時間・得点関連スタッツの入力内容を確認してください。
+          </p>
+
+          <PlayerStatsFinalConfirmTable
+            players={players}
+            selectedPlayerIds={selectedPlayerIds}
+            playerStats={playerStats}
+            teamScore={teamScore}
+          />
+
+          <div className={common.navigation}>
+            <button
+              type="button"
+              className={common.button}
+              onClick={() => {
+                setStatsErrors([]);
+                setStep(4);
+              }}
+            >
+              出場時間・得点入力に戻る
+            </button>
+
+            <button
+              type="button"
+              className={common.button}
+              onClick={handleConfirm}
+            >
+              登録
             </button>
 
             <Link

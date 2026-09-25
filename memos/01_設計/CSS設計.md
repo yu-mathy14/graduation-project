@@ -29,20 +29,14 @@
 | src/app/games/[gameId]/edit/page.tsx | src/app/games/[gameId]/edit/page.module.css |
 | src/app/games/[gameId]/edit/components/GameForm.tsx | src/app/common.module.css |
 | src/app/games/[gameId]/delete/page.tsx | src/app/common.module.css |
-| src/app/games/[gameId]/stats/new/page.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/stats.module.css |
-| src/app/games/[gameId]/stats/new/components/StatsNewForm.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/stats.module.css |
-| src/app/games/[gameId]/stats/new/components/PlayerStatsInput.tsx | src/app/games/[gameId]/stats/stats.module.css |
-| src/app/games/[gameId]/stats/new/components/PlayerSelect.tsx | src/app/games/[gameId]/stats/stats.module.css |
-| src/app/games/[gameId]/stats/edit/page.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/stats.module.css |
-| src/app/games/[gameId]/stats/edit/components/StatsEditForm.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/stats.module.css |
-| src/app/games/[gameId]/stats/edit/components/StatsEditTable.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/stats.module.css |
-
----
-### globals.css の役割
-| 設定 | 内容 |
-| :---- | :---- |
-| * | box-sizing: border-boxを設定 |
-| html, body | marginとpaddingを0に設定 |
-| body | 背景色・文字色・フォントを設定 |
-| a | リンクの文字色を継承し、下線を解除 |
-| button, input, select, textarea | フォントを継承 |
+| src/app/games/[gameId]/stats/new/page.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/new/page.module.css |
+| src/app/games/[gameId]/stats/new/components/StatsNewForm.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/new/components/StatsNewForm.module.css |
+| src/app/games/[gameId]/stats/new/components/PlayerStatsFirstInput.tsx | src/app/games/[gameId]/stats/new/components/PlayerStatsFirstInput.module.css <br> src/app/common.module.css |
+| src/app/games/[gameId]/stats/new/components/PlayerStatsFinalTable.tsx | src/app/games/[gameId]/stats/new/components/PlayerStatsFinalTable.module.css |
+| src/app/games/[gameId]/stats/new/components/PlayerSelect.tsx | src/app/games/[gameId]/stats/new/components/PlayerSelect.module.css |
+| src/app/games/[gameId]/stats/edit/page.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/edit/page.module.css |
+| src/app/games/[gameId]/stats/edit/components/StatsEditForm.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/edit/components/StatsEditForm.module.css |
+| src/app/games/[gameId]/stats/edit/components/StatsEditTable.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/edit/components/StatsEditTable.module.css |
+| src/app/games/[gameId]/stats/new/components/PlayerStatsFirstConfirmTable.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/new/components/PlayerStatsConfirmFirstTable.css |
+| src/app/games/[gameId]/stats/new/components/PlayerStatsFinalConfirmTable.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/new/components/PlayerStatsFinalConfirmTable.css |
+| src/app/games/[gameId]/stats/edit/components/StatsEditConfirmTable.tsx | src/app/common.module.css <br> src/app/games/[gameId]/stats/edit/components/StatsEditConfirmTable.css |

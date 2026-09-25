@@ -6,10 +6,10 @@
 "use client";
 
 /* 型の読み込み */
-import type { Player } from "../types";
+import type { Player } from "../../types";
 
 /* CSSファイルの読み込み */
-import styles from "../../stats.module.css";
+import styles from "./PlayerSelect.module.css"
 
 /* PlayerSelectが受け取るPropsの型定義 */
 type Props = {
@@ -30,15 +30,15 @@ export default function PlayerSelect({
   onChange,
 }: Props) {
   return (
-    <div className={styles.playerSelect}>
+    <div className={styles.container}>
       {players.map((player) => (
         <label
           key={player.playerId}
-          className={styles.playerOption}
+          className={styles.option}
         >
           <input
             type="checkbox" // 入力欄はチェックボックス
-            className={styles.playerCheckbox}
+            className={styles.checkbox}
             /* 入力欄が持つ値：選手IDを設定する */
             value={player.playerId}
             /* チェック状態：trueならチェックされる
@@ -53,7 +53,7 @@ export default function PlayerSelect({
       ))}
 
       {/* 選択されている選手のIDを格納した配列の要素数 */}
-      <p className={styles.selectedCount}>
+      <p className={styles.count}>
         選択人数：{selectedPlayerIds.length}人
       </p>
     </div>
