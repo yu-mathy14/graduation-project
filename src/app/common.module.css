@@ -266,3 +266,14 @@
   white-space: pre-wrap;
   font-weight: normal;
 }
+
+/* 確認画面での色見本表示用[チームカラー] */
+.confirmColor {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
+  margin: 0 8px;
+  vertical-align: middle;
+}
