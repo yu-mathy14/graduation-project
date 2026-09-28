@@ -19,3 +19,41 @@
   margin: 0 0 20px;
   font-size: 28px;
 }
+
+.recentStatsTable {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.recentStatsTable th.stickyDate,
+.recentStatsTable th.stickyOpponent {
+  z-index: 3;
+}
+
+.stickyDate {
+  position: sticky;
+  left: 0;
+  width: 160px;
+  min-width: 160px;
+  background-color: var(--background);
+  z-index: 2;
+}
+
+.stickyOpponent {
+  position: sticky;
+  left: 160px;
+  width: 120px;
+  min-width: 120px;
+  background-color: var(--background);
+  z-index: 2;
+}
+
+.recentStatsTable th.stickyDate,
+.recentStatsTable th.stickyOpponent {
+  z-index: 3;
+}
+
+.detailLink {
+  min-width: 90px;
+  white-space: nowrap;
+}
