@@ -15,6 +15,16 @@
 .link:hover {
   color: var(--color-hover-link);
 }
+
+.subLink {
+  color: var(--color-main);
+  text-decoration: none;
+}
+
+.subLink:hover {
+  color: var(--color-link);
+  text-decoration: underline;
+}
 /* --------------------------- */
 
 /* ボタン形式 ------------------ */
