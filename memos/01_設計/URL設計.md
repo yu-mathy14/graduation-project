@@ -36,3 +36,19 @@ from, returnTeamId, teamIdは、遷移減のチーム詳細へ戻るために使
 | :---- | :---- |
 | /teams/[opponentTeamId]?from=team&returnTeamId=[teamId] | 対戦相手チーム詳細 |
 | /games/[gameId]?from=team&teamId=[teamId] | 試合詳細 |
+
+--- 
+### 試合詳細画面への遷移元指定
+試合詳細画面(`/games/[gameId]`)では、`from` パラメータによって戻るリンクを切り替える。
+
+| URL | 遷移元 | 試合詳細画面からの戻り先 |
+| :---- | :---- | :---- |
+| /games/[gameId]?from=team&teamId=[teamId] | チーム詳細 | 【チーム名】チーム情報 |
+| /games/[gameId]?from=player&playerId=[playerId] | 選手詳細 | 【選手名】選手情報 |
+| /games/[gameId] | その他 | 試合一覧 |
+
+- `from=team`：チーム詳細画面の「直近3試合」から試合詳細へ遷移した場合に使用
+- `from=player`：選手詳細画面の「直近3試合のスタッツ」から試合詳細へ遷移した場合に使用
+- `teamId`：戻り先となるチームのID
+- `playerId`：戻り先となる選手のID
+- `from` が指定されていない場合は、試合一覧への戻るリンクを表示する
