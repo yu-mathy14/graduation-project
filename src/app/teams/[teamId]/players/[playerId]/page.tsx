@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import styles from "./page.module.css";
 import common from "@/app/common.module.css";
+import { calculatePlayerPoints } from "@/app/games/[gameId]/stats/utils";
 
 type Props = {
   params: Promise<{
@@ -40,6 +41,30 @@ export default async function PlayerDetailPage({ params }: Props) {
 
   /* 選手削除可否を判定し、結果を定数に格納 */
   const canDeletePlayer = player._count.stats === 0;
+
+  // 選手が出場した直近3試合のスタッツを取得
+  const recentStats = await prisma.stats.findMany({
+    where: {
+      playerId: pId, // 該当の選手IDと一致
+    },
+    // include：関連するテーブルを一緒に取得する
+    include: {
+      /* Statsに紐づくGamesも取得する */
+      game: {
+        include: {
+          homeTeam: true,
+          awayTeam: true,
+        },
+      },
+    },
+    orderBy: {
+      /* 試合テーブルの試合開始日時が新しい順に */
+      game: {
+        tipoffTime: "desc",
+      },
+    },
+    take: 3, // 最大3件まで取得する
+  });
   
 
   // Prismaを使ってTeamsテーブルから該当のチーム情報(1件)を取得
@@ -130,6 +155,126 @@ export default async function PlayerDetailPage({ params }: Props) {
             </tr>
           </tbody>
         </table>
+      </section>
+
+      {/* 直近3試合のスタッツ */}
+      <section className={styles.recentStats}>
+        <h2 className={styles.title}>直近の試合のスタッツ</h2>
+
+        {recentStats.length === 0 ? (
+          <p>スタッツ記録がありません。</p>
+        ) : (
+          <div className={styles.recentStatsTable}>
+            <table className={common.table}>
+              {/* 見出し部分 */}
+              <thead>
+                <tr>
+                  <th className={`${common.th} ${styles.stickyDate}`}>
+                    対戦日時
+                  </th>
+                  <th className={`${common.th} ${styles.stickyOpponent}`}>
+                    対戦相手
+                  </th>
+                  <th className={common.th}>PTS</th>
+                  <th className={common.th}>3P</th>
+                  <th className={common.th}>2P</th>
+                  <th className={common.th}>FT</th>
+                  <th className={common.th}>RBD</th>
+                  <th className={common.th}>AST</th>
+                  <th className={common.th}>BLK</th>
+                  <th className={common.th}>出場時間</th>
+                  <th className={`${common.th} ${styles.detailLink}`}></th>
+                </tr>
+              </thead>
+
+              {/* 実際のデータ部分 */}
+              <tbody>
+                {recentStats.map((stat) => {
+                  /* ホームチームかアウェイチームかを判定 */
+                  const isHome = stat.game.homeTeamId === tId;
+
+                  /* 対戦相手のチーム名を取得 */
+                  const opponent = isHome
+                    ? stat.game.awayTeam.teamName
+                    : stat.game.homeTeam.teamName;
+
+                  /* リバウンド合計 */
+                  const rbd = stat.oRbd + stat.dRbd;
+
+                  /* 得点 */
+                  const pts = calculatePlayerPoints(stat);
+
+                  /* 出場時間を「分:秒」に変換 */
+                  const minutes = Math.floor(stat.playSec / 60);
+                  const seconds = stat.playSec % 60;
+                  const playTime =
+                    `${minutes}:${String(seconds).padStart(2, "0")}`;
+
+                  return (
+                    <tr key={stat.gameId}>
+                      <td className={`${common.td} ${styles.stickyDate}`}>
+                        {/* 見やすい日時表示に変換 */}
+                        {stat.game.tipoffTime.toLocaleString("ja-JP", {
+                          timeZone: "Asia/Tokyo",
+                          year: "numeric",
+                          month: "numeric",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </td>
+
+                      <td className={`${common.td} ${styles.stickyOpponent}`}>
+                        {opponent}
+                      </td>
+
+                      <td className={common.td}>
+                        {pts}
+                      </td>
+
+                      <td className={common.td}>
+                        {stat.p3M}/{stat.p3A}
+                      </td>
+
+                      <td className={common.td}>
+                        {stat.p2M}/{stat.p2A}
+                      </td>
+
+                      <td className={common.td}>
+                        {stat.ftM}/{stat.ftA}
+                      </td>
+
+                      <td className={common.td}>
+                        {rbd}
+                      </td>
+
+                      <td className={common.td}>
+                        {stat.ast}
+                      </td>
+
+                      <td className={common.td}>
+                        {stat.blk}
+                      </td>
+
+                      <td className={common.td}>
+                        {playTime}
+                      </td>
+
+                      <td className={`${common.td} ${styles.detailLink}`}>
+                        <Link
+                          href={`/games/${stat.gameId}?from=player&teamId=${tId}&playerId=${pId}`}
+                          className={common.link}
+                        >
+                          詳しく見る
+                        </Link>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
       </section>
 
     </div>
