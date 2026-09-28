@@ -20,6 +20,10 @@ export async function createTeam(data: TeamFormValues) {
   const teamName = data.teamName.trim();
   const teamColor = data.teamColor.trim();
   const coach = data.coach.trim()
+  const customColor =
+    data.teamColor === "other"
+      ? data.customColor.trim()
+      : "";
 
 // チーム名重複チェック ---------------------------------
   /* 受け取ったデータのteamNameを条件にTeamsテーブルを検索、
@@ -42,6 +46,7 @@ export async function createTeam(data: TeamFormValues) {
     data: {
       teamName,
       teamColor,
+      customColor,
       prefecture: data.prefecture,
       coach,
       memo: data.memo,

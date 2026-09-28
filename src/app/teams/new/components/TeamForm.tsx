@@ -26,6 +26,7 @@ export default function TeamForm() {
   const teamDefaultValue: TeamFormValues = {
     teamName: "",
     teamColor: "",
+    customColor: "",
     prefecture: "",
     coach: "",
     memo: "",
@@ -38,6 +39,7 @@ export default function TeamForm() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<TeamFormValues>({
     // デフォルト値
@@ -47,6 +49,12 @@ export default function TeamForm() {
     /* yupResolver -> Yupの検証結果をReact Hook Formで扱えるようにするアダプタ */
     resolver: yupResolver(teamSchema), // Yupに検証を委ねる
   });
+
+  // 現在選択されているチームカラーを取得
+  const selectedTeamColor = watch("teamColor");
+
+  // 「その他」が選択されているか確認
+  const isOtherColor = selectedTeamColor === "other";
 
   // サブミット時の処理
   /* バリデーション成功時に実行される処理 */
@@ -90,11 +98,15 @@ export default function TeamForm() {
             <span
               className={common.confirmColor}
               style={{
-                backgroundColor: confirmData.teamColor,
+                backgroundColor:
+                  confirmData.teamColor === "other"
+                    ? confirmData.customColor
+                    : confirmData.teamColor,
               }}
             />
+
             <span className={common.confirmValue}>
-              {selectedColor?.name}
+              {selectedColor?.name ?? "その他"}
             </span>
           </p>
 
@@ -204,6 +216,43 @@ export default function TeamForm() {
               </option>
             ))}
           </select>
+
+          {/* "その他"を選択した場合はカラーコード入力欄を表示する */}
+          {isOtherColor && (
+          <>
+            <label
+              htmlFor="customColor"
+              className={common.label}
+            >
+              カラーコード
+            </label>
+
+            <input
+              id="customColor"
+              type="text"
+              placeholder="#FFFFFF"
+              className={common.input}
+              {...register("customColor")}
+            />
+
+            <div className={common.error}>
+              {errors.customColor?.message}
+            </div>
+
+            {/* カラーコード参考サイトを別タブで開く用のリンク */}
+            <p className={common.formNote}>
+              <a
+                href="https://www.colordic.org"
+                target="_blank" // サイトを別タブで開く
+                /* target="_blank"で外部サイトを開くときによくセットで使用するもの */
+                rel="noopener noreferrer"
+                className={common.link}
+              >
+                カラーコードを選ぶ(参考サイト)
+              </a>
+            </p>
+          </>
+        )}
         
           {/* teamColorのバリデーションエラーがある場合、メッセージを表示 */}
           <div className={common.error}>
