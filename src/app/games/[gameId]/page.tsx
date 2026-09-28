@@ -6,10 +6,18 @@ import common from "@/app/common.module.css";
 
 type Props = {
   params: Promise<{ gameId: string }>;
+  searchParams: Promise<{
+    from?: string;
+    teamId?: string;
+  }>;
 };
 
-export default async function GameDetailPage({ params }: Props) {
+export default async function GameDetailPage({
+  params,
+  searchParams,
+}: Props) {
   const { gameId } = await params;
+  const { from, teamId } = await searchParams;
   const id = Number( gameId ); // gameId(文字列)を数値に変換し、idに格納
 
   // Prismaを使ってGameテーブルから1件取得
@@ -50,13 +58,24 @@ export default async function GameDetailPage({ params }: Props) {
  
   return (
     <div className={styles.container}>
-      {/* 試合一覧に戻るための遷移リンク */}
-      <Link
-        href="/games"
-        className={common.link}
-      >
-        ←試合一覧に戻る
-      </Link>
+      {/* [戻る]リンクを条件分岐 */}
+      {from === "team" && teamId ? (
+        /* チーム詳細画面から来た場合 */
+        <Link
+          href={`/teams/${teamId}`}
+          className={common.link}
+        >
+          ←チーム詳細に戻る
+        </Link>
+      ) : (
+        /* 試合一覧から来た場合 */
+        <Link
+          href="/games"
+          className={common.link}
+        >
+          ←試合一覧に戻る
+        </Link>
+      )}
 
       <div className={styles.actions}>
         {/* 試合編集ページへの遷移リンク */}

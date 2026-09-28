@@ -59,7 +59,7 @@ export default async function TeamsPage() {
                   <td className={common.td}>
                     <Link
                       href={`/teams/${t.teamId}`}
-                      className={common.link}
+                      className={common.subLink}
                     >
                       <span
                         className={styles.teamColor}
