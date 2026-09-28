@@ -60,7 +60,7 @@ async function main() {
   const toyotama = await prisma.teams.create({
     data: {
         teamName: '豊玉高校',
-        teamColor: '#0077C0',
+        teamColor: '#3B82F6',
         prefecture: '大阪',
         coach: '金平',
         memo: 'ラン&ガン\n\n【昨年度の成績】\n・インターハイ大阪府予選突破\n・全国大会ベスト8',
@@ -73,7 +73,7 @@ async function main() {
         teamColor: '#FFFFFF',
         prefecture: '秋田',
         coach: '堂本五郎',
-        memo: '一意搏心\n\n【昨年度の成績】\n・インターハイ秋田県予選1位\n・全国大会優勝',
+        memo: '一意搏心【昨年度の成績】\n・インターハイ秋田県予選1位\n・全国大会優勝',
     },
   });
 

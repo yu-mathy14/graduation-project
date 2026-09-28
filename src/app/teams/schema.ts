@@ -19,6 +19,25 @@ export type TeamFormValues = {
   memo?: string;
 };
 
+/* チームカラーの選択肢 */
+export const teamColors = [
+  { name: "赤", value: "#E60012" },
+  { name: "オレンジ", value: "#F97316" },
+  { name: "黄色", value: "#EAB308" },
+  { name: "黄緑", value: "#84CC16" },
+  { name: "緑", value: "#15803D" },
+  { name: "水色", value: "#06B6D4" },
+  { name: "青", value: "#3B82F6" },
+  { name: "紺", value: "#1E3A8A" },
+  { name: "紫", value: "#552583" },
+  { name: "ピンク", value: "#EC4899" },
+  { name: "白", value: "#FFFFFF" },
+  { name: "グレー", value: "#6B7280" },
+  { name: "黒", value: "#171717" },
+  { name: "茶色", value: "#92400E" },
+];
+
+/* 都道府県の選択肢 */
 export const prefectures = [
   "北海道",
   "青森",
@@ -87,18 +106,22 @@ export const teamSchema = yup.object({
     .label("チームカラー") // フィールドの日本語名
   // 以下、検証ルール
     .required("${label}は必須入力です。") // 必須入力指定
-    /* 正規表現に一致するか
-    ：第一引数は照合する正規表現、第二引数はエラーメッセージ */
-    .matches(
-    /* 【/.../】正規表現リテラル(JSなどで使う書き方)
-       【^】 文字列の先頭
-       【#】リテラルの#記号
-       【[0-9A-Fa-f]】文字クラス(0〜9、A〜F、a〜f のいずれか1文字)
-       【{6}】直前のパターン([0-9A-Fa-f])を6回繰り返す
-       【$】文字列の末尾*/
-    /^#[0-9A-Fa-f]{6}$/,
-    "${label}は #RRGGBB の形式で入力してください。"
+    .oneOf(
+      teamColors.map((color) => color.value),
+      "${label}を選択してください。"
     ),
+    // /* 正規表現に一致するか
+    // ：第一引数は照合する正規表現、第二引数はエラーメッセージ */
+    // .matches(
+    // /* 【/.../】正規表現リテラル(JSなどで使う書き方)
+    //    【^】 文字列の先頭
+    //    【#】リテラルの#記号
+    //    【[0-9A-Fa-f]】文字クラス(0〜9、A〜F、a〜f のいずれか1文字)
+    //    【{6}】直前のパターン([0-9A-Fa-f])を6回繰り返す
+    //    【$】文字列の末尾*/
+    // /^#[0-9A-Fa-f]{6}$/,
+    // "${label}は #RRGGBB の形式で入力してください。"
+    // ),
 
     prefecture: yup
       .string() // データ型：文字列

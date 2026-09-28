@@ -17,7 +17,7 @@ import { useForm,
 
 /* 他ファイルから必要なものを読み込み */
 import { createTeam } from "../actions";
-import { teamSchema, prefectures, type TeamFormValues,} from "../../schema";
+import { teamSchema, prefectures, type TeamFormValues, teamColors } from "../../schema";
 import common from "@/app/common.module.css";
 import Link from "next/link";
 
@@ -25,7 +25,7 @@ export default function TeamForm() {
   // デフォルト値
   const teamDefaultValue: TeamFormValues = {
     teamName: "",
-    teamColor: "#FFFFFF",
+    teamColor: "",
     prefecture: "",
     coach: "",
     memo: "",
@@ -69,6 +69,11 @@ export default function TeamForm() {
 
   /* 確認画面 */
   if (confirmData) {
+    /* 選択済みのチームカラー名を格納 */
+    const selectedColor = teamColors.find(
+      (color) => color.value === confirmData.teamColor
+    );
+    
     return (
       <>
         <div className={common.form}>
@@ -79,10 +84,17 @@ export default function TeamForm() {
             </span>
           </p>
 
+          {/* チームカラーを色見本+色名で表示 */}
           <p className={common.confirmItem}>
             チームカラー *：
+            <span
+              className={common.confirmColor}
+              style={{
+                backgroundColor: confirmData.teamColor,
+              }}
+            />
             <span className={common.confirmValue}>
-              {confirmData.teamColor}
+              {selectedColor?.name}
             </span>
           </p>
 
@@ -173,30 +185,31 @@ export default function TeamForm() {
             チームカラー *
           </label>
 
-          <input
+          <select
             id="teamColor" // labelと対応
-            type="text"
-            placeholder="#FFFFFF"
-            className={common.input}
+            className={common.select}
             /* teamColorをReact Hook Formに登録 */
             {...register("teamColor")}
-          />
-          {/* teamColorのバリデーションエラーがある場合、メッセージを表示 */}
-         <div className={common.error}>
-          {errors.teamColor?.message}
-        </div>
+          >
+            <option value="">
+              チームカラーを選択してください
+            </option>
 
-          <p className={common.formNote}>
-            <a
-              href="https://www.colordic.org"
-              target="_blank" // サイトを別タブで開く
-              /* target="_blank"で外部サイトを開くときによくセットで使用するもの */
-              rel="noopener noreferrer"
-              className={common.link}
-            >
-              カラーコードを選ぶ(参考サイト)
-            </a>
-          </p>
+            {teamColors.map((color) => (
+              <option
+                key={color.value}
+                value={color.value}
+              >
+                {color.name}
+              </option>
+            ))}
+          </select>
+        
+          {/* teamColorのバリデーションエラーがある場合、メッセージを表示 */}
+          <div className={common.error}>
+          {errors.teamColor?.message}
+          </div>
+
         </div>
 
         {/* 都道府県 */}
