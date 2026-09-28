@@ -26,6 +26,15 @@ export default async function TeamEditPage({ params }: Props) {
   /* 該当するチームがあればチームオブジェクト、なければnullが返る */
   const team = await prisma.teams.findUnique({
     where: { teamId: id },
+     select: {
+      teamId: true,
+      teamName: true,
+      teamColor: true,
+      customColor: true,
+      prefecture: true,
+      coach: true,
+      memo: true,
+    },
   });
 
   /* チームが見つからなかったら404ページを表示する */
@@ -48,6 +57,7 @@ export default async function TeamEditPage({ params }: Props) {
         teamId={team.teamId}
         teamName={team.teamName}
         teamColor={team.teamColor}
+        customColor={team.customColor}
         prefecture={team.prefecture}
         coach={team.coach}
         memo={team.memo ?? ""}
