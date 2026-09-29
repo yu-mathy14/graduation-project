@@ -120,9 +120,31 @@ export default function GameForm({
         String(team.teamId) === confirmData.awayTeamId
     );
 
+    // スコアの異常値を判定
+    /* 受け取った文字列型のスコアを数値型に変換 */
+    const homeScoreValue = Number(confirmData.homeScore);
+    const awayScoreValue = Number(confirmData.awayScore);
+    /* ホームスコア異常値基準*/
+    const isHomeScoreWarning =
+      homeScoreValue <= 9 || homeScoreValue >= 100;
+    /* アウェイスコア異常値基準 */
+    const isAwayScoreWarning =
+      awayScoreValue <= 9 || awayScoreValue >= 100;
+    /* 異常値警告対象：ホームかアウェイのいずれかが該当する場合 */
+    const hasScoreWarning =
+      isHomeScoreWarning || isAwayScoreWarning;
+
     return (
       <>
         <div className={common.form}>
+          {/* スコアが異常値の場合に警告を表示 */}
+          {hasScoreWarning && (
+            <p className={common.notice}>
+              最終スコアが通常とは異なる値になっています。
+              内容を確認してください。
+            </p>
+          )}
+
           <p className={common.confirmItem}>
             試合開始日時：
             <span className={common.confirmValue}>
@@ -153,14 +175,26 @@ export default function GameForm({
 
           <p className={common.confirmItem}>
             ホーム最終スコア：
-            <span className={common.confirmValue}>
+            <span
+              className={
+                isHomeScoreWarning
+                  ? common.warningValue
+                  : common.confirmValue
+              }
+            >
               {confirmData.homeScore}点
             </span>
           </p>
 
           <p className={common.confirmItem}>
             アウェイ最終スコア：
-            <span className={common.confirmValue}>
+            <span
+              className={
+                isAwayScoreWarning
+                  ? common.warningValue
+                  : common.confirmValue
+              }
+            >
               {confirmData.awayScore}点
             </span>
           </p>

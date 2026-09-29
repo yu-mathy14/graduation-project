@@ -277,3 +277,11 @@
   margin: 0 8px;
   vertical-align: middle;
 }
+
+/* 確認画面での警告用 */
+.confirmErrorValue {
+  color: var(--color-danger);
+}
+.warningValue {
+  color: var(--color-danger);
+}
