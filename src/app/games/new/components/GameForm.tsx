@@ -68,6 +68,12 @@ export default function GameForm({ teams }: Props) {
   const selectedHomeTeamId = watch("homeTeamId");
   const selectedAwayTeamId = watch("awayTeamId");
 
+  /* 最終スコアが異常値かどうかを判定する */
+  const isAbnormalScore = (score: string) => {
+    const value = Number(score);
+    return value <= 9 || value >= 100;
+  };
+
   // サブミット時の処理
   /* バリデーション成功時に実行される処理 */
   const onSubmit: SubmitHandler<GameFormValues> = (data) => {
@@ -106,6 +112,15 @@ export default function GameForm({ teams }: Props) {
     return (
       <>
         <div className={common.form}>
+
+          {(isAbnormalScore(confirmData.homeScore) ||
+            isAbnormalScore(confirmData.awayScore)) && (
+            <div className={common.error}>
+              最終スコアが異常値の可能性があります。
+              ホーム・アウェイのスコアを確認してください。
+            </div>
+          )}
+
           <p className={common.confirmItem}>
             試合開始日時：
             <span className={common.confirmValue}>
@@ -136,14 +151,26 @@ export default function GameForm({ teams }: Props) {
 
           <p className={common.confirmItem}>
             ホーム最終スコア *：
-            <span className={common.confirmValue}>
+            <span
+              className={
+                isAbnormalScore(confirmData.homeScore)
+                  ? common.confirmErrorValue // 異常値の場合のCSS
+                  : common.confirmValue // 通常値の場合のCSS
+              }
+            >
               {confirmData.homeScore}点
             </span>
           </p>
 
           <p className={common.confirmItem}>
             アウェイ最終スコア *：
-            <span className={common.confirmValue}>
+            <span
+              className={
+                isAbnormalScore(confirmData.awayScore)
+                  ? common.confirmErrorValue // 異常値の場合のCSS
+                  : common.confirmValue // 通常値の場合のCSS
+              }
+            >
               {confirmData.awayScore}点
             </span>
           </p>
