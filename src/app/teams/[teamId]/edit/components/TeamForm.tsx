@@ -25,6 +25,7 @@ type Props = {
   teamId: number;
   teamName: string;
   teamColor: string;
+  customColor: string;
   prefecture: string;
   coach: string;
   memo?: string;
@@ -34,15 +35,20 @@ export default function TeamForm({
   teamId,
   teamName,
   teamColor,
+  customColor,
   prefecture,
   coach,
   memo,
 }: Props) {
+  /* DBに保存済みのカラーコードが、候補色なのか『その他』なのかを判定 */
+  const isOtherColor = teamColor === "other";
+
   // フォームの初期値
   /* 編集対象のチームの現在値を初期値として設定 */
   const teamDefaultValue: TeamFormValues = {
     teamName,
-    teamColor,
+    teamColor: isOtherColor ? "other" : teamColor,
+    customColor: isOtherColor ? customColor : "",
     prefecture,
     coach,
     memo: memo ?? "",
@@ -52,7 +58,11 @@ export default function TeamForm({
   const [confirmData, setConfirmData] = useState<TeamFormValues | null>(null);
 
   // フォーム初期化
-  const { register, handleSubmit, formState: { errors },} = useForm<TeamFormValues>({
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },} = useForm<TeamFormValues>({
   // デフォルト値
   defaultValues: teamDefaultValue,
   /* バリデーションをYupに任せる */
@@ -60,6 +70,8 @@ export default function TeamForm({
   /* yupResolver -> Yupの検証結果をReact Hook Formで扱えるようにするアダプタ */
   resolver: yupResolver(teamSchema),
   });
+
+  const selectedColor = watch("teamColor");
 
   // サブミット時の処理
   /* バリデーション成功時に実行される処理 */
@@ -103,7 +115,10 @@ export default function TeamForm({
             <span
               className={common.confirmColor}
               style={{
-                backgroundColor: confirmData.teamColor,
+                backgroundColor:
+                  confirmData.teamColor === "other"
+                    ? confirmData.customColor
+                    : confirmData.teamColor,
               }}
             />
             <span className={common.confirmValue}>
@@ -217,6 +232,35 @@ export default function TeamForm({
               </option>
             ))}
           </select>
+          
+          {/* "その他"を選択した場合はカラーコード入力欄を表示する */}
+          {selectedColor === "other" && (
+          <>
+            <input
+              type="text"
+              className={common.input}
+              placeholder="#FFFFFF"
+              {...register("customColor")}
+            />
+
+            <div className={common.error}>
+              {errors.customColor?.message}
+            </div>
+
+            {/* カラーコード参考サイトを別タブで開く用のリンク */}
+            <p className={common.formNote}>
+              <a
+                href="https://www.colordic.org"
+                target="_blank" // サイトを別タブで開く
+                /* target="_blank"で外部サイトを開くときによくセットで使用するもの */
+                rel="noopener noreferrer"
+                className={common.link}
+              >
+                カラーコードを選ぶ(参考サイト)
+              </a>
+            </p>
+          </>
+        )}
           
           {/* teamColorのバリデーションエラーがある場合、メッセージを表示 */}
           <div className={common.error}>

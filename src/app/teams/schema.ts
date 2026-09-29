@@ -14,6 +14,7 @@ import * as yup from "yup";
 export type TeamFormValues = {
   teamName: string;
   teamColor: string;
+  customColor: string;
   prefecture: string;
   coach: string;
   memo?: string;
@@ -35,6 +36,7 @@ export const teamColors = [
   { name: "グレー", value: "#6B7280" },
   { name: "黒", value: "#171717" },
   { name: "茶色", value: "#92400E" },
+  { name: "その他", value: "other"},
 ];
 
 /* 都道府県の選択肢 */
@@ -122,6 +124,27 @@ export const teamSchema = yup.object({
     // /^#[0-9A-Fa-f]{6}$/,
     // "${label}は #RRGGBB の形式で入力してください。"
     // ),
+
+    customColor: yup
+      .string() // データ型：文字列
+      /* undefinedだく許さない、空文字は許容 */
+      .defined()
+      .label("カラーコード") // フィールドの日本語名
+      /* teamColorがotherの時の処理 */
+      .when("teamColor", {
+        is: "other",
+        then: (schema) =>
+          schema
+            .required("${label}は必須入力です。") // 必須入力
+            /*  正規表現に一致するか
+            ：第一引数は照合する正規表現、第二引数はエラーメッセージ */
+            .matches(
+              /^#[0-9A-Fa-f]{6}$/,
+              "${label}は #RRGGBB の形式で入力してください。"
+            ),
+        /* teamColorがother以外の時の処理 */
+        otherwise: (schema) => schema,
+      }),
 
     prefecture: yup
       .string() // データ型：文字列
